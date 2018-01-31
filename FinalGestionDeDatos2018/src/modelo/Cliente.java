@@ -62,12 +62,11 @@ public class Cliente {
     public void grabarCliente(){
         try {
             Conexion conexion = new Conexion();
-            String query = "insert into cliente (idcliente, apellido, nombre, telefono) values (?,?,?,?);";
+            String query = "insert into cliente (apellido, nombre, telefono) values (?,?,?);";
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
-            st.setInt(1, this.getIdCliente());
-            st.setString(2, this.getApellido());
-            st.setString(3, this.getNombre());
-            st.setString(4, this.getTelefono());
+            st.setString(1, this.getApellido());
+            st.setString(2, this.getNombre());
+            st.setString(3, this.getTelefono());
             st.execute();
             System.out.println("SE GRABO EL CLIENTE EN LA BASE DE DATOS");
             st.close();
@@ -80,7 +79,7 @@ public class Cliente {
     public void eliminarCliente(){
         try {
             Conexion conexion = new Conexion();
-            String query = "delete from cliente where id = " + this.getIdCliente()+ ";";
+            String query = "delete from cliente where idCliente = " + this.getIdCliente()+ ";";
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.execute();
             System.out.println("SE ELIMINO EL CLIENTE DE LA BASE DE DATOS");
@@ -94,7 +93,7 @@ public class Cliente {
     public void editarCliente(){
         try {
             Conexion conexion = new Conexion();
-            String query = "update cliente set apeliido ='" + this.getApellido() + "', nombre ='"+ this.getNombre() + "', telefono= '" + this.getTelefono() + "' where id =" + this.getIdCliente()+ ";";
+            String query = "update cliente set apellido ='" + this.getApellido() + "', nombre ='"+ this.getNombre() + "', telefono= '" + this.getTelefono() + "' where idCliente =" + this.getIdCliente()+ ";";
             System.out.println(query);
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.executeUpdate();
@@ -135,5 +134,10 @@ public class Cliente {
         }
          
          return resultado;
+    }
+
+    public boolean tieneVenta() {
+        return false;
+        //Verificar si tiene ventas el cliente sino no podra ser dado de baja
     }
 }

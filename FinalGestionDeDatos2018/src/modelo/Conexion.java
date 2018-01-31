@@ -14,20 +14,8 @@ public class Conexion {
     /**Parametros de conexion*/
    static String bd = "sg_bar";
    static String login = "root";
-   static String password = "";
+   static String password = "35548988";
    static String url = "jdbc:mysql://localhost/"+bd;
- 
-   /* 
-   
-   Esta es la configuracion para conectarse a una base de datos creada en la pagina http://www.freesqldatabase.com 
-   con mi cuenta de correo electronico
-   
-   static String bd = "sql10195055";
-   static String login = "sql10195055";
-   static String password = "dtptItA9yY";
-   static String url = "jdbc:mysql://sql10.freesqldatabase.com/"+bd; 
-   
-   */
     
    Connection connection = null;
  

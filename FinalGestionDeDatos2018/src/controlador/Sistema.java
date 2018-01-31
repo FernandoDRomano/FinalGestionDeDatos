@@ -1,4 +1,6 @@
-package controlador;
+package controlador; 
+import java.sql.SQLException;
+import vista.GestionCliente;
 
 /**
  *
@@ -6,7 +8,9 @@ package controlador;
  */
 public class Sistema {
     
-    public static void main(String[] args){
-        System.out.println("Hola Mundo");
+    public static void main(String[] args) throws SQLException{
+        
+        GestionCliente vista = new GestionCliente(null, true);
+        vista.setVisible(true);
     }
 }
