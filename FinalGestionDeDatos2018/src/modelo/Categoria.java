@@ -1,6 +1,10 @@
 
 package modelo;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author Fernando
@@ -33,6 +37,95 @@ public class Categoria {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
+    //METODOS PARA LAS TRANSACCIONES A LA BASE DE DATOS
+    
+    public void grabarCategoria(){
+        try {
+            Conexion conexion = new Conexion();
+            String query = "insert into categoria (nombre) values (?);";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            st.setString(1, this.getNombre());
+            st.execute();
+            System.out.println("SE GRABO LA CATEGORIA EN LA BASE DE DATOS");
+            st.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
+    public void eliminarCategoria(){
+        try {
+            Conexion conexion = new Conexion();
+            String query = "delete from categoria where idcategoria = " + this.getIdCategoria()+ ";";
+            System.out.println(query);
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            st.execute();
+            System.out.println("SE ELIMINO LA CATEGORIA DE LA BASE DE DATOS");
+            st.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
+    public void editarCategoria(){
+        try {
+            Conexion conexion = new Conexion();
+            String query = "update categoria set nombre ='"+ this.getNombre() + "' where idcategoria =" + this.getIdCategoria()+ ";";
+            System.out.println(query);
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            st.executeUpdate();
+            System.out.println("SE EDITO LA CATEGORIA EN LA BASE DE DATOS");
+            st.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
+    public ResultSet listarCategoria(){
+        ResultSet resultado = null;
+         try {
+            Conexion conexion = new Conexion();
+            String query = "select * from categoria;";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            resultado = st.executeQuery();
+            conexion.desconectar();
+            
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+         
+         return resultado;
+    }
+    
+    public ResultSet buscarCategoria(String cadena){
+        ResultSet resultado = null;
+         try {
+            Conexion conexion = new Conexion();
+            String query = "select * from categoria where nombre like '" + cadena + "%' or idcategoria like'" + cadena + "%' ;";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            resultado = st.executeQuery();
+            conexion.desconectar();           
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+         
+         return resultado;
+    }
+
+    public boolean tieneProductos() {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return this.getNombre();
+    }
+
+    
     
     
 }

@@ -1,5 +1,9 @@
 package modelo;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author Fernando
@@ -32,6 +36,27 @@ public class Perfil {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public ResultSet listar() {
+        ResultSet resultado = null;
+         try {
+            Conexion conexion = new Conexion();
+            String query = "select * from perfil;";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            resultado = st.executeQuery();
+            conexion.desconectar();           
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+         
+         return resultado;
+    }
+
+    @Override
+    public String toString() {
+        return this.getNombre();
+    }
+    
     
     
 }
