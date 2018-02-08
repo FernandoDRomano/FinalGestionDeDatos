@@ -154,12 +154,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txt_Id" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txt_Apellido" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txt_Id" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
@@ -233,6 +235,9 @@
                   </Table>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabla_GrupoFamiliarMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -358,9 +363,10 @@
             <Component class="javax.swing.JComboBox" name="combo_Discapacidad">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="2">
-                    <StringItem index="0" value="SI"/>
-                    <StringItem index="1" value="NO"/>
+                  <StringArray count="3">
+                    <StringItem index="0" value="Seleccione una Opci&#xf3;n"/>
+                    <StringItem index="1" value="SI"/>
+                    <StringItem index="2" value="NO"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -376,9 +382,10 @@
             <Component class="javax.swing.JComboBox" name="combo_Vinculo">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="2">
-                    <StringItem index="0" value="C&#xf3;nyuge"/>
-                    <StringItem index="1" value="Hijo/a"/>
+                  <StringArray count="3">
+                    <StringItem index="0" value="Seleccione una Opci&#xf3;n"/>
+                    <StringItem index="1" value="C&#xf3;nyuge"/>
+                    <StringItem index="2" value="Hijo/a"/>
                   </StringArray>
                 </Property>
               </Properties>

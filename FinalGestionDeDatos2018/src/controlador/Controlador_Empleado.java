@@ -12,6 +12,7 @@ import modelo.Domicilio;
 import modelo.Empleado;
 import modelo.Perfil;
 import modelo.Usuario;
+import org.apache.commons.codec.digest.DigestUtils;
 import vista.EditarEmpleado;
 import vista.GestionEmpleado;
 import vista.NuevoEmpleado;
@@ -122,6 +123,15 @@ public class Controlador_Empleado {
         //Seteo los valores del Usuario
         usuario.setNombreUsuario(vista.getTxt_Usuario().getText());
         usuario.setClave(vista.getTxt_Dni().getText()); //AL CREARSE EL USUARIO SE LE ASIGNARA COMO CONTRASEÑA EL DNI
+        /*
+            ENCRIPTAR CON SHA1
+            Aquí estamos haciendo uso de la clase DigestUtils y su método sha1Hex(), 
+            el cuál recibe un parámetro que es la cadena a encriptar y retorna una cadena que ya está encriptada.
+        */
+        String textoSinEncriptar = vista.getTxt_Dni().getText(); //AL CREARSE EL USUARIO SE LE ASIGNARA COMO CONTRASEÑA EL DNI
+        String textoEncriptadoConSHA=DigestUtils.sha1Hex(textoSinEncriptar); //SE ENCRIPTA LA CONTRASEÑA
+        System.out.println("Texto Encriptado con SHA : "+textoEncriptadoConSHA);
+        usuario.setClave(textoEncriptadoConSHA); //SE ASIGNA AL EMPLEADO
         //Capturo el perfil y el Cargo
         cargo = (Cargo) vista.getCombo_Cargo().getModel().getSelectedItem();
         perfil = (Perfil) vista.getCombo_Perfil().getModel().getSelectedItem();
@@ -285,7 +295,8 @@ public class Controlador_Empleado {
                     }
                     
                     //Empiezo a Eliminar
-                    // 1) Primero Elimino el Grupo Familiar (Falta Resolver)
+                    // 1) Primero Elimino el Grupo Familiar
+                        empleado.eliminarGrupoFamiliar();
                     // 2) Segundo Elimino el Empleado
                         empleado.eliminarEmpleado();
                     // 3) Eliminar el Usuario

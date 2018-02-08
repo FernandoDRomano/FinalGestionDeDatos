@@ -4,6 +4,9 @@ package vista;
 import com.toedter.calendar.JDateChooser;
 import controlador.Controlador_Familia;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,7 +26,7 @@ public class GestionFamilia extends javax.swing.JDialog {
     private DefaultComboBoxModel modeloComboDiscapacidad = new DefaultComboBoxModel();
     private Empleado empleado;
 
-    public GestionFamilia(java.awt.Frame parent, boolean modal) throws SQLException {
+    public GestionFamilia(java.awt.Frame parent, boolean modal) throws SQLException{
         super(parent, modal);
         initComponents();
         txt_Id.setEnabled(false);
@@ -285,12 +288,13 @@ public class GestionFamilia extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txt_Id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8)
-                        .addComponent(txt_Apellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txt_Apellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(txt_Id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(12, 12, 12)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -315,6 +319,11 @@ public class GestionFamilia extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabla_GrupoFamiliar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_GrupoFamiliarMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabla_GrupoFamiliar);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Datos Generales"));
@@ -327,11 +336,11 @@ public class GestionFamilia extends javax.swing.JDialog {
 
         jLabel10.setText("Discapacidad");
 
-        combo_Discapacidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SI", "NO" }));
+        combo_Discapacidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione una Opción", "SI", "NO" }));
 
         jLabel12.setText("Vinculo");
 
-        combo_Vinculo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cónyuge", "Hijo/a" }));
+        combo_Vinculo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione una Opción", "Cónyuge", "Hijo/a" }));
 
         Date_FechaNacimiento.setDateFormatString("yyyy/MM/dd");
 
@@ -501,22 +510,50 @@ public class GestionFamilia extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AgregarActionPerformed
+        try {
+            Controlador_Familia.AltasFamiliar(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionFamilia.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_AgregarActionPerformed
 
     private void btn_EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EditarActionPerformed
-
+        try {
+            Controlador_Familia.EditarFamiliar(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionFamilia.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_EditarActionPerformed
 
     private void btn_EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EliminarActionPerformed
-
+        try {
+            Controlador_Familia.EliminarFamiliar(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionFamilia.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_EliminarActionPerformed
 
     private void btn_LimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LimpiarActionPerformed
+        Controlador_Familia.LimpiarCampos(this);
     }//GEN-LAST:event_btn_LimpiarActionPerformed
 
     private void btn_SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SalirActionPerformed
         dispose();
+        try {
+            GestionEmpleado vista = new GestionEmpleado(null, true);
+            vista.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionFamilia.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_SalirActionPerformed
+
+    private void tabla_GrupoFamiliarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_GrupoFamiliarMouseClicked
+        try {
+            Controlador_Familia.CargarFamiliar(this);
+        } catch (ParseException ex) {
+            Logger.getLogger(GestionFamilia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_tabla_GrupoFamiliarMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

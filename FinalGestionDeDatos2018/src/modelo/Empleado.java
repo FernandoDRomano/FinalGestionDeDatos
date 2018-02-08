@@ -225,6 +225,21 @@ public class Empleado {
         }
     }
     
+    public void eliminarGrupoFamiliar(){
+        try {
+            Conexion conexion = new Conexion();
+            String query = "delete from familia where empleado_idempleado = " + this.getIdEmpleado()+ ";";
+            System.out.println(query);
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            st.execute();
+            System.out.println("SE ELIMINO EL GRUPO FAMILIAR DE LA BASE DE DATOS");
+            st.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
     public void editarEmpleado(){
         try {
             Conexion conexion = new Conexion();
