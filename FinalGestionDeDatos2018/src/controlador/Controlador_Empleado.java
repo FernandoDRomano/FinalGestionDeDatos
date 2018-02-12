@@ -122,7 +122,6 @@ public class Controlador_Empleado {
         domicilio.setDepartamento(vista.getTxt_Departamento().getText());
         //Seteo los valores del Usuario
         usuario.setNombreUsuario(vista.getTxt_Usuario().getText());
-        usuario.setClave(vista.getTxt_Dni().getText()); //AL CREARSE EL USUARIO SE LE ASIGNARA COMO CONTRASEÑA EL DNI
         /*
             ENCRIPTAR CON SHA1
             Aquí estamos haciendo uso de la clase DigestUtils y su método sha1Hex(), 

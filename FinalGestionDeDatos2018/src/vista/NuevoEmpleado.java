@@ -30,6 +30,8 @@ public class NuevoEmpleado extends javax.swing.JDialog {
         txt_Id.setEnabled(false);
         Controlador_Empleado.CargarPerfil(this);
         Controlador_Empleado.CargarCargo(this);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     @SuppressWarnings("unchecked")

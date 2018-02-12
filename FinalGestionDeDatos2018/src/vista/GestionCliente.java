@@ -16,10 +16,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GestionCliente extends javax.swing.JDialog {
 
-    /**
-     * Creates new form GestionCliente
-     */
-    
     public DefaultTableModel modelo = new DefaultTableModel();
     
     public GestionCliente(java.awt.Frame parent, boolean modal) throws SQLException {
@@ -28,8 +24,9 @@ public class GestionCliente extends javax.swing.JDialog {
         txt_Id.setEnabled(false);
         Controlador_Cliente.ActualizarCliente(this);
         this.setTitle("Gestión de Clientes");
-        this.setLocationRelativeTo(null);
         Controlador_Cliente.LogicaBotones(this);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     //Metodos Get - Set

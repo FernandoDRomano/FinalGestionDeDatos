@@ -1,6 +1,6 @@
 package controlador; 
 import java.sql.SQLException;
-import vista.GestionCliente;
+import vista.Login;
 
 /**
  *
@@ -9,8 +9,7 @@ import vista.GestionCliente;
 public class Sistema {
     
     public static void main(String[] args) throws SQLException{
-        
-        GestionCliente vista = new GestionCliente(null, true);
+        Login vista = new Login(null, true);
         vista.setVisible(true);
     }
 }

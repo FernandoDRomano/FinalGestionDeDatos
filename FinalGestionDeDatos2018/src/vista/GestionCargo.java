@@ -25,6 +25,8 @@ public class GestionCargo extends javax.swing.JDialog {
         this.setTitle("Gestión de Cargos");
         this.setLocationRelativeTo(null);
         Controlador_Cargo.LogicaBotones(this);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     public DefaultTableModel getModelo() {

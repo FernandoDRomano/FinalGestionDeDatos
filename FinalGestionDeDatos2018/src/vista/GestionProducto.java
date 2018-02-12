@@ -29,6 +29,8 @@ public class GestionProducto extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         Controlador_Producto.LogicaBotones(this);
         Controlador_Producto.cargarCombo(this);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     public DefaultComboBoxModel getModeloCombo() {

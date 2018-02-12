@@ -26,6 +26,8 @@ public class GestionEmpleado extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         Controlador_Empleado.ActualizarEmpleado(this);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     public DefaultTableModel getModeloTabla() {

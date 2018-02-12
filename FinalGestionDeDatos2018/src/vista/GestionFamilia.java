@@ -34,6 +34,8 @@ public class GestionFamilia extends javax.swing.JDialog {
         txt_Nombre.setEnabled(false);
         txt_Dni.setEnabled(false);
         txt_IdFamiliar.setEnabled(false);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     public DefaultTableModel getModeloTabla() {

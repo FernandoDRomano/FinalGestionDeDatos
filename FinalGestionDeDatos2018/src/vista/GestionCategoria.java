@@ -25,6 +25,8 @@ public class GestionCategoria extends javax.swing.JDialog {
         this.setTitle("Gestión de Categorias");
         this.setLocationRelativeTo(null);
         Controlador_Categoria.LogicaBotones(this);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     public DefaultTableModel getModelo() {

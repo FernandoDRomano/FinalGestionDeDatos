@@ -33,6 +33,8 @@ public class EditarEmpleado extends javax.swing.JDialog {
         Controlador_Empleado.CargarPerfil(this);
         Controlador_Empleado.CargarCargo(this);
         Controlador_Empleado.MostrarEmpleado(this);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
     }
 
     public Empleado getEmpleado() {

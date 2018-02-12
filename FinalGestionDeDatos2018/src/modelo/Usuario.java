@@ -197,5 +197,39 @@ public class Usuario {
     }
 
     */
+
+    public ResultSet login() {
+        ResultSet resultado = null;
+         try {
+            Conexion conexion = new Conexion();
+            String query = "SELECT usuario.idusuario, usuario.nombreUsuario, perfil.nombre, empleado.apellido, empleado.nombre, empleado.idempleado, empleado.estado\n" +
+                           "FROM usuario\n" +
+                           "INNER JOIN perfil ON perfil.idperfil = usuario.perfil_idperfil\n" +
+                           "INNER JOIN empleado ON empleado.usuario_idusuario = usuario.idusuario\n" +
+                           "WHERE usuario.nombreUsuario = '" + this.getNombreUsuario() + "' AND usuario.clave = '" + this.getClave()+"' AND empleado.estado = 'Activo';";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            System.out.println(query);
+            resultado = st.executeQuery();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        return resultado;
+    }
+    
+    public void cambiarContraseña(){
+        try {
+            Conexion conexion = new Conexion();
+            String query = "update usuario set clave = '" + this.getClave() + "' where idusuario =" + this.getIdUsuario()+ ";";
+            System.out.println(query);
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            st.executeUpdate();
+            System.out.println("SE EDITO LA CONTRASEÑA DEL USUARIO EN LA BASE DE DATOS");
+            st.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
    
 }
