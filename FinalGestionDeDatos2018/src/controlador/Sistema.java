@@ -12,6 +12,6 @@ public class Sistema {
         Login vista = new Login(null, true);
         vista.setVisible(true);
         
-        System.out.println("Corriendo Programa");
+        System.out.println("Corriendo Programa por Ahora");
     }
 }
