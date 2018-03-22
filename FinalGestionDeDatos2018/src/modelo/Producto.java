@@ -128,6 +128,21 @@ public class Producto {
         }
     }
     
+    public void restarStock(int cantidad){
+        try {
+            Conexion conexion = new Conexion();
+            String query = "update producto set stock = stock - '" + cantidad + "' where idproducto =" + this.getIdProducto()+ ";";
+            System.out.println(query);
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            st.executeUpdate();
+            System.out.println("SE EDITO EL PRODUCTO EN LA BASE DE DATOS");
+            st.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
     public ResultSet listarProducto(){
         ResultSet resultado = null;
          try {

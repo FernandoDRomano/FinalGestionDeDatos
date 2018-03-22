@@ -13,8 +13,10 @@ import modelo.Empleado;
 import modelo.Perfil;
 import modelo.Usuario;
 import org.apache.commons.codec.digest.DigestUtils;
+import vista.BuscarEmpleado;
 import vista.EditarEmpleado;
 import vista.GestionEmpleado;
+import vista.GestionFamilia;
 import vista.NuevoEmpleado;
 
 /**
@@ -310,6 +312,69 @@ public class Controlador_Empleado {
         } else {
             JOptionPane.showMessageDialog(vista, "Debe seleccionar un Producto", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    //METODO QUE SE UTILIZARA EN EL GRUPO FAMILIAR PARA BUSCAR EL EMPLEADO 
+    
+    public static void ventanaBuscarEmpleado(GestionFamilia vista) throws SQLException{
+        BuscarEmpleado ventana = new BuscarEmpleado(null, true, vista);
+        ventana.setVisible(true);
+    }
+    
+    public static void CargarTodosLosEmpleados(BuscarEmpleado vista) throws SQLException {
+        empleado = new Empleado();
+        vista.getModelo().setColumnCount(0);
+        vista.getModelo().setNumRows(0);
+        vista.getModelo().addColumn("Id");
+        vista.getModelo().addColumn("Apellido");
+        vista.getModelo().addColumn("Nombre");
+        vista.getModelo().addColumn("Dni");
+        ResultSet r = empleado.listarEmpleado();
+        while (r.next()) {
+            Object[] fila = new Object[4];
+            fila[0] = r.getString("idempleado");
+            fila[1] = r.getString("apellido");
+            fila[2] = r.getString("nombre");
+            fila[3] = r.getString("dni");
+            vista.getModelo().addRow(fila);
+        }
+
+        vista.getTabla_Empleado().setModel(vista.getModelo());
+        
+        //declaramos un arreglo de enteros con los anchos que deseamos
+        //para nuestra tabla
+        int[] anchos = {30, 200, 200, 80};
+        //hacemos un bucle FOR desde cero hasta la cantidad de columnas
+        //de nuestra tabla
+        for(int i = 0; i < vista.getTabla_Empleado().getColumnCount(); i++) {
+        //Sacamos el modelo de columnas de nuestra tabla
+        //luego obtenemos la columna en la posicion "i"
+        //invocamos el metodo setPreferrefWidth para ajustar el ancho
+        //y le damos el valor del entero que esta en el arreglo en la posicion "i"
+        vista.getTabla_Empleado().getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+        
+    }
+    
+    public static void agregarEmpleadoAlGrupoFamiliar(BuscarEmpleado vista, GestionFamilia gestion){
+        int fila = vista.getTabla_Empleado().getSelectedRow();
+        if (fila > -1) {
+            //saco los valores
+            String id = vista.getTabla_Empleado().getModel().getValueAt(fila, 0).toString();
+            String apellido = vista.getTabla_Empleado().getModel().getValueAt(fila, 1).toString();
+            String nombre = vista.getTabla_Empleado().getModel().getValueAt(fila, 2).toString();
+            String dni = vista.getTabla_Empleado().getModel().getValueAt(fila, 3).toString();
+ 
+            //Los cargo en la vista
+            gestion.getTxt_Id().setText(id);
+            gestion.getTxt_Apellido().setText(apellido);
+            gestion.getTxt_Nombre().setText(nombre);
+            gestion.getTxt_Dni().setText(dni);
+            vista.setVisible(false);
+        }else{
+            JOptionPane.showMessageDialog(vista, "DEBE SELECCIONAR UN EMPLEADO", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
     
 }

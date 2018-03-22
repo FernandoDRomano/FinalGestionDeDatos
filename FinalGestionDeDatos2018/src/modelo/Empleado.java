@@ -94,8 +94,6 @@ public class Empleado {
         this.sexo = sexo;
     }
 
-    
-
     public String getEstado() {
         return estado;
     }
@@ -173,6 +171,29 @@ public class Empleado {
                            "inner join cargo on cargo.idcargo = empleado.cargo_idcargo\n" +
                            "inner join usuario on usuario.idusuario = empleado.usuario_idusuario\n" +
                            "inner join perfil on perfil.idperfil = usuario.perfil_idperfil;";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            resultado = st.executeQuery();
+            conexion.desconectar();
+            
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+         
+         return resultado;
+    }
+    
+    public ResultSet filtrarEmpleado(String cadena){
+        ResultSet resultado = null;
+         try {
+            Conexion conexion = new Conexion();
+            String query = "select empleado.idempleado, empleado.apellido, empleado.nombre, empleado.dni, empleado.telefono, empleado.fechaIngreso, empleado.sexo, empleado.estado, concat(domicilio.calle, ' ',domicilio.numero) as domicilio , usuario.nombreUsuario as usuario, perfil.nombre as perfil, cargo.cargo as cargo\n" +
+                           "from empleado\n" +
+                           "inner join domicilio on domicilio.iddomicilio = empleado.domicilio_iddomicilio\n" +
+                           "inner join cargo on cargo.idcargo = empleado.cargo_idcargo\n" +
+                           "inner join usuario on usuario.idusuario = empleado.usuario_idusuario\n" +
+                           "inner join perfil on perfil.idperfil = usuario.perfil_idperfil\n" +
+                           "where empleado.apellido like '" + cadena + "%' or empleado.dni like '" + cadena + "%' or empleado.idempleado like '" + cadena + "%' ;";
+            System.out.println(query);
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             resultado = st.executeQuery();
             conexion.desconectar();

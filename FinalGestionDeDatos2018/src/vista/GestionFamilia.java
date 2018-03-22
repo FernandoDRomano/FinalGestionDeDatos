@@ -2,6 +2,7 @@
 package vista;
 
 import com.toedter.calendar.JDateChooser;
+import controlador.Controlador_Empleado;
 import controlador.Controlador_Familia;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -255,6 +256,11 @@ public class GestionFamilia extends javax.swing.JDialog {
         jLabel5.setText("Dni");
 
         boton_Buscar.setText("Buscar");
+        boton_Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_BuscarActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("Apellido");
 
@@ -556,6 +562,14 @@ public class GestionFamilia extends javax.swing.JDialog {
             Logger.getLogger(GestionFamilia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tabla_GrupoFamiliarMouseClicked
+
+    private void boton_BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_BuscarActionPerformed
+        try {
+            Controlador_Empleado.ventanaBuscarEmpleado(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionFamilia.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_boton_BuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

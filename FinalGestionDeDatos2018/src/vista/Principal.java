@@ -187,15 +187,59 @@ public class Principal extends javax.swing.JFrame {
         
         Icon IconoNuevaVenta = new ImageIcon(ClassLoader.getSystemResource("imagenes/NuevaVenta.png"));
         Icon IconoListarVenta = new ImageIcon(ClassLoader.getSystemResource("imagenes/ListarVenta.png"));
+        Icon IconoListarVentaxEmpleado = new ImageIcon(ClassLoader.getSystemResource("imagenes/ListarVentaEmpleado.png"));
         
         final JXLabel labelNuevaVenta = new JXLabel("Nueva Venta", IconoNuevaVenta, JXLabel.LEFT);
         final JXLabel labelListarVentas = new JXLabel("Listar Ventas", IconoListarVenta, JXLabel.LEFT);
+        final JXLabel labelListarVentasxEmpleado = new JXLabel("Listar Ventas por Empleado", IconoListarVentaxEmpleado, JXLabel.LEFT);
         
+        labelNuevaVenta.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                System.out.println("Creando Interfaz NUEVA VENTA");
+                //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
+                NuevaVenta vista = new NuevaVenta(null, true, empleado);
+                vista.setVisible(true);    
+            }
+        });
+        
+        labelListarVentas.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Interfaz LISTAR VENTA");
+                    //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
+                    ListarVenta vista = new ListarVenta(null, true);    
+                    vista.setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        labelListarVentasxEmpleado.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Interfaz LISTAR VENTA POR EMPLEADO");
+                    //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
+                    ListarVentaEmpleado vista = new ListarVentaEmpleado(null, true);    
+                    vista.setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         
         eventosMouse(labelNuevaVenta);
         eventosMouse(labelListarVentas);
+        eventosMouse(labelListarVentasxEmpleado);
         Menu_Venta.add(labelNuevaVenta);
         Menu_Venta.add(labelListarVentas);
+        Menu_Venta.add(labelListarVentasxEmpleado);
     }
     
     public final void MenuCompras(){

@@ -57,6 +57,11 @@ public class Controlador_Usuario {
         if (bandera == true) {
             vista.dispose();
             principal = new Principal();
+            //Seteo los valores del empleado, seran importantes al pasarlo a las otras ventanas
+            principal.getEmpleado().setIdEmpleado(empleado.getIdEmpleado());
+            principal.getEmpleado().setNombre(empleado.getNombre());
+            principal.getEmpleado().setApellido(empleado.getApellido());
+            //Seteo el Label del Form Principal
             principal.getLabel_Empleado().setText(empleado.getApellido() + ", " + empleado.getNombre());
             if (perfil.getNombre().equals("Administrador")) {
                 principal.setVisible(true);

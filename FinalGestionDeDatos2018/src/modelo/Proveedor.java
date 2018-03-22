@@ -1,5 +1,9 @@
 package modelo;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author Fernando
@@ -62,6 +66,6 @@ public class Proveedor {
     public void setDomicilio(Domicilio domicilio) {
         this.domicilio = domicilio;
     }
-    
+   
     
 }
