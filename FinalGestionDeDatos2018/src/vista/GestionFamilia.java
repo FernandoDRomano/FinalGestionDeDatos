@@ -198,6 +198,31 @@ public class GestionFamilia extends javax.swing.JDialog {
     public void setTxt_NombreFamiliar(JTextField txt_NombreFamiliar) {
         this.txt_NombreFamiliar = txt_NombreFamiliar;
     }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
+    public JComboBox<String> getCombo_Escolaridad() {
+        return combo_Escolaridad;
+    }
+
+    public void setCombo_Escolaridad(JComboBox<String> combo_Escolaridad) {
+        this.combo_Escolaridad = combo_Escolaridad;
+    }
+
+    public JTextField getTxt_DniFamiliar() {
+        return txt_DniFamiliar;
+    }
+
+    public void setTxt_DniFamiliar(JTextField txt_DniFamiliar) {
+        this.txt_DniFamiliar = txt_DniFamiliar;
+    }
+    
     
     
 
@@ -237,6 +262,10 @@ public class GestionFamilia extends javax.swing.JDialog {
         combo_Vinculo = new javax.swing.JComboBox<>();
         Date_FechaNacimiento = new com.toedter.calendar.JDateChooser();
         jLabel13 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txt_DniFamiliar = new javax.swing.JTextField();
+        combo_Escolaridad = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
         btn_Agregar = new javax.swing.JButton();
         btn_Editar = new javax.swing.JButton();
         btn_Eliminar = new javax.swing.JButton();
@@ -344,7 +373,7 @@ public class GestionFamilia extends javax.swing.JDialog {
 
         jLabel10.setText("Discapacidad");
 
-        combo_Discapacidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione una Opción", "SI", "NO" }));
+        combo_Discapacidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione una Opción", "Si", "No" }));
 
         jLabel12.setText("Vinculo");
 
@@ -354,6 +383,12 @@ public class GestionFamilia extends javax.swing.JDialog {
 
         jLabel13.setText("Fecha de Nacimiento");
 
+        jLabel9.setText("Dni");
+
+        combo_Escolaridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione una Opción", "Primaria", "Secundaria", "Universidad", "Ninguna" }));
+
+        jLabel11.setText("Escolaridad");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -361,6 +396,7 @@ public class GestionFamilia extends javax.swing.JDialog {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel9)
                     .addComponent(jLabel13)
                     .addComponent(jLabel6)
                     .addComponent(jLabel4))
@@ -368,16 +404,19 @@ public class GestionFamilia extends javax.swing.JDialog {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txt_ApellidoFamiliar)
                     .addComponent(txt_IdFamiliar)
-                    .addComponent(Date_FechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
+                    .addComponent(Date_FechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                    .addComponent(txt_DniFamiliar))
                 .addGap(43, 43, 43)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7)
                     .addComponent(jLabel10)
-                    .addComponent(jLabel12))
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(combo_Escolaridad, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_NombreFamiliar)
-                    .addComponent(combo_Discapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(combo_Discapacidad, 0, 228, Short.MAX_VALUE)
                     .addComponent(combo_Vinculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -386,13 +425,11 @@ public class GestionFamilia extends javax.swing.JDialog {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(txt_IdFamiliar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(12, 12, 12))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(combo_Vinculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12))
@@ -404,15 +441,21 @@ public class GestionFamilia extends javax.swing.JDialog {
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel6)
                         .addComponent(txt_ApellidoFamiliar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(Date_FechaNacimiento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel9)
+                        .addComponent(txt_DniFamiliar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(combo_Escolaridad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Date_FechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(combo_Discapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel10)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel10))
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         btn_Agregar.setText("Agregar");
@@ -487,8 +530,8 @@ public class GestionFamilia extends javax.swing.JDialog {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_Agregar)
@@ -581,9 +624,11 @@ public class GestionFamilia extends javax.swing.JDialog {
     private javax.swing.JButton btn_Limpiar;
     private javax.swing.JButton btn_Salir;
     private javax.swing.JComboBox<String> combo_Discapacidad;
+    private javax.swing.JComboBox<String> combo_Escolaridad;
     private javax.swing.JComboBox<String> combo_Vinculo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
@@ -593,6 +638,7 @@ public class GestionFamilia extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -601,6 +647,7 @@ public class GestionFamilia extends javax.swing.JDialog {
     private javax.swing.JTextField txt_Apellido;
     private javax.swing.JTextField txt_ApellidoFamiliar;
     private javax.swing.JTextField txt_Dni;
+    private javax.swing.JTextField txt_DniFamiliar;
     private javax.swing.JTextField txt_Id;
     private javax.swing.JTextField txt_IdFamiliar;
     private javax.swing.JTextField txt_Nombre;

@@ -142,7 +142,7 @@ public class Controlador_Empleado {
         empleado.setApellido(vista.getTxt_Apellido().getText());
         empleado.setNombre(vista.getTxt_Nombre().getText());
         empleado.setDni(Integer.valueOf(vista.getTxt_Dni().getText()));
-        empleado.setTelefono(vista.getTxt_Telefono().getText());
+        empleado.setTelefono(Integer.valueOf(vista.getTxt_Telefono().getText()));
         //Tratamiento de la fecha de Ingreso
         String fecha = new SimpleDateFormat("yyyy/MM/dd").format(vista.getDate_Fecha().getDate());
         empleado.setFechaIngreso(fecha);
@@ -180,7 +180,7 @@ public class Controlador_Empleado {
             empleado.setApellido(r.getString("apellido"));
             empleado.setNombre(r.getString("nombre"));
             empleado.setDni(Integer.valueOf(r.getString("dni")));
-            empleado.setTelefono(r.getString("telefono"));
+            empleado.setTelefono(Integer.valueOf(r.getString("telefono")));
             empleado.setFechaIngreso(r.getString("fechaIngreso"));
             empleado.setSexo(r.getString("sexo"));
             empleado.setEstado(r.getString("estado"));
@@ -203,7 +203,7 @@ public class Controlador_Empleado {
         vista.getTxt_Apellido().setText(empleado.getApellido());
         vista.getTxt_Nombre().setText(empleado.getNombre());
         vista.getTxt_Dni().setText(String.valueOf(empleado.getDni()));
-        vista.getTxt_Telefono().setText(empleado.getTelefono());
+        vista.getTxt_Telefono().setText(String.valueOf(empleado.getTelefono()));
         vista.getCombo_Sexo().getModel().setSelectedItem(empleado.getSexo());
         //vista.getDate_Fecha().setDateFormatString(string);
         //Tratamiento de la Fecha
@@ -238,7 +238,7 @@ public class Controlador_Empleado {
             domicilio.setDepartamento(vista.getTxt_Departamento().getText());
             //Seteo los valores del Usuario
             usuario.setNombreUsuario(vista.getTxt_Usuario().getText());
-            usuario.setClave(vista.getTxt_Dni().getText()); //AL CREARSE EL USUARIO SE LE ASIGNARA COMO CONTRASEÑA EL DNI
+            //Ya no se puede modificar la contraseña desde aqui!! 
             //Capturo el perfil y el Cargo
             cargo = (Cargo) vista.getCombo_Cargo().getModel().getSelectedItem();
             perfil = (Perfil) vista.getCombo_Perfil().getModel().getSelectedItem();
@@ -249,7 +249,7 @@ public class Controlador_Empleado {
             empleado.setApellido(vista.getTxt_Apellido().getText());
             empleado.setNombre(vista.getTxt_Nombre().getText());
             empleado.setDni(Integer.valueOf(vista.getTxt_Dni().getText()));
-            empleado.setTelefono(vista.getTxt_Telefono().getText());
+            empleado.setTelefono(Integer.valueOf(vista.getTxt_Telefono().getText()));
             //Tratamiento de la fecha de Ingreso
             String fecha = new SimpleDateFormat("yyyy/MM/dd").format(vista.getDate_Fecha().getDate());
             empleado.setFechaIngreso(fecha);
@@ -356,7 +356,7 @@ public class Controlador_Empleado {
         
     }
     
-    public static void agregarEmpleadoAlGrupoFamiliar(BuscarEmpleado vista, GestionFamilia gestion){
+    public static void agregarEmpleadoAlGrupoFamiliar(BuscarEmpleado vista, GestionFamilia gestion) throws SQLException{
         int fila = vista.getTabla_Empleado().getSelectedRow();
         if (fila > -1) {
             //saco los valores
@@ -370,6 +370,8 @@ public class Controlador_Empleado {
             gestion.getTxt_Apellido().setText(apellido);
             gestion.getTxt_Nombre().setText(nombre);
             gestion.getTxt_Dni().setText(dni);
+            //UNA VES CARGADO EL EMPLEADO EN EL FORM DE LA GESTION DE FAMILIA, ACTUALIZO SUS FAMILIARES EN LA TABLA
+            Controlador_Familia.ActualizarFamilia(gestion);
             vista.setVisible(false);
         }else{
             JOptionPane.showMessageDialog(vista, "DEBE SELECCIONAR UN EMPLEADO", "ERROR", JOptionPane.ERROR_MESSAGE);

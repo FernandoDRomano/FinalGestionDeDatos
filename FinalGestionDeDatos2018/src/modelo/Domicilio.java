@@ -130,7 +130,7 @@ public class Domicilio {
     public void editarDomicilio(){
         try {
             Conexion conexion = new Conexion();
-            String query = "update domicilio set calle ='"+ this.getCalle()+ "', numero =' " + this.getNumero() + "', piso =' " + this.getPiso() + "', departamento = ' " + this.getDepartamento() + "' where iddomicilio =" + this.getIdDomicilio()+ ";";
+            String query = "update domicilio set calle = '"+ this.getCalle()+ "', numero = '" + this.getNumero() + "', piso = '" + this.getPiso() + "', departamento = '" + this.getDepartamento() + "' where iddomicilio =" + this.getIdDomicilio()+ ";";
             System.out.println(query);
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.executeUpdate();

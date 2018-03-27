@@ -39,6 +39,7 @@ public class NuevaVenta extends javax.swing.JDialog {
         //Seteo la Fecha Actual
         Calendar c2 = new GregorianCalendar();
         Date_Fecha.setCalendar(c2);
+        Date_Fecha.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -72,7 +73,7 @@ public class NuevaVenta extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 3, 24)); // NOI18N
-        jLabel1.setText("Nueva Venta");
+        jLabel1.setText("Punto de Venta");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED), "Empleado", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 

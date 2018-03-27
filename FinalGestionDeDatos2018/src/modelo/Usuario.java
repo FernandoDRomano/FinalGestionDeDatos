@@ -118,7 +118,7 @@ public class Usuario {
     public void editarUsuario(){
         try {
             Conexion conexion = new Conexion();
-            String query = "update usuario set nombreUsuario ='"+ this.getNombreUsuario()+ "', clave =' " + this.getClave() + "', perfil_idperfil =' " + this.getPerfil().getIdPerfil() + "' where idusuario =" + this.getIdUsuario()+ ";";
+            String query = "update usuario set nombreUsuario ='"+ this.getNombreUsuario()+ "', perfil_idperfil = '" + this.getPerfil().getIdPerfil() + "' where idusuario =" + this.getIdUsuario()+ " ;";
             System.out.println(query);
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.executeUpdate();

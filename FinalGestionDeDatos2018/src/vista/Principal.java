@@ -163,6 +163,20 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         
+        labelProveedor.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                System.out.println("Creando Interfaz GestionProveedor");
+                try {
+                    GestionProveedor vista = new GestionProveedor(null, true);
+                    vista.setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }    
+            }
+        });
+        
         eventosMouse(labelEmpleado);
         eventosMouse(labelCliente);
         eventosMouse(labelProveedor);
@@ -253,6 +267,16 @@ public class Principal extends javax.swing.JFrame {
         final JXLabel labelNuevaCompra = new JXLabel("Nueva Compra", IconoNuevaCompra, JXLabel.LEFT);
         final JXLabel labelListarCompras = new JXLabel("Listar Compras", IconoListarCompra, JXLabel.LEFT);
         
+        labelNuevaCompra.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                System.out.println("Creando Interfaz NUEVA COMPRA");
+                //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
+                NuevaPedido vista = new NuevaPedido(null, true, empleado);
+                vista.setVisible(true);
+            }
+        });
         
         eventosMouse(labelNuevaCompra);
         eventosMouse(labelListarCompras);

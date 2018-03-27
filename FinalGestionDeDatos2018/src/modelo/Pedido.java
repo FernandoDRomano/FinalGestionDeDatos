@@ -11,21 +11,13 @@ import java.util.ArrayList;
 class Pedido {
     
     private int idPedido;
-    private Date fecha;
+    private String fecha;
     private double total;
     private String estado;
     private Empleado empleado;
     private Proveedor proveedor;
     private ArrayList<LineaPedido> linea;
 
-    public Pedido(int idPedido, Date fecha, double total, String estado, Empleado empleado, Proveedor proveedor) {
-        this.idPedido = idPedido;
-        this.fecha = fecha;
-        this.total = total;
-        this.estado = estado;
-        this.empleado = empleado;
-        this.proveedor = proveedor;
-    }
 
     public Pedido() {
         linea = new ArrayList<LineaPedido>();
@@ -39,11 +31,11 @@ class Pedido {
         this.idPedido = idPedido;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 

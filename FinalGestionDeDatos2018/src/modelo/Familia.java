@@ -11,26 +11,34 @@ import java.sql.SQLException;
 public class Familia {
     
     private int idFamilia;
+    private int dni;
     private String apellido;
     private String nombre;
     private String vinculo;
     private String fechaNacimiento;
     private String discapacidad;
+    private String escolaridad;
     private Empleado empleado;
-
-    public Familia(int idFamilia, String apellido, String nombre, String vinculo, String fechaNacimiento, String discapacidad, Empleado empleado) {
-        this.idFamilia = idFamilia;
-        this.apellido = apellido;
-        this.nombre = nombre;
-        this.vinculo = vinculo;
-        this.fechaNacimiento = fechaNacimiento;
-        this.discapacidad = discapacidad;
-        this.empleado = empleado;
-    }
 
     public Familia() {
     }
 
+    public int getDni() {
+        return dni;
+    }
+
+    public void setDni(int dni) {
+        this.dni = dni;
+    }
+
+    public String getEscolaridad() {
+        return escolaridad;
+    }
+
+    public void setEscolaridad(String escolaridad) {
+        this.escolaridad = escolaridad;
+    }
+    
     public int getIdFamilia() {
         return idFamilia;
     }
@@ -92,14 +100,16 @@ public class Familia {
     public void grabarFamiliar(){
         try {
             Conexion conexion = new Conexion();
-            String query = "insert into familia (apellido, nombre, vinculo, fechaNacimiento, discapacidad, empleado_idempleado) values (?,?,?,?,?,?);";
+            String query = "insert into familia (apellido, nombre, vinculo, fechaNacimiento, discapacidad, dni, escolaridad, empleado_idempleado) values (?,?,?,?,?,?,?,?);";
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.setString(1, this.getApellido());
             st.setString(2, this.getNombre());
             st.setString(3, this.getVinculo());
             st.setString(4, this.getFechaNacimiento());
             st.setString(5, this.getDiscapacidad());
-            st.setInt(6, this.getEmpleado().getIdEmpleado());
+            st.setInt(6, this.getDni());
+            st.setString(7, this.getEscolaridad());
+            st.setInt(8, this.getEmpleado().getIdEmpleado());
             st.execute();
             System.out.println("SE GRABO EL FAMILIAR EN LA BASE DE DATOS");
             st.close();
@@ -127,7 +137,7 @@ public class Familia {
     public void editarFamiliar(){
         try {
             Conexion conexion = new Conexion();
-            String query = "update familia set apellido ='"+ this.getApellido()+ "', nombre =' " + this.getNombre()+ "', vinculo =' " + this.getVinculo()+ "', fechaNacimiento = ' " + this.getFechaNacimiento() + "', discapacidad = ' " + this.getDiscapacidad() + "' where idfamilia =" + this.getIdFamilia()+ ";";
+            String query = "update familia set apellido ='"+ this.getApellido()+ "', nombre =' " + this.getNombre()+ "', vinculo =' " + this.getVinculo()+ "', fechaNacimiento = ' " + this.getFechaNacimiento() + "', discapacidad = ' " + this.getDiscapacidad() + "', dni = '" + this.getDni() + "', escolaridad = '" + this.getEscolaridad() + "' where idfamilia =" + this.getIdFamilia()+ ";";
             System.out.println(query);
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.executeUpdate();
@@ -143,7 +153,7 @@ public class Familia {
         ResultSet resultado = null;
          try {
             Conexion conexion = new Conexion();
-            String query = "SELECT idfamilia, familia.nombre, familia.apellido, familia.vinculo, familia.fechaNacimiento, familia.discapacidad\n" +
+            String query = "SELECT idfamilia, familia.dni, familia.nombre, familia.apellido, familia.vinculo, familia.fechaNacimiento, familia.discapacidad, familia.escolaridad \n" +
                            "FROM familia\n" +
                            "INNER JOIN empleado ON empleado.idempleado = familia.empleado_idempleado\n" +
                            "WHERE empleado.idempleado = " + this.getEmpleado().getIdEmpleado() + ";";

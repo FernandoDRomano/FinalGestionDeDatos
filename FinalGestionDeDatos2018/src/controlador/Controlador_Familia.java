@@ -54,18 +54,22 @@ public class Controlador_Familia {
         vista.getModeloTabla().addColumn("Id");
         vista.getModeloTabla().addColumn("Apellido");
         vista.getModeloTabla().addColumn("Nombre");
+        vista.getModeloTabla().addColumn("Dni");
         vista.getModeloTabla().addColumn("Vinculo");
         vista.getModeloTabla().addColumn("Fecha de Nacimiento");
         vista.getModeloTabla().addColumn("Discapacidad");
+        vista.getModeloTabla().addColumn("Escolaridad");
         ResultSet r = familia.listarFamiliar();
         while (r.next()) {
-            Object[] fila = new Object[6];
+            Object[] fila = new Object[8];
             fila[0] = r.getString("idfamilia");
             fila[1] = r.getString("apellido");
             fila[2] = r.getString("nombre");
-            fila[3] = r.getString("vinculo");
-            fila[4] = r.getString("fechaNacimiento");
-            fila[5] = r.getString("discapacidad");
+            fila[3] = r.getString("dni");
+            fila[4] = r.getString("vinculo");
+            fila[5] = r.getString("fechaNacimiento");
+            fila[6] = r.getString("discapacidad");
+            fila[7] = r.getString("escolaridad");
             vista.getModeloTabla().addRow(fila);
         }
         vista.getTabla_GrupoFamiliar().setModel(vista.getModeloTabla());
@@ -78,7 +82,9 @@ public class Controlador_Familia {
         
         familia.setApellido(vista.getTxt_ApellidoFamiliar().getText());
         familia.setNombre(vista.getTxt_NombreFamiliar().getText());
+        familia.setDni(Integer.parseInt(vista.getTxt_DniFamiliar().getText()));
         familia.setVinculo(vista.getCombo_Vinculo().getSelectedItem().toString());
+        familia.setEscolaridad(vista.getCombo_Escolaridad().getSelectedItem().toString());
         familia.setDiscapacidad(vista.getCombo_Discapacidad().getSelectedItem().toString());
         //Tratamiento de la fecha de Ingreso
         String fecha = new SimpleDateFormat("yyyy/MM/dd").format(vista.getDate_FechaNacimiento().getDate());
@@ -101,7 +107,9 @@ public class Controlador_Familia {
             familia.setIdFamilia(Integer.parseInt(vista.getTxt_IdFamiliar().getText()));
             familia.setApellido(vista.getTxt_ApellidoFamiliar().getText());
             familia.setNombre(vista.getTxt_NombreFamiliar().getText());
+            familia.setDni(Integer.parseInt(vista.getTxt_DniFamiliar().getText()));
             familia.setVinculo(vista.getCombo_Vinculo().getSelectedItem().toString());
+            familia.setEscolaridad(vista.getCombo_Escolaridad().getSelectedItem().toString());
             familia.setDiscapacidad(vista.getCombo_Discapacidad().getSelectedItem().toString());
             //Tratamiento de la fecha de Ingreso
             String fecha = new SimpleDateFormat("yyyy/MM/dd").format(vista.getDate_FechaNacimiento().getDate());
@@ -134,11 +142,13 @@ public class Controlador_Familia {
             vista.getTxt_IdFamiliar().setText(vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 0).toString());
             vista.getTxt_ApellidoFamiliar().setText(vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 1).toString());
             vista.getTxt_NombreFamiliar().setText(vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 2).toString());
-            vista.getCombo_Vinculo().getModel().setSelectedItem(vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 3).toString());
-            vista.getCombo_Discapacidad().getModel().setSelectedItem(vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 5).toString());
+            vista.getTxt_DniFamiliar().setText(vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 3).toString());
+            vista.getCombo_Vinculo().getModel().setSelectedItem(vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 4).toString());
+            vista.getCombo_Discapacidad().getModel().setSelectedItem(vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 6).toString());
+            vista.getCombo_Escolaridad().getModel().setSelectedItem(vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 7).toString());
             //Tratamiento de la Fecha
             SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
-            String fechaEmpleado = vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 4).toString();
+            String fechaEmpleado = vista.getTabla_GrupoFamiliar().getModel().getValueAt(fila, 5).toString();
             Date fecha = null;
             fecha = formatoDelTexto.parse(fechaEmpleado);
             vista.getDate_FechaNacimiento().setDate(fecha);
@@ -149,6 +159,8 @@ public class Controlador_Familia {
     public static void LimpiarCampos(GestionFamilia vista){
         vista.getTxt_ApellidoFamiliar().setText("");
         vista.getTxt_NombreFamiliar().setText("");
+        vista.getTxt_DniFamiliar().setText("");
+        vista.getCombo_Escolaridad().getModel().setSelectedItem("Seleccione una Opción");
         vista.getCombo_Vinculo().getModel().setSelectedItem("Seleccione una Opción");
         vista.getCombo_Discapacidad().getModel().setSelectedItem("Seleccione una Opción");
         vista.getDate_FechaNacimiento().setCalendar(null);

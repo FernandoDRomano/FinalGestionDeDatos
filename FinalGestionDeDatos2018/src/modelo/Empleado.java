@@ -14,7 +14,7 @@ public class Empleado {
     private String apellido;
     private String nombre;
     private int dni;
-    private String telefono;
+    private int telefono;
     private String fechaIngreso;
     private String sexo;
     private String estado;
@@ -22,7 +22,7 @@ public class Empleado {
     private Cargo cargo;
     private Usuario usuario;
 
-    public Empleado(int idEmpleado, String nombre, int dni, String telefono, String fechaIngreso, String sexo, String estado, Domicilio domicilio, Cargo cargo, Usuario usuario) {
+    public Empleado(int idEmpleado, String nombre, int dni, int telefono, String fechaIngreso, String sexo, String estado, Domicilio domicilio, Cargo cargo, Usuario usuario) {
         this.idEmpleado = idEmpleado;
         this.nombre = nombre;
         this.dni = dni;
@@ -70,11 +70,11 @@ public class Empleado {
         this.dni = dni;
     }
 
-    public String getTelefono() {
+    public int getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(String telefono) {
+    public void setTelefono(int telefono) {
         this.telefono = telefono;
     }
 
@@ -144,7 +144,7 @@ public class Empleado {
             st.setString(1, this.getApellido());
             st.setString(2, this.getNombre());
             st.setInt(3, this.getDni());
-            st.setString(4, this.getTelefono());
+            st.setInt(4, this.getTelefono());
             st.setString(5, this.getFechaIngreso());
             st.setString(6, this.getSexo());
             st.setString(7, this.getEstado());
@@ -264,9 +264,9 @@ public class Empleado {
     public void editarEmpleado(){
         try {
             Conexion conexion = new Conexion();
-            String query = "update empleado set apellido ='"+ this.getApellido()+ "', nombre =' " + this.getNombre() + "', dni =' " + this.getDni() +
-                            "', telefono = ' " + this.getTelefono() + "', sexo ='"+ this.getSexo()+"', estado = ' " + this.getEstado() + 
-                            "', cargo_idcargo = ' " + this.getCargo().getIdCargo() + "' where idempleado =" + this.getIdEmpleado()+ ";";
+            String query = "update empleado set apellido ='"+ this.getApellido()+ "', nombre = '" + this.getNombre() + "', dni = '" + this.getDni() +
+                            "', telefono = '" + this.getTelefono() + "', sexo = '"+ this.getSexo()+"', estado = '" + this.getEstado() + 
+                            "', cargo_idcargo = '" + this.getCargo().getIdCargo() + "' where idempleado =" + this.getIdEmpleado()+ ";";
             
             System.out.println(query);
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
