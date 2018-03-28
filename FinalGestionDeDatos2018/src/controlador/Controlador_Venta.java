@@ -80,7 +80,7 @@ public class Controlador_Venta {
             Object[] fila = new Object[4];
             fila[0] = r.getString("idProducto");
             fila[1] = r.getString("descripcion");
-            fila[2] = r.getString("precioCompra");
+            fila[2] = r.getString("precioVenta");
             fila[3] = r.getString("stock");
             vista.getModelo().addRow(fila);
         }
@@ -285,7 +285,6 @@ public class Controlador_Venta {
     
     
     //METODO PARA ETRABAJAR EN EL FORM LISTAR_VENTA_EMPLEADO
-    
     public static void cargarEmpleados(ListarVentaEmpleado vista) throws SQLException {
         empleado = new Empleado();
         vista.getModeloEmpleados().setColumnCount(0);

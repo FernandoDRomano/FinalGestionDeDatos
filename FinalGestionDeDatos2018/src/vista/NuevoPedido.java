@@ -1,6 +1,7 @@
 package vista;
 
 import com.toedter.calendar.JDateChooser;
+import controlador.Controlador_Pedido;
 import controlador.Controlador_Venta;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -17,12 +18,12 @@ import vista.Principal;
  *
  * @author Fernando
  */
-public class NuevaPedido extends javax.swing.JDialog {
+public class NuevoPedido extends javax.swing.JDialog {
 
     public DefaultTableModel modelo = new DefaultTableModel();
     private Empleado empleado;
     
-    public NuevaPedido(java.awt.Frame parent, boolean modal, Empleado empleado) {
+    public NuevoPedido(java.awt.Frame parent, boolean modal, Empleado empleado) {
         super(parent, modal);
         initComponents();
         //Recibo por parametro el Empleado de la Ventana Principal
@@ -57,7 +58,7 @@ public class NuevaPedido extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         txt_IdProveedor = new javax.swing.JTextField();
         txt_NombreProveedor = new javax.swing.JTextField();
-        btn_BuscarCliente = new javax.swing.JButton();
+        btn_BuscarProveedor = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_Descripcion = new javax.swing.JTable();
@@ -137,10 +138,10 @@ public class NuevaPedido extends javax.swing.JDialog {
         txt_NombreProveedor.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         txt_NombreProveedor.setForeground(java.awt.Color.black);
 
-        btn_BuscarCliente.setText("Buscar");
-        btn_BuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+        btn_BuscarProveedor.setText("Buscar");
+        btn_BuscarProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_BuscarClienteActionPerformed(evt);
+                btn_BuscarProveedorActionPerformed(evt);
             }
         });
 
@@ -162,7 +163,7 @@ public class NuevaPedido extends javax.swing.JDialog {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(txt_NombreProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btn_BuscarCliente))
+                        .addComponent(btn_BuscarProveedor))
                     .addComponent(txt_IdProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -177,7 +178,7 @@ public class NuevaPedido extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_NombreProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(btn_BuscarCliente))
+                    .addComponent(btn_BuscarProveedor))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -327,15 +328,24 @@ public class NuevaPedido extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_BuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_BuscarClienteActionPerformed
-
-    }//GEN-LAST:event_btn_BuscarClienteActionPerformed
+    private void btn_BuscarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_BuscarProveedorActionPerformed
+        try {
+            Controlador_Pedido.ventanaBuscarProveedor(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(NuevoPedido.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btn_BuscarProveedorActionPerformed
 
     private void btn_AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AgregarActionPerformed
-
+        try {
+            Controlador_Pedido.ventanaBuscarProducto(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(NuevoPedido.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_AgregarActionPerformed
 
     private void btn_QuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_QuitarActionPerformed
+        Controlador_Pedido.quitarProducto(this);
     }//GEN-LAST:event_btn_QuitarActionPerformed
 
     private void txt_IdEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_IdEmpleadoActionPerformed
@@ -347,6 +357,7 @@ public class NuevaPedido extends javax.swing.JDialog {
     }//GEN-LAST:event_btn_CancelarActionPerformed
 
     private void btn_GrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_GrabarActionPerformed
+        Controlador_Pedido.AltaVenta(this);
     }//GEN-LAST:event_btn_GrabarActionPerformed
 
     public DefaultTableModel getModelo() {
@@ -429,7 +440,7 @@ public class NuevaPedido extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser Date_Fecha;
     private javax.swing.JButton btn_Agregar;
-    private javax.swing.JButton btn_BuscarCliente;
+    private javax.swing.JButton btn_BuscarProveedor;
     private javax.swing.JButton btn_Cancelar;
     private javax.swing.JButton btn_Grabar;
     private javax.swing.JButton btn_Quitar;

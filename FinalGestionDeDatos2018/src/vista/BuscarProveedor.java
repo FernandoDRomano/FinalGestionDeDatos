@@ -1,6 +1,9 @@
 
 package vista;
 
+import controlador.Controlador_Pedido;
+import java.sql.SQLException;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -12,10 +15,13 @@ import javax.swing.table.DefaultTableModel;
 public class BuscarProveedor extends javax.swing.JDialog {
 
     DefaultTableModel modelo = new DefaultTableModel();
+    NuevoPedido compra;
     
-    public BuscarProveedor(java.awt.Frame parent, boolean modal) {
+    public BuscarProveedor(java.awt.Frame parent, boolean modal, NuevoPedido compra) throws SQLException {
         super(parent, modal);
         initComponents();
+        this.compra = compra;
+        Controlador_Pedido.CargarTodosLosProveedores(this);
     }
 
     /**
@@ -137,7 +143,7 @@ public class BuscarProveedor extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AgregarActionPerformed
-
+       Controlador_Pedido.agregarProveedorAlPedido(this, compra);
     }//GEN-LAST:event_btn_AgregarActionPerformed
 
     private void btn_CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CancelarActionPerformed
@@ -177,45 +183,6 @@ public class BuscarProveedor extends javax.swing.JDialog {
     }
 
     
-    
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BuscarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BuscarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BuscarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BuscarProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                BuscarProveedor dialog = new BuscarProveedor(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Agregar;

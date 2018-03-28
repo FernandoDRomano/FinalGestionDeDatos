@@ -34,7 +34,7 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[300, 538]"/>
+              <Dimension value="[320, 538]"/>
             </Property>
           </Properties>
           <Constraints>
@@ -46,9 +46,9 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="Contenedor_Menu" pref="280" max="32767" attributes="0"/>
+                      <Component id="Contenedor_Menu" pref="296" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -57,7 +57,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="Contenedor_Menu" pref="530" max="32767" attributes="0"/>
+                      <Component id="Contenedor_Menu" pref="528" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>

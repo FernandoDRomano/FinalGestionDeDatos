@@ -263,9 +263,12 @@ public class Principal extends javax.swing.JFrame {
     
         Icon IconoNuevaCompra = new ImageIcon(ClassLoader.getSystemResource("imagenes/NuevaCompra.png"));
         Icon IconoListarCompra = new ImageIcon(ClassLoader.getSystemResource("imagenes/ListarCompra.png"));
+        Icon IconoListarCompraXempleado = new ImageIcon(ClassLoader.getSystemResource("imagenes/ListarCompraEmpleado.png"));
+
         
         final JXLabel labelNuevaCompra = new JXLabel("Nueva Compra", IconoNuevaCompra, JXLabel.LEFT);
         final JXLabel labelListarCompras = new JXLabel("Listar Compras", IconoListarCompra, JXLabel.LEFT);
+        final JXLabel labelListarComprasXempleado = new JXLabel("Listar Compras por Empleado", IconoListarCompraXempleado, JXLabel.LEFT);
         
         labelNuevaCompra.addMouseListener(new MouseAdapter() {
             
@@ -273,15 +276,47 @@ public class Principal extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e){
                 System.out.println("Creando Interfaz NUEVA COMPRA");
                 //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
-                NuevaPedido vista = new NuevaPedido(null, true, empleado);
+                NuevoPedido vista = new NuevoPedido(null, true, empleado);
                 vista.setVisible(true);
+            }
+        });
+        
+        labelListarCompras.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Interfaz LISTAR COMPRA");
+                    //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
+                    ListarPedido vista = new ListarPedido(null, true);
+                    vista.setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        labelListarComprasXempleado.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Interfaz LISTAR COMPRA POR EMPLEADO");
+                    //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
+                    ListarPedidoEmpleado vista = new ListarPedidoEmpleado(null, true);
+                    vista.setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
         eventosMouse(labelNuevaCompra);
         eventosMouse(labelListarCompras);
+        eventosMouse(labelListarComprasXempleado);
         Menu_Compra.add(labelNuevaCompra);
         Menu_Compra.add(labelListarCompras);
+        Menu_Compra.add(labelListarComprasXempleado);
     }
     
     public final void MenuReportes(){
@@ -521,7 +556,7 @@ public class Principal extends javax.swing.JFrame {
         jcMousePanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel1.setPreferredSize(new java.awt.Dimension(300, 538));
+        jPanel1.setPreferredSize(new java.awt.Dimension(320, 538));
 
         Contenedor_Menu.setBackground(new java.awt.Color(102, 153, 255));
         org.jdesktop.swingx.VerticalLayout verticalLayout1 = new org.jdesktop.swingx.VerticalLayout();
@@ -571,16 +606,16 @@ public class Principal extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Contenedor_Menu, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addComponent(Contenedor_Menu, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Contenedor_Menu, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                .addComponent(Contenedor_Menu, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

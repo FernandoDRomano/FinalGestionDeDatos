@@ -1,11 +1,7 @@
-
 package vista;
 
 import controlador.Controlador_Pedido;
-import controlador.Controlador_Venta;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -14,61 +10,18 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Fernando
  */
-public class BuscarProducto extends javax.swing.JDialog {
+public class BuscarProductoPedido extends javax.swing.JDialog {
 
-    public DefaultTableModel modelo = new DefaultTableModel();
-    public NuevaVenta venta;
+    private DefaultTableModel modelo = new DefaultTableModel();
+    private NuevoPedido compra;
     
-    public BuscarProducto(java.awt.Frame parent, boolean modal, NuevaVenta venta) throws SQLException {
+    public BuscarProductoPedido(java.awt.Frame parent, boolean modal, NuevoPedido compra) throws SQLException {
         super(parent, modal);
         initComponents();
-        this.venta = venta;
-        Controlador_Venta.CargarTodosLosProductos(this);
-        Controlador_Venta.validarStock(venta, this);
+        this.compra = compra;
+        Controlador_Pedido.CargarTodosLosProductos(this);
     }
 
-    public DefaultTableModel getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(DefaultTableModel modelo) {
-        this.modelo = modelo;
-    }
-
-    public JTable getTabla_Producto() {
-        return tabla_Producto;
-    }
-
-    public void setTabla_Producto(JTable tabla_Producto) {
-        this.tabla_Producto = tabla_Producto;
-    }
-
-    public JTextField getTxt_Buscar() {
-        return txt_Buscar;
-    }
-
-    public void setTxt_Buscar(JTextField txt_Buscar) {
-        this.txt_Buscar = txt_Buscar;
-    }
-
-    public JTextField getTxt_Cantidad() {
-        return txt_Cantidad;
-    }
-
-    public void setTxt_Cantidad(JTextField txt_Cantidad) {
-        this.txt_Cantidad = txt_Cantidad;
-    }
-
-    public NuevaVenta getVenta() {
-        return venta;
-    }
-
-    public void setVenta(NuevaVenta venta) {
-        this.venta = venta;
-    }
-    
-    
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -141,20 +94,15 @@ public class BuscarProducto extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(263, 263, 263)
-                                .addComponent(jLabel1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(200, 200, 200)
-                                .addComponent(btn_Agregar)
-                                .addGap(32, 32, 32)
-                                .addComponent(btn_Cancelar)))
+                        .addGap(200, 200, 200)
+                        .addComponent(btn_Agregar)
+                        .addGap(32, 32, 32)
+                        .addComponent(btn_Cancelar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -167,13 +115,17 @@ public class BuscarProducto extends javax.swing.JDialog {
                                         .addComponent(txt_Cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(201, 201, 201)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addGap(24, 24, 24)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txt_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -183,7 +135,7 @@ public class BuscarProducto extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txt_Cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_Agregar)
                     .addComponent(btn_Cancelar))
@@ -198,19 +150,19 @@ public class BuscarProducto extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AgregarActionPerformed
+        Controlador_Pedido.agregarProductoAlPedido(this, compra);
+    }//GEN-LAST:event_btn_AgregarActionPerformed
+
     private void btn_CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btn_CancelarActionPerformed
-
-    private void btn_AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AgregarActionPerformed
-        Controlador_Venta.agregarProductoAlaVenta(this, venta);
-    }//GEN-LAST:event_btn_AgregarActionPerformed
 
     private void txt_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_BuscarKeyReleased
         /*try {
@@ -223,6 +175,46 @@ public class BuscarProducto extends javax.swing.JDialog {
     private void txt_CantidadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_CantidadMouseClicked
         this.getTxt_Cantidad().setText("");
     }//GEN-LAST:event_txt_CantidadMouseClicked
+
+    public DefaultTableModel getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(DefaultTableModel modelo) {
+        this.modelo = modelo;
+    }
+
+    public NuevoPedido getCompra() {
+        return compra;
+    }
+
+    public void setCompra(NuevoPedido compra) {
+        this.compra = compra;
+    }
+
+    public JTable getTabla_Producto() {
+        return tabla_Producto;
+    }
+
+    public void setTabla_Producto(JTable tabla_Producto) {
+        this.tabla_Producto = tabla_Producto;
+    }
+
+    public JTextField getTxt_Buscar() {
+        return txt_Buscar;
+    }
+
+    public void setTxt_Buscar(JTextField txt_Buscar) {
+        this.txt_Buscar = txt_Buscar;
+    }
+
+    public JTextField getTxt_Cantidad() {
+        return txt_Cantidad;
+    }
+
+    public void setTxt_Cantidad(JTextField txt_Cantidad) {
+        this.txt_Cantidad = txt_Cantidad;
+    }
 
     
 
