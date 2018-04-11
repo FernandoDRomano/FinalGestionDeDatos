@@ -1,7 +1,13 @@
 
 package vista;
 
-import java.awt.Dimension;
+import controlador.Controlador_Cargo;
+import controlador.Controlador_Categoria;
+import controlador.Controlador_Cliente;
+import controlador.Controlador_Concepto;
+import controlador.Controlador_Empleado;
+import controlador.Controlador_Producto;
+import controlador.Controlador_Proveedor;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -51,10 +57,12 @@ public class Principal extends javax.swing.JFrame {
     }
 
     public final void Minimizar(){
+        Menu_Gestion.setCollapsed(true);
         Menu_Compra.setCollapsed(true);
         Menu_Venta.setCollapsed(true);
         Menu_LiquidacionSueldo.setCollapsed(true);
         Menu_Reporte.setCollapsed(true);
+        Menu_Sistema.setCollapsed(true);
     }
     
     public final void MenuGestiones(){
@@ -75,7 +83,7 @@ public class Principal extends javax.swing.JFrame {
         labelProveedor = new JXLabel("Gestión de Proveedores", IconoProveedor, JXLabel.LEFT);
         labelFamilia = new JXLabel("Gestión de Grupo Familiar", IconoFamilia, JXLabel.LEFT);
         labelProducto = new JXLabel("Gestión de Productos", IconoProducto, JXLabel.LEFT);
-        labelCategoria = new JXLabel("Gestión de Categorias", IconoCategoria, JXLabel.LEFT);
+        labelCategoria = new JXLabel("Gestión de Categorías", IconoCategoria, JXLabel.LEFT);
         labelCargo = new JXLabel("Gestión de Cargos", IconoCargo, JXLabel.LEFT);
         labelConceptos = new JXLabel("Gestión de Conceptos", IconoConceptos, JXLabel.LEFT);
         
@@ -177,6 +185,20 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         
+        labelConceptos.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                System.out.println("Creando Interfaz GestionConcepto");
+                try {
+                    GestionConcepto vista = new GestionConcepto(null, true);
+                    vista.setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }    
+            }
+        });
+        
         eventosMouse(labelEmpleado);
         eventosMouse(labelCliente);
         eventosMouse(labelProveedor);
@@ -185,14 +207,15 @@ public class Principal extends javax.swing.JFrame {
         eventosMouse(labelCategoria);
         eventosMouse(labelCargo);
         eventosMouse(labelConceptos);
-        Menu_Gestion.add(labelEmpleado);
+        Menu_Gestion.add(labelCargo);
+        Menu_Gestion.add(labelCategoria);
         Menu_Gestion.add(labelCliente);
-        Menu_Gestion.add(labelProveedor);
+        Menu_Gestion.add(labelConceptos);
+        Menu_Gestion.add(labelEmpleado);
         Menu_Gestion.add(labelFamilia);
         Menu_Gestion.add(labelProducto);
-        Menu_Gestion.add(labelCategoria);
-        Menu_Gestion.add(labelCargo);
-        Menu_Gestion.add(labelConceptos);
+        Menu_Gestion.add(labelProveedor);
+
     }
     
     public final void MenuVentas(){
@@ -225,7 +248,7 @@ public class Principal extends javax.swing.JFrame {
                 try {
                     System.out.println("Creando Interfaz LISTAR VENTA");
                     //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
-                    ListarVenta vista = new ListarVenta(null, true);    
+                    ListarVenta vista = new ListarVenta(null, false);    
                     vista.setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
@@ -276,7 +299,7 @@ public class Principal extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e){
                 System.out.println("Creando Interfaz NUEVA COMPRA");
                 //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
-                NuevoPedido vista = new NuevoPedido(null, true, empleado);
+                NuevaCompra vista = new NuevaCompra(null, true, empleado);
                 vista.setVisible(true);
             }
         });
@@ -288,7 +311,7 @@ public class Principal extends javax.swing.JFrame {
                 try {
                     System.out.println("Creando Interfaz LISTAR COMPRA");
                     //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
-                    ListarPedido vista = new ListarPedido(null, true);
+                    ListarCompra vista = new ListarCompra(null, false);
                     vista.setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
@@ -303,7 +326,7 @@ public class Principal extends javax.swing.JFrame {
                 try {
                     System.out.println("Creando Interfaz LISTAR COMPRA POR EMPLEADO");
                     //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
-                    ListarPedidoEmpleado vista = new ListarPedidoEmpleado(null, true);
+                    ListarCompraEmpleado vista = new ListarCompraEmpleado(null, true);
                     vista.setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
@@ -322,11 +345,195 @@ public class Principal extends javax.swing.JFrame {
     public final void MenuReportes(){
         Icon Icono = new ImageIcon(ClassLoader.getSystemResource("imagenes/Menu_Reporte.png"));
         Menu_Reporte.setIcon(Icono);
+        
+        Icon IconoPdf = new ImageIcon(ClassLoader.getSystemResource("imagenes/PDF.png"));
+        
+        final JXLabel labelCargo = new JXLabel("Reporte de Cargos", IconoPdf, JXLabel.LEFT);
+        final JXLabel labelCategoria = new JXLabel("Reporte de Categorías", IconoPdf, JXLabel.LEFT);
+        final JXLabel labelCliente = new JXLabel("Reporte de Clientes", IconoPdf, JXLabel.LEFT);
+        final JXLabel labelConcepto = new JXLabel("Reporte de Conceptos", IconoPdf, JXLabel.LEFT);
+        final JXLabel labelEmpleado = new JXLabel("Reporte de Empleados", IconoPdf, JXLabel.LEFT);
+        final JXLabel labelProducto = new JXLabel("Reporte de Productos", IconoPdf, JXLabel.LEFT);
+        final JXLabel labelProveedores = new JXLabel("Reporte de Proveedores", IconoPdf, JXLabel.LEFT);
+    
+        labelCargo.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Reporte");
+                    Controlador_Cargo.imprimirCargos(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        labelCategoria.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Reporte");
+                    Controlador_Categoria.imprimirCategorias(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        labelCliente.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Reporte");
+                    Controlador_Cliente.imprimirClientes(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        labelConcepto.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Reporte");
+                    Controlador_Concepto.imprimirConceptos(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        labelEmpleado.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Reporte");
+                    Controlador_Empleado.imprimirEmpleados(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        labelProducto.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Reporte");
+                    Controlador_Producto.imprimirProductos(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        labelProveedores.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Reporte");
+                    Controlador_Proveedor.imprimirProveedores(null);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        eventosMouse(labelCargo);
+        eventosMouse(labelCategoria);
+        eventosMouse(labelCliente);
+        eventosMouse(labelConcepto);
+        eventosMouse(labelEmpleado);
+        eventosMouse(labelProducto);
+        eventosMouse(labelProveedores);
+        Menu_Reporte.add(labelCargo);
+        Menu_Reporte.add(labelCategoria);
+        Menu_Reporte.add(labelCliente);
+        Menu_Reporte.add(labelConcepto);
+        Menu_Reporte.add(labelEmpleado);
+        Menu_Reporte.add(labelProducto);
+        Menu_Reporte.add(labelProveedores);
     }
     
     public final void MenuLiquidacionSueldo(){
         Icon Icono = new ImageIcon(ClassLoader.getSystemResource("imagenes/Menu_Liquidacion.png"));
         Menu_LiquidacionSueldo.setIcon(Icono);
+        
+        Icon IconoLiquidacion = new ImageIcon(ClassLoader.getSystemResource("imagenes/LiquidacionEmpleado.png"));
+        Icon IconoLiquidacionTodos = new ImageIcon(ClassLoader.getSystemResource("imagenes/LiquidacionTodos.png"));
+        Icon IconoListarLiquidacionXempleado = new ImageIcon(ClassLoader.getSystemResource("imagenes/ListarLiquidacion.png"));
+        
+        final JXLabel labelLiquidacion = new JXLabel("Liquidación por Empleado", IconoLiquidacion, JXLabel.LEFT);
+        final JXLabel labelLiquidacionTodos = new JXLabel("Liquidación a Todos", IconoLiquidacionTodos, JXLabel.LEFT);
+        final JXLabel labelListarLiquidacionXempleado = new JXLabel("Listar Liquidaciones", IconoListarLiquidacionXempleado, JXLabel.LEFT);
+     
+        labelLiquidacion.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                System.out.println("Creando Interfaz NUEVA LIQUIDACION");
+                //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
+                LiquidacionEmpleado vista = new LiquidacionEmpleado(null, true);
+                vista.setVisible(true);
+            }
+        });
+        
+        labelLiquidacionTodos.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                System.out.println("Creando Interfaz LIQUIDACION TODOS");
+                //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
+                LiquidacionTodos vista = new LiquidacionTodos(null, true);
+                vista.setVisible(true);
+            }
+        });
+        
+        labelListarLiquidacionXempleado.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                try {
+                    System.out.println("Creando Interfaz LISTAR LIQUIDACIONES");
+                    //En el Controlador_Usuario cuando se loguea ya le setea los valores al objeto empleado
+                    ListarLiquidaciones vista = new ListarLiquidaciones(null, false);
+                    vista.setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        eventosMouse(labelLiquidacion);
+        eventosMouse(labelLiquidacionTodos);
+        eventosMouse(labelListarLiquidacionXempleado);
+        Menu_LiquidacionSueldo.add(labelLiquidacion);
+        Menu_LiquidacionSueldo.add(labelLiquidacionTodos);
+        Menu_LiquidacionSueldo.add(labelListarLiquidacionXempleado);
+        
+        
     }
     
     
@@ -336,9 +543,11 @@ public class Principal extends javax.swing.JFrame {
         
         Icon IconoClave = new ImageIcon(ClassLoader.getSystemResource("imagenes/Clave.png"));
         Icon IconoSalir = new ImageIcon(ClassLoader.getSystemResource("imagenes/Salir.png"));
+        Icon IconoAcercaDe = new ImageIcon(ClassLoader.getSystemResource("imagenes/AcercaDe.png"));
         
         final JXLabel labelClave = new JXLabel("Cambiar Contraseña", IconoClave, JXLabel.LEFT);
         final JXLabel labelSalir = new JXLabel("Salir", IconoSalir, JXLabel.LEFT);
+        final JXLabel labelAcercaDe = new JXLabel("Acerca De", IconoAcercaDe, JXLabel.LEFT);
         
         labelSalir.addMouseListener(new MouseAdapter() {
             
@@ -366,11 +575,25 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         
+        labelAcercaDe.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){
+                System.out.println("Creando Interfaz ACERCA DE");
+                AcercaDe vista = new AcercaDe(null, true);
+                vista.setVisible(true);
+                
+            }
+        });
+        
         
         eventosMouse(labelClave);
         eventosMouse(labelSalir);
+        eventosMouse(labelAcercaDe);
         Menu_Sistema.add(labelClave);
+        Menu_Sistema.add(labelAcercaDe);
         Menu_Sistema.add(labelSalir);
+        
     }
     
     public void eventosMouse(final JXLabel label){

@@ -1,9 +1,11 @@
 package vista;
 
 import controlador.Controlador_Proveedor;
+import controlador.Validar;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -20,10 +22,63 @@ public class GestionProveedor extends javax.swing.JDialog {
     public GestionProveedor(java.awt.Frame parent, boolean modal) throws SQLException {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.getTxt_Id().setEnabled(false);
         Controlador_Proveedor.ActualizarProveedor(this);
+        //VALIDO LOS FORMATOS DE LOS CAMPOS
+        Validar.validarLongitud(txt_Nombre, 45);
+        Validar.validarSoloNumeros(txt_Cuit, 11);
+        Validar.validarSoloNumeros(txt_Telefono, 7);
+        Validar.validarSoloNumeros(txt_Numero, 45);
+        Validar.validarLongitud(txt_Calle, 45);
+        Validar.validarSoloNumeros(txt_Piso, 4);
+        Validar.validarSoloLetras(txt_Departamento, 10);
+        Validar.validarLongitud(txt_Correo, 60);
     }
 
+    public JButton getBtn_Agregar() {
+        return btn_Agregar;
+    }
+
+    public void setBtn_Agregar(JButton btn_Agregar) {
+        this.btn_Agregar = btn_Agregar;
+    }
+
+    public JButton getBtn_Editar() {
+        return btn_Editar;
+    }
+
+    public void setBtn_Editar(JButton btn_Editar) {
+        this.btn_Editar = btn_Editar;
+    }
+
+    public JButton getBtn_Eliminar() {
+        return btn_Eliminar;
+    }
+
+    public void setBtn_Eliminar(JButton btn_Eliminar) {
+        this.btn_Eliminar = btn_Eliminar;
+    }
+
+    public JButton getBtn_Limpiar() {
+        return btn_Limpiar;
+    }
+
+    public void setBtn_Limpiar(JButton btn_Limpiar) {
+        this.btn_Limpiar = btn_Limpiar;
+    }
+
+    public JButton getBtn_Salir() {
+        return btn_Salir;
+    }
+
+    public void setBtn_Salir(JButton btn_Salir) {
+        this.btn_Salir = btn_Salir;
+    }
+
+    
+    
     public DefaultTableModel getModelo() {
         return modelo;
     }
@@ -153,14 +208,17 @@ public class GestionProveedor extends javax.swing.JDialog {
         txt_Telefono = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         combo_RazonSocial = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
         btn_Agregar = new javax.swing.JButton();
         btn_Editar = new javax.swing.JButton();
         btn_Eliminar = new javax.swing.JButton();
         btn_Limpiar = new javax.swing.JButton();
         btn_Salir = new javax.swing.JButton();
+        jTextField3 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestión de Proveedores");
+
+        jPanel1.setBackground(java.awt.Color.white);
 
         tabla_Proveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -180,7 +238,8 @@ public class GestionProveedor extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tabla_Proveedores);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Domicilio"));
+        jPanel2.setBackground(java.awt.Color.white);
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Domicilio", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         jLabel8.setText("Calle");
 
@@ -231,7 +290,8 @@ public class GestionProveedor extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Datos Generales"));
+        jPanel3.setBackground(java.awt.Color.white);
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Datos Generales", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         jLabel2.setText("Id");
 
@@ -241,7 +301,7 @@ public class GestionProveedor extends javax.swing.JDialog {
 
         jLabel5.setText("Correo");
 
-        jLabel6.setText("Telefono");
+        jLabel6.setText("Teléfono");
 
         jLabel7.setText("Razón Social");
 
@@ -315,11 +375,10 @@ public class GestionProveedor extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(combo_RazonSocial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        jLabel1.setText("Gestion de Proveedores");
-
+        btn_Agregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_agregar.png"))); // NOI18N
         btn_Agregar.setText("Agregar");
         btn_Agregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -327,6 +386,7 @@ public class GestionProveedor extends javax.swing.JDialog {
             }
         });
 
+        btn_Editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_editar.png"))); // NOI18N
         btn_Editar.setText("Editar");
         btn_Editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -334,6 +394,7 @@ public class GestionProveedor extends javax.swing.JDialog {
             }
         });
 
+        btn_Eliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_eliminar.png"))); // NOI18N
         btn_Eliminar.setText("Eliminar");
         btn_Eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -341,6 +402,7 @@ public class GestionProveedor extends javax.swing.JDialog {
             }
         });
 
+        btn_Limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_limpiar.png"))); // NOI18N
         btn_Limpiar.setText("Limpiar");
         btn_Limpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -348,6 +410,7 @@ public class GestionProveedor extends javax.swing.JDialog {
             }
         });
 
+        btn_Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_salir.png"))); // NOI18N
         btn_Salir.setText("Salir");
         btn_Salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -355,56 +418,60 @@ public class GestionProveedor extends javax.swing.JDialog {
             }
         });
 
+        jTextField3.setEditable(false);
+        jTextField3.setBackground(java.awt.Color.blue);
+        jTextField3.setFont(new java.awt.Font("Ubuntu", 1, 16)); // NOI18N
+        jTextField3.setForeground(java.awt.Color.white);
+        jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField3.setText("Lista de Proveedores");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(491, 491, 491))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jTextField3)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(20, 20, 20)
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(315, 315, 315)
-                        .addComponent(btn_Agregar)
-                        .addGap(31, 31, 31)
-                        .addComponent(btn_Editar)
-                        .addGap(40, 40, 40)
-                        .addComponent(btn_Eliminar)
-                        .addGap(39, 39, 39)
-                        .addComponent(btn_Limpiar)
-                        .addGap(29, 29, 29)
-                        .addComponent(btn_Salir)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(206, 206, 206)
+                        .addComponent(btn_Agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Limpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_Agregar)
                     .addComponent(btn_Editar)
                     .addComponent(btn_Eliminar)
                     .addComponent(btn_Limpiar)
                     .addComponent(btn_Salir))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -515,7 +582,6 @@ public class GestionProveedor extends javax.swing.JDialog {
     private javax.swing.JButton btn_Limpiar;
     private javax.swing.JButton btn_Salir;
     private javax.swing.JComboBox<String> combo_RazonSocial;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -530,6 +596,7 @@ public class GestionProveedor extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField3;
     private javax.swing.JTable tabla_Proveedores;
     private javax.swing.JTextField txt_Calle;
     private javax.swing.JTextField txt_Correo;

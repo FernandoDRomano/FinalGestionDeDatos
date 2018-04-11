@@ -13,16 +13,16 @@ public class Cliente {
     private int idCliente;
     private String apellido;
     private String nombre;
-    private String telefono;
+    private int telefono;
 
-    public Cliente(int idCliente, String apellido, String nombre, String telefono) {
+    public Cliente() {
+    }
+
+    public Cliente(int idCliente, String apellido, String nombre, int telefono) {
         this.idCliente = idCliente;
         this.apellido = apellido;
         this.nombre = nombre;
         this.telefono = telefono;
-    }
-
-    public Cliente() {
     }
 
     public int getIdCliente() {
@@ -49,13 +49,16 @@ public class Cliente {
         this.nombre = nombre;
     }
 
-    public String getTelefono() {
+    public int getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(String telefono) {
+    public void setTelefono(int telefono) {
         this.telefono = telefono;
     }
+
+    
+
     
     //METODOS PARA LAS TRANSACCIONES A LA BASE DE DATOS
     
@@ -66,7 +69,7 @@ public class Cliente {
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.setString(1, this.getApellido());
             st.setString(2, this.getNombre());
-            st.setString(3, this.getTelefono());
+            st.setInt(3, this.getTelefono());
             st.execute();
             System.out.println("SE GRABO EL CLIENTE EN LA BASE DE DATOS");
             st.close();
@@ -137,7 +140,29 @@ public class Cliente {
     }
 
     public boolean tieneVenta() {
-        return false;
-        //Verificar si tiene ventas el cliente sino no podra ser dado de baja
+        boolean bandera = false;
+        ResultSet r = null;
+        int resultado = 0;
+        try {
+            Conexion conexion = new Conexion();
+            String query = "select count(*) as resultado from venta where venta.cliente_idcliente  =  " + this.getIdCliente()+ " ;";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            r = st.executeQuery();
+            conexion.desconectar();
+            
+            //VERIFICO QUE NO TENGA VENTAS ASOCIADAS AL CLIENTE
+            while (r.next()) {                
+                resultado = Integer.valueOf(r.getString("resultado"));
+            }
+            
+            if (resultado > 0) {
+                bandera = true;
+            }
+            
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        
+        return bandera;
     }
 }

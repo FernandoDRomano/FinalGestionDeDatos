@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b0e7ff7e-ecb0-4d5a-b7f7-d304fe2855d6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#73B0E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#CFDBE6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="CONCEPTOS" uuid="933cf717-ec7f-4a81-98ad-2cac5020b312">
+		<queryString language="SQL">
+			<![CDATA[SELECT
+     concepto.`idconcepto` AS concepto_idconcepto,
+     concepto.`descripcion` AS concepto_descripcion,
+     concepto.`tipoConcepto` AS concepto_tipoConcepto,
+     concepto.`fijo` AS concepto_fijo,
+     concepto.`porcentaje` AS concepto_porcentaje,
+     concepto.`monto` AS concepto_monto
+FROM
+     `concepto` concepto]]>
+		</queryString>
+		<field name="concepto_idconcepto" class="java.lang.Integer"/>
+		<field name="concepto_descripcion" class="java.lang.String"/>
+		<field name="concepto_tipoConcepto" class="java.lang.String"/>
+		<field name="concepto_fijo" class="java.lang.String"/>
+		<field name="concepto_porcentaje" class="java.lang.Double"/>
+		<field name="concepto_monto" class="java.lang.Double"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[select 1 as dummy]]>
+	</queryString>
+	<field name="dummy" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement x="207" y="0" width="385" height="44" uuid="b22f1f8f-c5f9-4b42-8781-7a80b28258da"/>
+				<textElement>
+					<font size="30" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Conceptos]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="149" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 1" style="table 1" x="0" y="0" width="752" height="149" uuid="fc4272a4-0f33-47c2-8738-36ba6c6924b2"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="CONCEPTOS" uuid="df4b8809-1a1e-4332-ae17-4b023c10355d">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="39" uuid="6f57703d-2b2e-4328-9b07-b2bedfe958b9">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="10" width="37" height="20" uuid="ea4b0fa8-2258-46a6-b5dc-2f6a6c008b8c"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[ID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="27" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="7" width="37" height="20" uuid="ddc41b2e-9a30-4a91-81bb-7bc0c960d6c2"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{concepto_idconcepto}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="350" uuid="429b7939-4d4f-4db2-8ee7-6d71573a1092">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="10" width="350" height="20" uuid="12ce2c6c-1625-4dec-8f42-a0c132b71179"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[DESCRIPCIÓN]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="27" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="7" width="350" height="20" uuid="41cb9758-2f20-4425-8f7b-0b979c4b3504"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{concepto_descripcion}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="0e3ac3b6-686f-4c0f-a654-3ea11aade53d">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="10" width="90" height="20" uuid="3bdc8a17-3a3c-41e0-ac3f-24b81c5095e4"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[TIPO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="27" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="7" width="90" height="20" uuid="8241bba6-d45f-4563-ba3b-faaabbee1c5a"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{concepto_tipoConcepto}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="6f478350-7381-4a9d-976d-41660c13864c">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="10" width="90" height="20" uuid="48ed24c6-067a-459d-9b12-28d1e44a7048"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[FIJO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="27" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="7" width="90" height="20" uuid="b07e95c8-6c6b-4bc8-b134-74133e1b5b52"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{concepto_fijo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="fc1e1f21-72d8-4934-9446-e534a68dab69">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="10" width="90" height="20" uuid="d8bd8f80-7694-4c54-b3fc-52cdd42d8f7d"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[PORCENTAJE]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="27" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="7" width="90" height="20" uuid="89cd87ae-a4e0-4841-b085-abfb222e3c19"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{concepto_porcentaje}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="80d8f0da-3098-466d-a43b-50031c64ddbe">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="10" width="90" height="20" uuid="4bdb82dc-7f68-4501-872f-0b4babb2712a"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[MONTO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="27" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="7" width="90" height="20" uuid="fbcedaf8-5e42-4cb2-a168-9c8d2b5e04da"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{concepto_monto}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="3" y="34" width="204" height="20" uuid="83ce2b92-e6bf-45b9-9100-89319243d6f2"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -134,7 +134,30 @@ public class Cargo {
     }
 
     public boolean tieneEmpleados() {
-        return false;
+        boolean bandera = false;
+        ResultSet r = null;
+        int resultado = 0;
+        try {
+            Conexion conexion = new Conexion();
+            String query = "select count(*) as resultado from linea_venta where linea_venta.producto_idproducto = " + this.getIdCargo() + " ;";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            r = st.executeQuery();
+            conexion.desconectar();
+            
+            //VERIFICO QUE NO TENGA EMPLEADOS ASOCIADOS AL CARGO
+            while (r.next()) {                
+                resultado = Integer.valueOf(r.getString("resultado"));
+            }
+            
+            if (resultado > 0) {
+                bandera = true;
+            }
+            
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        
+        return bandera;
     }
 
     

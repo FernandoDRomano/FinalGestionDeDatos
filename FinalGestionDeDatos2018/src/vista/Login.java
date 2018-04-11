@@ -2,6 +2,7 @@
 package vista;
 
 import controlador.Controlador_Usuario;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,6 +73,11 @@ public class Login extends javax.swing.JDialog {
         txt_Usuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         txt_Clave.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txt_Clave.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_ClaveKeyPressed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Login_Entrar.png"))); // NOI18N
@@ -79,6 +85,11 @@ public class Login extends javax.swing.JDialog {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
             }
         });
 
@@ -164,6 +175,20 @@ public class Login extends javax.swing.JDialog {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+      
+    }//GEN-LAST:event_jButton1KeyPressed
+
+    private void txt_ClaveKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_ClaveKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            try {
+                Controlador_Usuario.Login(this);
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_txt_ClaveKeyPressed
 
     /**
      * @param args the command line arguments

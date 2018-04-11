@@ -167,6 +167,48 @@ public class Proveedor {
          return resultado;
     }
     
+    public ResultSet buscarProveedor(String cadena){
+        ResultSet resultado = null;
+         try {
+            Conexion conexion = new Conexion();
+            String query = "select * from proveedor where nombre like '" + cadena + "%' or idproveedor like'" + cadena + "%' ;";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            resultado = st.executeQuery();
+            conexion.desconectar();           
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+         
+         return resultado;
+    }
+    
+    public boolean tienePedidos() {
+        boolean bandera = false;
+        ResultSet r = null;
+        int resultado = 0;
+        try {
+            Conexion conexion = new Conexion();
+            String query = "select count(*) as resultado from pedido where pedido.proveedor_idproveedor = " + this.getIdProveedor()+ " ;";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            r = st.executeQuery();
+            conexion.desconectar();
+            
+            //VERIFICO QUE NO TENGA LINEAS DE LIQUIDACION ASOCIADAS AL CONCEPTO
+            while (r.next()) {                
+                resultado = Integer.valueOf(r.getString("resultado"));
+            }
+            
+            if (resultado > 0) {
+                bandera = true;
+            }
+            
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        
+        return bandera;
+    }
+    
     @Override
     public String toString() {
         return "Proveedor{" + "idProveedor=" + idProveedor + ", nombre=" + nombre + ", razonSocial=" + razonSocial + ", cuit=" + cuit + ", telefono=" + telefono + ", correo=" + correo + ", domicilio=" + domicilio + '}';

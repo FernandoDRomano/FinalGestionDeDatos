@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import modelo.Empleado;
 
@@ -30,6 +31,14 @@ public class GestionEmpleado extends javax.swing.JDialog {
         this.setResizable(false);
     }
 
+    public JTextField getTxt_Buscar() {
+        return txt_Buscar;
+    }
+
+    public void setTxt_Buscar(JTextField txt_Buscar) {
+        this.txt_Buscar = txt_Buscar;
+    }
+    
     public DefaultTableModel getModeloTabla() {
         return modeloTabla;
     }
@@ -46,7 +55,13 @@ public class GestionEmpleado extends javax.swing.JDialog {
         this.tabla_Empleado = tabla_Empleado;
     }
 
-    
+    public JButton getBtn_GrupoFamiliar() {
+        return btn_GrupoFamiliar;
+    }
+
+    public void setBtn_GrupoFamiliar(JButton btn_GrupoFamiliar) {
+        this.btn_GrupoFamiliar = btn_GrupoFamiliar;
+    }
     
     public JButton getBtn_Agregar() {
         return btn_Agregar;
@@ -87,24 +102,38 @@ public class GestionEmpleado extends javax.swing.JDialog {
     public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
     }
+
+    public JButton getBtn_Limpiar() {
+        return btn_Limpiar;
+    }
+
+    public void setBtn_Limpiar(JButton btn_Limpiar) {
+        this.btn_Limpiar = btn_Limpiar;
+    }
+    
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_Empleado = new javax.swing.JTable();
         btn_Agregar = new javax.swing.JButton();
         btn_Editar = new javax.swing.JButton();
         btn_Eliminar = new javax.swing.JButton();
         btn_Salir = new javax.swing.JButton();
-        boton_GrupoFamiliar = new javax.swing.JButton();
+        btn_GrupoFamiliar = new javax.swing.JButton();
+        btn_Limpiar = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        txt_Buscar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestión de Empleado");
 
-        jLabel1.setText("Gestión de Empleados");
+        jPanel1.setBackground(java.awt.Color.white);
 
         tabla_Empleado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,6 +153,7 @@ public class GestionEmpleado extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tabla_Empleado);
 
+        btn_Agregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_agregar.png"))); // NOI18N
         btn_Agregar.setText("Agregar");
         btn_Agregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -131,6 +161,7 @@ public class GestionEmpleado extends javax.swing.JDialog {
             }
         });
 
+        btn_Editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_editar.png"))); // NOI18N
         btn_Editar.setText("Editar");
         btn_Editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,6 +169,7 @@ public class GestionEmpleado extends javax.swing.JDialog {
             }
         });
 
+        btn_Eliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_eliminar.png"))); // NOI18N
         btn_Eliminar.setText("Eliminar");
         btn_Eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,6 +177,7 @@ public class GestionEmpleado extends javax.swing.JDialog {
             }
         });
 
+        btn_Salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_salir.png"))); // NOI18N
         btn_Salir.setText("Salir");
         btn_Salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -152,10 +185,34 @@ public class GestionEmpleado extends javax.swing.JDialog {
             }
         });
 
-        boton_GrupoFamiliar.setText("Grupo Familiar");
-        boton_GrupoFamiliar.addActionListener(new java.awt.event.ActionListener() {
+        btn_GrupoFamiliar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_familia.png"))); // NOI18N
+        btn_GrupoFamiliar.setText("Grupo Familiar");
+        btn_GrupoFamiliar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boton_GrupoFamiliarActionPerformed(evt);
+                btn_GrupoFamiliarActionPerformed(evt);
+            }
+        });
+
+        btn_Limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_limpiar.png"))); // NOI18N
+        btn_Limpiar.setText("Limpiar");
+        btn_Limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LimpiarActionPerformed(evt);
+            }
+        });
+
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(java.awt.Color.blue);
+        jTextField1.setFont(new java.awt.Font("Ubuntu", 1, 16)); // NOI18N
+        jTextField1.setForeground(java.awt.Color.white);
+        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField1.setText("Lista de Empleados");
+
+        jLabel1.setText("Buscar:");
+
+        txt_Buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_BuscarKeyReleased(evt);
             }
         });
 
@@ -164,40 +221,48 @@ public class GestionEmpleado extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(281, 281, 281)
-                        .addComponent(btn_Agregar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_Editar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_Eliminar)
-                        .addGap(18, 18, 18)
-                        .addComponent(boton_GrupoFamiliar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_Salir))
+                        .addComponent(jLabel1)
+                        .addGap(3, 3, 3)
+                        .addComponent(txt_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(324, 324, 324)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 921, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                        .addComponent(btn_Agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Editar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_GrupoFamiliar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Limpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jLabel1)
-                .addGap(162, 162, 162)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txt_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_Agregar)
                     .addComponent(btn_Editar)
                     .addComponent(btn_Eliminar)
-                    .addComponent(btn_Salir)
-                    .addComponent(boton_GrupoFamiliar))
+                    .addComponent(btn_GrupoFamiliar)
+                    .addComponent(btn_Limpiar)
+                    .addComponent(btn_Salir))
                 .addContainerGap())
         );
 
@@ -218,7 +283,7 @@ public class GestionEmpleado extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tabla_EmpleadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_EmpleadoMouseClicked
-
+        Controlador_Empleado.LogicaBotonesInvertir(this);
     }//GEN-LAST:event_tabla_EmpleadoMouseClicked
 
     private void btn_AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AgregarActionPerformed
@@ -248,7 +313,7 @@ public class GestionEmpleado extends javax.swing.JDialog {
                 Logger.getLogger(GestionEmpleado.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else{
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un Empleado", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "ERROR: DEBE SELECCIONAR UN EMPLEADO", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btn_EditarActionPerformed
 
@@ -264,7 +329,7 @@ public class GestionEmpleado extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btn_SalirActionPerformed
 
-    private void boton_GrupoFamiliarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_GrupoFamiliarActionPerformed
+    private void btn_GrupoFamiliarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_GrupoFamiliarActionPerformed
         empleado = new Empleado();
         int fila = tabla_Empleado.getSelectedRow();
         if(fila > -1){
@@ -277,9 +342,21 @@ public class GestionEmpleado extends javax.swing.JDialog {
                 Logger.getLogger(GestionEmpleado.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else{
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un Empleado", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "ERROR: DEBE SELECCIONAR UN EMPLEADO", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_boton_GrupoFamiliarActionPerformed
+    }//GEN-LAST:event_btn_GrupoFamiliarActionPerformed
+
+    private void btn_LimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LimpiarActionPerformed
+        Controlador_Empleado.LogicaBotones(this);
+    }//GEN-LAST:event_btn_LimpiarActionPerformed
+
+    private void txt_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_BuscarKeyReleased
+        try {
+            Controlador_Empleado.BuscarEmpleado(this, txt_Buscar.getText());
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_txt_BuscarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -329,14 +406,17 @@ public class GestionEmpleado extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton boton_GrupoFamiliar;
     private javax.swing.JButton btn_Agregar;
     private javax.swing.JButton btn_Editar;
     private javax.swing.JButton btn_Eliminar;
+    private javax.swing.JButton btn_GrupoFamiliar;
+    private javax.swing.JButton btn_Limpiar;
     private javax.swing.JButton btn_Salir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tabla_Empleado;
+    private javax.swing.JTextField txt_Buscar;
     // End of variables declaration//GEN-END:variables
 }

@@ -94,45 +94,16 @@
                   </Properties>
                 </Component>
                 <Component class="org.jdesktop.swingx.JXTaskPane" name="Menu_Gestion">
-                  <Properties>
-                    <Property name="scrollOnExpand" type="boolean" value="true"/>
-                    <Property name="special" type="boolean" value="true"/>
-                    <Property name="title" type="java.lang.String" value="Gestiones"/>
-                  </Properties>
                 </Component>
                 <Component class="org.jdesktop.swingx.JXTaskPane" name="Menu_Venta">
-                  <Properties>
-                    <Property name="special" type="boolean" value="true"/>
-                    <Property name="title" type="java.lang.String" value="Ventas"/>
-                  </Properties>
                 </Component>
                 <Component class="org.jdesktop.swingx.JXTaskPane" name="Menu_Compra">
-                  <Properties>
-                    <Property name="scrollOnExpand" type="boolean" value="true"/>
-                    <Property name="special" type="boolean" value="true"/>
-                    <Property name="title" type="java.lang.String" value="Compras"/>
-                  </Properties>
                 </Component>
                 <Component class="org.jdesktop.swingx.JXTaskPane" name="Menu_Reporte">
-                  <Properties>
-                    <Property name="scrollOnExpand" type="boolean" value="true"/>
-                    <Property name="special" type="boolean" value="true"/>
-                    <Property name="title" type="java.lang.String" value="Reportes"/>
-                  </Properties>
                 </Component>
                 <Component class="org.jdesktop.swingx.JXTaskPane" name="Menu_LiquidacionSueldo">
-                  <Properties>
-                    <Property name="scrollOnExpand" type="boolean" value="true"/>
-                    <Property name="special" type="boolean" value="true"/>
-                    <Property name="title" type="java.lang.String" value="Liquidaci&#xf3;n de Sueldo"/>
-                  </Properties>
                 </Component>
                 <Component class="org.jdesktop.swingx.JXTaskPane" name="Menu_Sistema">
-                  <Properties>
-                    <Property name="scrollOnExpand" type="boolean" value="true"/>
-                    <Property name="special" type="boolean" value="true"/>
-                    <Property name="title" type="java.lang.String" value="Sistema"/>
-                  </Properties>
                 </Component>
               </SubComponents>
               <LayoutCode>

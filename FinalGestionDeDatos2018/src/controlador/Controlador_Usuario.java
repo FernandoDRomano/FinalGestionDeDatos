@@ -90,7 +90,8 @@ public class Controlador_Usuario {
         }else{
             vista.getTxt_Usuario().setText("");
             vista.getTxt_Clave().setText("");
-            JOptionPane.showMessageDialog(vista, "USUARIO O CONTRASEÑA INCORRECTA!!", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "ERROR: USUARIO O CONTRASEÑA INCORRECTA", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            vista.getTxt_Usuario().requestFocus();
         }
     }
     
@@ -132,13 +133,13 @@ public class Controlador_Usuario {
                 vista.getTxt_Actual().setText("");
                 vista.getTxt_Nueva().setText("");
                 vista.getTxt_Repetir().setText("");
-                JOptionPane.showMessageDialog(vista, "CONTRASEÑA NUEVA INCORRECTA!!", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(vista, "ERROR: CONTRASEÑA NUEVA INCORRECTA", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
                 }
         }else{
                 vista.getTxt_Actual().setText("");
                 vista.getTxt_Nueva().setText("");
                 vista.getTxt_Repetir().setText("");
-                JOptionPane.showMessageDialog(vista, "CONTRASEÑA ACTUAL NO COINCIDE!!", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(vista, "ERROR: CONTRASEÑA ACTUAL NO COINCIDE", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     

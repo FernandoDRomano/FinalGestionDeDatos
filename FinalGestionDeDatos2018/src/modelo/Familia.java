@@ -137,7 +137,7 @@ public class Familia {
     public void editarFamiliar(){
         try {
             Conexion conexion = new Conexion();
-            String query = "update familia set apellido ='"+ this.getApellido()+ "', nombre =' " + this.getNombre()+ "', vinculo =' " + this.getVinculo()+ "', fechaNacimiento = ' " + this.getFechaNacimiento() + "', discapacidad = ' " + this.getDiscapacidad() + "', dni = '" + this.getDni() + "', escolaridad = '" + this.getEscolaridad() + "' where idfamilia =" + this.getIdFamilia()+ ";";
+            String query = "update familia set apellido = '"+ this.getApellido()+ "', nombre = '" + this.getNombre()+ "', vinculo = '" + this.getVinculo()+ "', fechaNacimiento = '" + this.getFechaNacimiento() + "', discapacidad = '" + this.getDiscapacidad() + "', dni = '" + this.getDni() + "', escolaridad = '" + this.getEscolaridad() + "' where idfamilia =" + this.getIdFamilia()+ ";";
             System.out.println(query);
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.executeUpdate();
@@ -153,10 +153,11 @@ public class Familia {
         ResultSet resultado = null;
          try {
             Conexion conexion = new Conexion();
-            String query = "SELECT idfamilia, familia.dni, familia.nombre, familia.apellido, familia.vinculo, familia.fechaNacimiento, familia.discapacidad, familia.escolaridad \n" +
+            String query = "SELECT familia.idfamilia, familia.dni, familia.nombre, familia.apellido, familia.vinculo, familia.fechaNacimiento, familia.discapacidad, familia.escolaridad \n" +
                            "FROM familia\n" +
                            "INNER JOIN empleado ON empleado.idempleado = familia.empleado_idempleado\n" +
                            "WHERE empleado.idempleado = " + this.getEmpleado().getIdEmpleado() + ";";
+            System.out.println(query);
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             resultado = st.executeQuery();
             conexion.desconectar();

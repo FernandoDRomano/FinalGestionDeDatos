@@ -1,12 +1,18 @@
 
 package controlador;
 
+import java.awt.Frame;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import modelo.Categoria;
+import modelo.Conexion;
 import modelo.Producto;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import vista.GestionProducto;
+import vista.Principal;
 
 /**
  *
@@ -29,6 +35,48 @@ public class Controlador_Producto {
         vista.getBtn_Eliminar().setEnabled(true);
     }
     
+    public static boolean ValidarCampos(GestionProducto vista){
+        boolean bandera = true;
+        //VALIDO QUE LOS CAMPOS NO SEAN VACIOS
+        String descripcion = vista.getTxt_Descripcion().getText();
+        descripcion = descripcion.replaceAll(" ", ""); //REEMPLAZO LOS ESPACIO VACIO
+        String stock = vista.getTxt_Stock().getText();
+        stock = stock.replaceAll(" ", "");
+        String precioCompra = vista.getTxt_PrecioCompra().getText();
+        precioCompra = precioCompra.replaceAll(" ", "");
+        String precioVenta = vista.getTxt_PrecioVenta().getText();
+        precioVenta = precioVenta.replaceAll(" ", "");
+        String categoria = vista.getCombo_Categoria().getSelectedItem().toString();
+        
+        
+        if (descripcion.length() == 0) {
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE COMPLETAR LA DESCRIPCIÓN", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            bandera = false;
+        }
+        
+        if (stock.length() == 0) {
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE COMPLETAR EL STOCK", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            bandera = false;
+        }
+        
+        if (precioCompra.length() == 0) {
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE COMPLETAR EL PRECIO DE COMPRA", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            bandera = false;
+        }
+        
+        if (precioVenta.length() == 0) {
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE COMPLETAR EL PRECIO DE VENTA", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            bandera = false;
+        }
+            
+        if (categoria.equals("Seleccione una Opción")) {
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UNA CATEGORÍA", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            bandera = false;
+        }
+        
+        return bandera;
+    }
+    
     public static void ActualizarProducto(GestionProducto vista) throws SQLException {
         producto = new Producto();
         vista.getModelo().setColumnCount(0);
@@ -38,7 +86,7 @@ public class Controlador_Producto {
         vista.getModelo().addColumn("Stock");
         vista.getModelo().addColumn("Precio Compra");
         vista.getModelo().addColumn("Precio de Venta");
-        vista.getModelo().addColumn("Categoria");
+        vista.getModelo().addColumn("Categoría");
         ResultSet r = producto.listarProducto();
         while (r.next()) {
             Object[] fila = new Object[6];
@@ -81,7 +129,7 @@ public class Controlador_Producto {
     public static void cargarCombo(GestionProducto vista) throws SQLException{
         categoria = new Categoria();
         ResultSet r = categoria.listarCategoria();
-        vista.getModeloCombo().addElement("Seleccione una Opcion");
+        vista.getModeloCombo().addElement("Seleccione una Opción");
         while(r.next()){
             categoria = new Categoria();
             categoria.setIdCategoria(Integer.parseInt(r.getString("idcategoria")));
@@ -92,10 +140,10 @@ public class Controlador_Producto {
     }
     
     
-    public static void AltasProducto(GestionProducto vista) {
-        producto = new Producto();
-        categoria = new Categoria();
-        try {
+    public static void AltasProducto(GestionProducto vista) throws SQLException {
+        if (ValidarCampos(vista)) {
+            producto = new Producto();
+            categoria = new Categoria();
             //Capturo el Objeto Categoria del modelo del Combobox y lo seteo al atributo producto
             categoria = (Categoria) vista.getCombo_Categoria().getModel().getSelectedItem();
             producto.setDescripcion(vista.getTxt_Descripcion().getText());
@@ -105,11 +153,10 @@ public class Controlador_Producto {
             producto.setCategoria(categoria);
             System.out.println("AGREGANDO PRODUCTO");
             producto.grabarProducto();
+            JOptionPane.showMessageDialog(vista, "PRODUCTO GRABADO CON ÉXITO", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
             ActualizarProducto(vista);
-            LimpiarCampos(vista);      
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(vista, "Datos mal ingresados", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
-            }
+            LimpiarCampos(vista);     
+        }   
     }
 
     
@@ -117,24 +164,28 @@ public class Controlador_Producto {
         int fila = vista.getTabla_Producto().getSelectedRow();
         if (fila >-1) {
             //RESOLVER EL PROBLEMA DEL COMBOBOX, SALTA ERROR CUANDO QUIERO EDITAR Y NO LO SELECCIONO
-            int opt = JOptionPane.showConfirmDialog(vista, "¿Esta seguro de modificarlo?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION);
+            int opt = JOptionPane.showConfirmDialog(vista, "¿ESTÁ USTED SEGURO DE MODIFICAR ÉSTE PRODUCTO?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if (opt == JOptionPane.YES_OPTION) {
-                producto = new Producto();
-                categoria = new Categoria();
-                categoria = (Categoria) vista.getCombo_Categoria().getModel().getSelectedItem();
-                System.out.println("Id: " + categoria.getIdCategoria() + " Categoria: " + categoria.getNombre());
-                producto.setIdProducto(Integer.valueOf(vista.getTxt_Id().getText()));
-                producto.setDescripcion(vista.getTxt_Descripcion().getText());
-                producto.setPrecioCompra(Double.parseDouble(vista.getTxt_PrecioCompra().getText()));
-                producto.setPrecioVenta(Double.parseDouble(vista.getTxt_PrecioVenta().getText()));
-                producto.setCategoria(categoria);
-                System.out.println("MODIFICANDO PRODUCTO");
-                producto.editarProducto();
-                ActualizarProducto(vista);
-                LimpiarCampos(vista);
+                if (ValidarCampos(vista)) {
+                    producto = new Producto();
+                    categoria = new Categoria();
+                    categoria = (Categoria) vista.getCombo_Categoria().getModel().getSelectedItem();
+                    System.out.println("Id: " + categoria.getIdCategoria() + " Categoria: " + categoria.getNombre());
+                    producto.setIdProducto(Integer.valueOf(vista.getTxt_Id().getText()));
+                    producto.setDescripcion(vista.getTxt_Descripcion().getText());
+                    producto.setPrecioCompra(Double.parseDouble(vista.getTxt_PrecioCompra().getText()));
+                    producto.setPrecioVenta(Double.parseDouble(vista.getTxt_PrecioVenta().getText()));
+                    producto.setCategoria(categoria);
+                    System.out.println("MODIFICANDO PRODUCTO");
+                    producto.editarProducto();
+                    JOptionPane.showMessageDialog(vista, "PRODUCTO MODIFICADO CON ÉXITO", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
+                    ActualizarProducto(vista);
+                    LimpiarCampos(vista);
+                }
+                
             }
         }else{
-            JOptionPane.showMessageDialog(vista, "Debe seleccionar un Producto", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UN PRODUCTO", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -142,28 +193,25 @@ public class Controlador_Producto {
     public static void EliminarProducto(GestionProducto vista) throws SQLException {
         int fila = vista.getTabla_Producto().getSelectedRow();
         if (fila > -1) {
-            int opt = JOptionPane.showConfirmDialog(vista, "Esta seguro de Borrar ?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION);
+            int opt = JOptionPane.showConfirmDialog(vista, "¿ESTÁ USTED SEGURO DE ELIMINAR ÉSTE PRODUCTO?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
             if (opt == JOptionPane.YES_OPTION) {
                 producto = new Producto();
                 producto.setIdProducto(Integer.parseInt(vista.getTabla_Producto().getModel().getValueAt(fila, 0).toString()));
                 boolean bandera = producto.tieneCompraVenta();
                 if (bandera == true) {
-                    JOptionPane.showMessageDialog(vista, "NO SE PUEDE ELIMINAR EL PRODUCTO TIENE COMPRAS Y VENTAS ASOCIADAS", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(vista, "ERROR: NO SE PUEDE ELIMINAR ÉSTE PRODUCTO,\n TIENE COMPRAS Y VENTAS ASOCIADAS", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
                 }else{
                     producto.eliminarProducto();
+                    JOptionPane.showMessageDialog(vista, "PRODUCTO ELIMINADO CON ÉXITO", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
                     ActualizarProducto(vista);
                     LimpiarCampos(vista);
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(vista, "Debe seleccionar un Producto", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UN PRODUCTO", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    public static void LimpiarVentana(GestionProducto vista){
-        LimpiarCampos(vista);
-        LogicaBotones(vista);
-    }
     
     public static void LimpiarCampos(GestionProducto vista){
         vista.getTxt_Id().setText("");
@@ -172,7 +220,30 @@ public class Controlador_Producto {
         vista.getTxt_PrecioVenta().setText("");
         vista.getTxt_Stock().setText("");
         vista.getTxt_Stock().setEnabled(true);
-        vista.getCombo_Categoria().getModel().setSelectedItem("Seleccione una Opcion");
+        vista.getCombo_Categoria().getModel().setSelectedItem("Seleccione una Opción");
+        LogicaBotones(vista);
     }
+    
+        public static void imprimirProductos(Principal vista) throws SQLException, ClassNotFoundException{
+        int opt = JOptionPane.showConfirmDialog(vista, "¿DESEA IMPRIMIR EL REPORTE DE PRODUCTOS?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (opt == JOptionPane.YES_OPTION) {
+            Conexion conexion = new Conexion();
+        
+        //Metodo para Exportar
+            try {
+                JOptionPane.showMessageDialog(null, "ESTO PUEDE TARDAR UNOS SEGUNDOS,\nESPERE POR FAVOR", "ESTAMOS GENERANDO EL REPORTE", JOptionPane.WARNING_MESSAGE);
+                String rutaInforme = "/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/reportes/Productos.jasper";
+                JasperPrint informe = JasperFillManager.fillReport(rutaInforme, null, conexion.getConnection());
+                JasperViewer ventanavisor = new JasperViewer(informe, false);
+                JOptionPane.showMessageDialog(null, "DOCUMENTO EXPORTADO EXITOSAMENTE!", "GUARDADO EXITOSO!", JOptionPane.INFORMATION_MESSAGE);
+                ventanavisor.setTitle("PRODUCTOS");
+                ventanavisor.setExtendedState(Frame.MAXIMIZED_BOTH);
+                ventanavisor.setVisible(true);
+            } catch (Exception e) {//Catch del metodo exportar
+                JOptionPane.showMessageDialog(null, "ERROR AL EXPORTAR DOCUMENTO");
+            }//Fin de del metodo Exportar      
+        }
+    }
+
     
 }

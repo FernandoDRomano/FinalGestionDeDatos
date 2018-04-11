@@ -1,11 +1,17 @@
 
 package controlador;
 
+import java.awt.Frame;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import modelo.Categoria;
+import modelo.Conexion;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import vista.GestionCategoria;
+import vista.Principal;
 
 /**
  *
@@ -26,6 +32,22 @@ public class Controlador_Categoria {
         vista.getBtn_Editar().setEnabled(true);
         vista.getBtn_Eliminar().setEnabled(true);
     }
+    
+    public static boolean ValidarCampos(GestionCategoria vista){
+        boolean bandera = true;
+        //VALIDO QUE LOS CAMPOS NO SEAN VACIOS
+        String nombre = vista.getTxt_Nombre().getText();
+        nombre = nombre.replaceAll(" ", ""); //REEMPLAZO LOS ESPACIO VACIO
+        
+        if (nombre.length() == 0) {
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE COMPLETAR EL NOMBRE DE LA CATEGORÍA", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            bandera = false;
+        }
+            
+        
+        return bandera;
+    }
+
     
     public static void ActualizarCategoria(GestionCategoria vista) throws SQLException {
         categoria = new Categoria();
@@ -54,65 +76,88 @@ public class Controlador_Categoria {
         }
     }
 
-    public static void AltasCategoria(GestionCategoria vista) {
-        categoria = new Categoria();
-        try {
+    public static void AltasCategoria(GestionCategoria vista) throws SQLException {
+        if (ValidarCampos(vista)) {
+            categoria = new Categoria();
             categoria.setNombre(vista.getTxt_Nombre().getText());
             System.out.println("AGREGANDO CATEGORIA");
             categoria.grabarCategoria();
+            JOptionPane.showMessageDialog(vista, "CATEGORÍA GRABADA CON ÉXITO", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
             ActualizarCategoria(vista);
-            LimpiarCampos(vista);      
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(vista, "Datos mal ingresados", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
-            }
+            LimpiarCampos(vista);  
+        }
+            
     }
 
     public static void EditarCategoria(GestionCategoria vista) throws SQLException {
         int fila = vista.getTabla_Categoria().getSelectedRow();
         if (fila >-1) {
-            int opt = JOptionPane.showConfirmDialog(vista, "¿Esta seguro de modificarlo?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION);
+            int opt = JOptionPane.showConfirmDialog(vista, "¿ESTÁ USTED SEGURO DE MODIFICAR ÉSTA CATEGORÍA?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if (opt == JOptionPane.YES_OPTION) {
-                categoria = new Categoria();
-                categoria.setIdCategoria(Integer.valueOf(vista.getTxt_Id().getText()));
-                categoria.setNombre(vista.getTxt_Nombre().getText());
-                System.out.println("MODIFICANDO CATEGORIA");
-                categoria.editarCategoria();
-                ActualizarCategoria(vista);
-                LimpiarCampos(vista);
+                if (ValidarCampos(vista)) {
+                    categoria = new Categoria();
+                    categoria.setIdCategoria(Integer.valueOf(vista.getTxt_Id().getText()));
+                    categoria.setNombre(vista.getTxt_Nombre().getText());
+                    System.out.println("MODIFICANDO CATEGORIA");
+                    categoria.editarCategoria();
+                    JOptionPane.showMessageDialog(vista, "CATEGORÍA MODIFICADA CON ÉXITO", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
+                    ActualizarCategoria(vista);
+                    LimpiarCampos(vista);
+                }
+                
             }
         }else{
-            JOptionPane.showMessageDialog(vista, "Debe seleccionar una Categoria", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UNA CATEGORÍA", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public static void EliminarCategoria(GestionCategoria vista) throws SQLException {
         int fila = vista.getTabla_Categoria().getSelectedRow();
         if (fila > -1) {
-            int opt = JOptionPane.showConfirmDialog(vista, "Esta seguro de Borrar ?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION);
+            int opt = JOptionPane.showConfirmDialog(vista, "¿ESTÁ USTED SEGURO DE ELIMINAR ÉSTA CATEGORÍA?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
             if (opt == JOptionPane.YES_OPTION) {
                 categoria = new Categoria();
                 categoria.setIdCategoria(Integer.parseInt(vista.getTabla_Categoria().getModel().getValueAt(fila, 0).toString()));
                 boolean bandera = categoria.tieneProductos();
                 if (bandera == true) {
-                    JOptionPane.showMessageDialog(vista, "NO SE PUEDE ELIMINAR TIENE PRODUCTOS ASOCIADOS", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(vista, "ERROR: NO SE PUEDE ELIMINAR ÉSTA CATEGORÍA, \nTIENE PRODUCTOS ASOCIADOS", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
                 }else{
                     categoria.eliminarCategoria();
+                    JOptionPane.showMessageDialog(vista, "CATEGORÍA ELIMINADA CON ÉXITO", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
                     ActualizarCategoria(vista);
                     LimpiarCampos(vista);
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(vista, "Debe seleccionar una Categoria", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UNA CATEGORÍA", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-    
-    public static void LimpiarVentana(GestionCategoria vista){
-        LimpiarCampos(vista);
-        LogicaBotones(vista);
     }
     
     public static void LimpiarCampos(GestionCategoria vista){
         vista.getTxt_Id().setText("");
         vista.getTxt_Nombre().setText("");
+        LogicaBotones(vista);
     }
+    
+        public static void imprimirCategorias(Principal vista) throws SQLException, ClassNotFoundException{
+        int opt = JOptionPane.showConfirmDialog(vista, "¿DESEA IMPRIMIR EL REPORTE DE CATEGORÍAS?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (opt == JOptionPane.YES_OPTION) {
+            Conexion conexion = new Conexion();
+        
+        //Metodo para Exportar
+            try {
+                JOptionPane.showMessageDialog(null, "ESTO PUEDE TARDAR UNOS SEGUNDOS,\nESPERE POR FAVOR", "ESTAMOS GENERANDO EL REPORTE", JOptionPane.WARNING_MESSAGE);
+                String rutaInforme = "/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/reportes/Categorias.jasper";
+                JasperPrint informe = JasperFillManager.fillReport(rutaInforme, null, conexion.getConnection());
+                JasperViewer ventanavisor = new JasperViewer(informe, false);
+                JOptionPane.showMessageDialog(null, "DOCUMENTO EXPORTADO EXITOSAMENTE!", "GUARDADO EXITOSO!", JOptionPane.INFORMATION_MESSAGE);
+                ventanavisor.setTitle("CATEGORIAS");
+                ventanavisor.setExtendedState(Frame.MAXIMIZED_BOTH);
+                ventanavisor.setVisible(true);
+            } catch (Exception e) {//Catch del metodo exportar
+                JOptionPane.showMessageDialog(null, "ERROR AL EXPORTAR DOCUMENTO");
+            }//Fin de del metodo Exportar      
+        }
+    }
+
 }

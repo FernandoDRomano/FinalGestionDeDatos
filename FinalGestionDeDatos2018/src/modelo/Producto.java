@@ -197,7 +197,46 @@ public class Producto {
     }
 
     public boolean tieneCompraVenta() {
-        return false;
+        boolean bandera = false;
+        ResultSet v = null;
+        ResultSet p = null;
+        int resultadoV = 0;
+        int resultadoP = 0;
+        try {
+            Conexion conexion1 = new Conexion();
+            String queryVenta = "select count(*) as resultado from linea_venta where linea_venta.producto_idproducto = " + this.getIdProducto()+ " ;";
+            PreparedStatement st = conexion1.getConnection().prepareStatement(queryVenta);
+            v = st.executeQuery();
+            conexion1.desconectar();
+            
+            Conexion conexion2 = new Conexion();
+            String queryPedido = "select count(*) as resultado from linea_pedido where linea_pedido.producto_idproducto = " + this.getIdProducto()+ " ;";
+            PreparedStatement st1 = conexion2.getConnection().prepareStatement(queryPedido);
+            p = st1.executeQuery();
+            conexion2.desconectar();
+            
+            //VERIFICO QUE NO TENGA LINEAS DE VENTA-COMPRA ASOCIADOS AL PRODUCTO
+            while (v.next()) {                
+                resultadoV = Integer.valueOf(v.getString("resultado"));
+            }
+            
+            while (p.next()) {                
+                resultadoP = Integer.valueOf(p.getString("resultado"));
+            }
+            
+            if (resultadoV > 0) {
+                bandera = true;
+            }
+            
+            if (resultadoP > 0) {
+                bandera = true;
+            }
+            
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        
+        return bandera;
     }
 
     public ResultSet buscarProductoId(String cadena) {

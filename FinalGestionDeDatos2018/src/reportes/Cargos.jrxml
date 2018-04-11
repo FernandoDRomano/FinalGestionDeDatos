@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bbceb294-4d47-4495-91a9-cff9757fadb2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#73B0E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFDBE6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="CARGOS" uuid="a404217e-972f-4cd3-85dd-dbf3e812e117">
+		<queryString language="SQL">
+			<![CDATA[SELECT
+     cargo.`idcargo` AS cargo_idcargo,
+     cargo.`cargo` AS cargo_cargo,
+     cargo.`basico` AS cargo_basico
+FROM
+     `cargo` cargo]]>
+		</queryString>
+		<field name="cargo_idcargo" class="java.lang.Integer"/>
+		<field name="cargo_cargo" class="java.lang.String"/>
+		<field name="cargo_basico" class="java.lang.Float"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[Select 1 as hola]]>
+	</queryString>
+	<field name="hola" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement x="118" y="0" width="321" height="44" uuid="27de31c2-ddee-4ea7-88a2-b886eb3b13ae"/>
+				<textElement>
+					<font size="30" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Cargos]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" style="table" x="0" y="0" width="555" height="125" uuid="8b3dd902-f7fa-4648-883d-fd2c2cc55932"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="CARGOS" uuid="8c77ada0-0db7-4da2-99b7-5092fcbdc759">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="70" uuid="cb1dad2d-71e5-4631-9cf1-eb22fb5006af">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="11" width="68" height="19" uuid="6a790b71-8810-4c9b-a9e8-e57d67d0f091"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[ID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="27" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="7" width="68" height="20" uuid="688469fb-1956-4af2-be40-8a3ab66f3638"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{cargo_idcargo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="347" uuid="cd4fa207-7677-4bf6-b78c-5f6a8e97948b">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="11" width="347" height="19" uuid="3a26a13f-103b-4629-af39-72abe2375713"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[DESCRIPCIÓN]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="27" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="7" width="347" height="20" uuid="3475b457-68f8-4596-947a-803b45c83589"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{cargo_cargo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="132" uuid="5a6bc035-9d5c-4f3d-8100-94ae6cc82d55">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="11" width="132" height="19" uuid="2c1a2017-45b4-45ca-83ff-2c499800252c"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[SUELDO BÁSICO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="27" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="7" width="132" height="20" uuid="afb144dd-5cfd-4b46-bc56-7e8c3844f96c"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{cargo_basico}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="34" width="204" height="20" uuid="2702c4e6-202c-4194-b6cc-e5d3a704f4ac"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
