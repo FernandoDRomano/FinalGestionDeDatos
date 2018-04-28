@@ -198,6 +198,7 @@ public class Controlador_Compra {
                 for(int i = 0; i < compra.getTabla_Descripcion().getColumnCount(); i++) {
                     compra.getTabla_Descripcion().getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
                 }
+                vista.setVisible(false);
             }
             
         }else{
@@ -468,6 +469,9 @@ public class Controlador_Compra {
             //LOS HAGO VISIBLE
             vista.getLabel_NumeroVenta().setVisible(true);
             vista.getLabel_TotalVenta().setVisible(true);
+            
+            //LIMPIO LOS DETALLES DE LA VENTA QUE PUDIERA ESTAR SELECCIONADA
+            vista.getModeloDetalles().setRowCount(0);
         }
         
     }
@@ -476,9 +480,10 @@ public class Controlador_Compra {
         vista.getDate_FechaInicio().setDate(null);
         vista.getDate_FechaFin().setDate(null);
         try {
-            //UNA VES LIMPIADOS LAS FECHAS POR LAS QUE SE FILTRABA, VUELVO A CARGAR LAS VENTAS DEL ULTIMO EMPLEADO SELECCIONADO
-            //POR ESO SE INVOCA AL MEDOTO CARGAR_VENTAS
+            //UNA VES LIMPIADOS LAS FECHAS POR LAS QUE SE FILTRABA, VUELVO A CARGAR LAS COMRAS DEL ULTIMO EMPLEADO SELECCIONADO
+            //POR ESO SE INVOCA AL MEDOTO CARGAR_COMPRAS
             cargarCompras(vista);
+            vista.getModeloDetalles().setRowCount(0);
         } catch (SQLException ex) {
             Logger.getLogger(Controlador_Compra.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -636,6 +641,9 @@ public class Controlador_Compra {
             vista.getLabel_NumeroVenta().setVisible(true);
             vista.getLabel_TotalVenta().setVisible(true);
             vista.getLabel_Empleado().setVisible(true);
+            
+            //LIMPIO LAS COMPRAS SELECCIONADAS ANTERIORMENTE
+            vista.getModeloPedidos().setRowCount(0);
         }
         
     }
@@ -647,6 +655,7 @@ public class Controlador_Compra {
             //UNA VES LIMPIADOS LAS FECHAS POR LAS QUE SE FILTRABA, VUELVO A CARGAR LAS VENTAS DEL ULTIMO EMPLEADO SELECCIONADO
             //POR ESO SE INVOCA AL MEDOTO CARGAR_VENTAS_X_EMPLEADO
             cargarCompraxEmpleado(vista);
+            vista.getModeloPedidos().setRowCount(0);
         } catch (SQLException ex) {
             Logger.getLogger(Controlador_Venta.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -135,10 +135,7 @@ WHERE compra.idcompra = $P{Id};]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="118" splitType="Stretch">
-			<rectangle radius="10">
-				<reportElement x="1" y="47" width="555" height="44" uuid="13e6a109-7ac9-4af2-acf3-a0046e7738e0"/>
-			</rectangle>
+		<band height="163" splitType="Stretch">
 			<staticText>
 				<reportElement x="130" y="2" width="328" height="40" uuid="aeea5b61-c3eb-4bbf-9895-65d8b675fb9a"/>
 				<textElement>
@@ -147,40 +144,54 @@ WHERE compra.idcompra = $P{Id};]]>
 				<text><![CDATA[Factura de Compra]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="23" y="98" width="137" height="20" uuid="5cd71bbf-e385-44cb-972f-d7f491e6c15c"/>
+				<reportElement x="23" y="141" width="137" height="20" uuid="5cd71bbf-e385-44cb-972f-d7f491e6c15c"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha de Emisión:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="407" y="98" width="83" height="20" uuid="6bcdc75f-a941-4fab-826b-fbaa314244d1"/>
+				<reportElement x="407" y="141" width="83" height="20" uuid="6bcdc75f-a941-4fab-826b-fbaa314244d1"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Id Factura:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="19" y="55" width="193" height="20" uuid="cd39ac62-e01b-4e41-a373-35cb2802eab5"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[DETALLES DEL NEGOCIO]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="159" y="98" width="100" height="20" uuid="e508fa0a-5029-49ca-9948-694fbc02ddcd"/>
+				<reportElement x="159" y="141" width="100" height="20" uuid="e508fa0a-5029-49ca-9948-694fbc02ddcd"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="489" y="98" width="64" height="20" uuid="f687e8a3-10b8-4b92-8629-05f9e72ff050"/>
+				<reportElement x="489" y="141" width="64" height="20" uuid="f687e8a3-10b8-4b92-8629-05f9e72ff050"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{idpedido}]]></textFieldExpression>
 			</textField>
+			<rectangle radius="10">
+				<reportElement x="1" y="48" width="555" height="86" uuid="a64a72df-6d9b-4a7e-81bd-7745850e72c1"/>
+			</rectangle>
+			<image>
+				<reportElement x="25" y="50" width="149" height="83" uuid="e967fd29-c1ed-4de8-8aa4-239e445be7b7"/>
+				<imageExpression><![CDATA["/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/imagenes/TodoHogar.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="174" y="67" width="195" height="20" uuid="94198b1d-b90e-4e12-a98d-5b75b551f641"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Domicilio: Av. Colón 702]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="174" y="94" width="195" height="20" uuid="07c61c8e-aa17-406a-97a5-ae968c74e495"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefono: 3814305868]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>

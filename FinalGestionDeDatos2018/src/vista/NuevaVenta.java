@@ -381,7 +381,13 @@ public class NuevaVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_btn_CancelarActionPerformed
 
     private void btn_GrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_GrabarActionPerformed
-        Controlador_Venta.AltaVenta(this);
+        try {
+            Controlador_Venta.AltaVenta(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(NuevaVenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btn_GrabarActionPerformed
 
     public JTextField getTxt_IdCliente() {

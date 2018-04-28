@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
 import modelo.Domicilio;
+import modelo.Localidad;
 import modelo.Proveedor;
+import modelo.Provincia;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
@@ -23,6 +25,8 @@ public class Controlador_Proveedor {
     //DECLARO LAS VARIABLES
     private static Proveedor proveedor;
     private static Domicilio domicilio;
+    private static Provincia provincia;
+    private static Localidad localidad;
     
     public static void LogicaBotones(GestionProveedor vista){
         vista.getBtn_Agregar().setEnabled(true);
@@ -36,6 +40,43 @@ public class Controlador_Proveedor {
         vista.getBtn_Editar().setEnabled(true);
         vista.getBtn_Eliminar().setEnabled(true);
         vista.getBtn_Limpiar().setEnabled(true);
+    }
+    
+    public static void CargarProvincia(GestionProveedor vista) throws SQLException{
+        provincia = new Provincia();
+        ResultSet r = provincia.listar();
+        vista.getModeloProvincia().addElement("Seleccione una Opción");
+        while(r.next()){
+            provincia = new Provincia();
+            provincia.setIdprovincia(Integer.valueOf(r.getString("idprovincia")));
+            provincia.setNombre(r.getString("nombre"));
+            vista.getModeloProvincia().addElement(provincia);
+        }
+        vista.getCombo_Pronvincia().setModel(vista.getModeloProvincia());
+    }
+    
+    public static void CargarLocalidad(GestionProveedor vista) throws SQLException{
+        if (!vista.getCombo_Pronvincia().getModel().getSelectedItem().equals("Seleccione una Opción")) {
+            provincia = new Provincia();
+            provincia = (Provincia) vista.getCombo_Pronvincia().getModel().getSelectedItem();
+            localidad = new Localidad();
+            localidad.setProvincia(provincia);
+            //Limpiar el Combo
+            vista.getModeloLocalidad().removeAllElements();
+            ResultSet r = localidad.listar();
+            vista.getModeloLocalidad().addElement("Seleccione una Opción");
+            while(r.next()){
+                localidad = new Localidad();
+                localidad.setIdlocalidad(Integer.valueOf(r.getString("idlocalidad")));
+                localidad.setNombre(r.getString("nombre"));
+                localidad.setCodigoPostal(Integer.valueOf(r.getString("codigoPostal")));
+                vista.getModeloLocalidad().addElement(localidad);
+            }
+            vista.getCombo_Localidad().setModel(vista.getModeloLocalidad());
+        }else{
+            vista.getCombo_Localidad().setSelectedItem("Seleccione una Opción");
+        }
+        
     }
     
     public static boolean ValidarCampos(GestionProveedor vista){
@@ -52,6 +93,7 @@ public class Controlador_Proveedor {
         calle = calle.replace(" ", "");
         String numero = vista.getTxt_Numero().getText();
         numero = numero.replace(" ", "");
+        String localidad = vista.getCombo_Localidad().getSelectedItem().toString();
         
         if (nombre.length() == 0) {
             JOptionPane.showMessageDialog(vista, "ERROR: DEBE COMPLETAR EL NOMBRE", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
@@ -80,6 +122,11 @@ public class Controlador_Proveedor {
         
         if (numero.length() == 0) {
             JOptionPane.showMessageDialog(vista, "ERROR: DEBE COMPLETAR EL NÚMERO DE LA CALLE", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            bandera = false;
+        }
+        
+        if (localidad.equals("Seleccione una Opción")) {
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UNA LOCALIDAD", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
             bandera = false;
         }
         
@@ -122,6 +169,7 @@ public class Controlador_Proveedor {
             //INSTANCIO LOS OBJETOS A UTILIZAR
             proveedor = new Proveedor();
             domicilio = new Domicilio();
+            localidad = new Localidad();
 
             //CAPTURO LOS DATOS DEL PROVEEDOR
             proveedor.setNombre(vista.getTxt_Nombre().getText());
@@ -134,6 +182,9 @@ public class Controlador_Proveedor {
             domicilio.setNumero(vista.getTxt_Numero().getText());
             domicilio.setPiso(vista.getTxt_Piso().getText());
             domicilio.setDepartamento(vista.getTxt_Departamento().getText());
+            //Seteo la Localidad para asignarle al Domicilio
+            localidad = (Localidad) vista.getCombo_Localidad().getSelectedItem();
+            domicilio.setLocalidad(localidad);
             //GRABO EL DOMICILIO
             domicilio.grabarDomicilio();
             //TRAIGO EL ID DEL DOMICILIO Y LO SETEO AL PROVEEDOR
@@ -152,6 +203,9 @@ public class Controlador_Proveedor {
         int fila = vista.getTabla_Proveedores().getSelectedRow();
         if (fila > -1) {
               proveedor = new Proveedor();
+              provincia = new Provincia();
+              Localidad loc = new Localidad();
+              
               //SOLO SETEO EL ID PARA TRAER LOS DATOS DEL DOMICILIO LUEGO
               proveedor.setIdProveedor(Integer.valueOf(vista.getTabla_Proveedores().getModel().getValueAt(fila, 0).toString()));
               vista.getTxt_Id().setText(vista.getTabla_Proveedores().getModel().getValueAt(fila, 0).toString());
@@ -168,7 +222,16 @@ public class Controlador_Proveedor {
                 vista.getTxt_Numero().setText(r.getString("numero"));
                 vista.getTxt_Piso().setText(r.getString("piso"));
                 vista.getTxt_Departamento().setText(r.getString("departamento"));
+                provincia.setIdprovincia(Integer.valueOf(r.getString("idprovincia")));
+                provincia.setNombre(r.getString("provincia"));
+                loc.setIdlocalidad(Integer.valueOf(r.getString("idlocalidad")));
+                loc.setNombre(r.getString("localidad"));
+                loc.setCodigoPostal(Integer.valueOf(r.getString("codigoPostal")));
               }
+              vista.getCombo_Pronvincia().getModel().setSelectedItem(provincia);
+              vista.getCombo_Localidad().getModel().setSelectedItem(loc);
+
+              
               LogicaBotonesInvertir(vista);
         }else{
               JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UN PROVEEDOR", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
@@ -215,6 +278,7 @@ public class Controlador_Proveedor {
                 if (ValidarCampos(vista)) {
                     proveedor = new Proveedor();
                     domicilio = new Domicilio();
+                    localidad = new Localidad();
                     proveedor.setIdProveedor(Integer.valueOf(vista.getTxt_Id().getText()));
                     //CAPTURO LOS DATOS DEL PROVEEDOR Y DEL DOMICILIO
                     proveedor.setNombre(vista.getTxt_Nombre().getText());
@@ -226,6 +290,9 @@ public class Controlador_Proveedor {
                     domicilio.setNumero(vista.getTxt_Numero().getText());
                     domicilio.setPiso(vista.getTxt_Piso().getText());
                     domicilio.setDepartamento(vista.getTxt_Departamento().getText());
+                    //Seteo la Localidad para asignarle al Domicilio
+                    localidad = (Localidad) vista.getCombo_Localidad().getSelectedItem();
+                    domicilio.setLocalidad(localidad);
                     //BUSCO EL ID DEL DOMICILIO ASOCIADO AL PROVEEDOR EXISTENTE
                     ResultSet r = proveedor.buscarProveedorId();
                     while (r.next()) {                
@@ -258,6 +325,7 @@ public class Controlador_Proveedor {
         vista.getTxt_Piso().setText("");
         vista.getTxt_Telefono().setText("");
         vista.getCombo_RazonSocial().setSelectedItem("Seleccione una Opción");
+        vista.getCombo_Pronvincia().setSelectedItem("Seleccione una Opción");
         LogicaBotones(vista);
     }
     

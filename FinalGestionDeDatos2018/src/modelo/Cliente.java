@@ -14,6 +14,7 @@ public class Cliente {
     private String apellido;
     private String nombre;
     private int telefono;
+    private Domicilio domicilio;
 
     public Cliente() {
     }
@@ -25,6 +26,14 @@ public class Cliente {
         this.telefono = telefono;
     }
 
+    public Domicilio getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(Domicilio domicilio) {
+        this.domicilio = domicilio;
+    }
+    
     public int getIdCliente() {
         return idCliente;
     }
@@ -65,11 +74,12 @@ public class Cliente {
     public void grabarCliente(){
         try {
             Conexion conexion = new Conexion();
-            String query = "insert into cliente (apellido, nombre, telefono) values (?,?,?);";
+            String query = "insert into cliente (apellido, nombre, telefono, domicilio_iddomicilio) values (?,?,?,?);";
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.setString(1, this.getApellido());
             st.setString(2, this.getNombre());
             st.setInt(3, this.getTelefono());
+            st.setInt(4, this.getDomicilio().getIdDomicilio());
             st.execute();
             System.out.println("SE GRABO EL CLIENTE EN LA BASE DE DATOS");
             st.close();
@@ -112,7 +122,9 @@ public class Cliente {
         ResultSet resultado = null;
          try {
             Conexion conexion = new Conexion();
-            String query = "select * from cliente;";
+            String query = "select cliente.idcliente, cliente.nombre, cliente.apellido, cliente.telefono, concat(domicilio.calle, ' ',domicilio.numero) as domicilio\n" +
+                           "from cliente\n" +
+                           "inner join domicilio on domicilio.iddomicilio = cliente.domicilio_iddomicilio;";
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             resultado = st.executeQuery();
             conexion.desconectar();
@@ -138,7 +150,30 @@ public class Cliente {
          
          return resultado;
     }
-
+    
+    public ResultSet buscarClienteId(){
+        ResultSet resultado = null;
+         try {
+            Conexion conexion = new Conexion();
+            String query = "select domicilio.iddomicilio, domicilio.calle, domicilio.numero, domicilio.piso, domicilio.departamento, \n" +
+                            "provincia.idprovincia, provincia.nombre as provincia, \n" +
+                            "localidad.idlocalidad, localidad.nombre as localidad, localidad.codigoPostal,\n" +
+                            "cliente.idcliente, cliente.nombre as clienteNombre, cliente.apellido as clienteApellido, cliente.telefono \n" +
+                            "from cliente\n" +
+                            "inner join domicilio on domicilio.iddomicilio = cliente.domicilio_iddomicilio\n" +
+                            "inner join localidad on localidad.idlocalidad = domicilio.localidad_idlocalidad\n" +
+                            "inner join provincia on provincia.idprovincia = localidad.provincia_idprovincia\n" +
+                            "where cliente.idcliente = " + this.getIdCliente()+ " ;";
+            PreparedStatement st = conexion.getConnection().prepareStatement(query);
+            resultado = st.executeQuery();
+            conexion.desconectar();           
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+         
+         return resultado;
+    }
+    
     public boolean tieneVenta() {
         boolean bandera = false;
         ResultSet r = null;

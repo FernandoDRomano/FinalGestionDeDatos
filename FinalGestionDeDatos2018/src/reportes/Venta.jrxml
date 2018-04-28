@@ -82,11 +82,13 @@ WHERE venta.`idventa` = $P{id};]]>
      venta.`total` AS total,
      CONCAT(empleado.`apellido`, ', ' , empleado.`nombre`) AS empleado,
      CONCAT(cliente.`apellido`, ', ' , cliente.`nombre`) AS cliente,
+     CONCAT(domicilio.`calle`, ' ' , domicilio.`numero`) AS domicilio,
      cliente.`telefono`
 FROM
      `venta` venta
 INNER JOIN `empleado` empleado ON empleado.`idempleado` = venta.`empleado_idempleado`
 INNER JOIN `cliente` cliente ON cliente.`idcliente` = venta.`cliente_idcliente`
+INNER JOIN `domicilio` domicilio ON domicilio.`iddomicilio` = cliente.`domicilio_iddomicilio`
 WHERE venta.`idventa` = $P{id};]]>
 	</queryString>
 	<field name="idventa" class="java.lang.Integer">
@@ -100,6 +102,7 @@ WHERE venta.`idventa` = $P{id};]]>
 	</field>
 	<field name="empleado" class="java.lang.String"/>
 	<field name="cliente" class="java.lang.String"/>
+	<field name="domicilio" class="java.lang.String"/>
 	<field name="telefono" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -107,7 +110,7 @@ WHERE venta.`idventa` = $P{id};]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="114" splitType="Stretch">
+		<band height="156" splitType="Stretch">
 			<staticText>
 				<reportElement x="137" y="0" width="297" height="40" uuid="7282fff2-a11b-43fb-8af4-3e433cb3a995"/>
 				<textElement>
@@ -116,43 +119,54 @@ WHERE venta.`idventa` = $P{id};]]>
 				<text><![CDATA[Factura de Venta]]></text>
 			</staticText>
 			<rectangle radius="10">
-				<reportElement x="0" y="40" width="555" height="44" uuid="cea7fc7e-de3e-41f1-a253-1ac057702b56"/>
+				<reportElement x="0" y="40" width="555" height="86" uuid="cea7fc7e-de3e-41f1-a253-1ac057702b56"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="20" y="52" width="193" height="20" uuid="869d91f7-d701-4715-a367-1fa4cefb57ba"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[DETALLES DEL NEGOCIO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="20" y="94" width="137" height="20" uuid="0e94654d-f765-4e65-b83c-1c1911ac2e37"/>
+				<reportElement x="19" y="136" width="137" height="20" uuid="0e94654d-f765-4e65-b83c-1c1911ac2e37"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha de Emisión:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="397" y="94" width="83" height="20" uuid="fa138472-3811-4b35-aa69-5bf78d70c24f"/>
+				<reportElement x="396" y="136" width="83" height="20" uuid="fa138472-3811-4b35-aa69-5bf78d70c24f"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Id Factura:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="480" y="94" width="75" height="20" uuid="8f15530a-91ab-4af9-90ee-b322ece9c437"/>
+				<reportElement x="479" y="136" width="75" height="20" uuid="8f15530a-91ab-4af9-90ee-b322ece9c437"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{idventa}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="157" y="94" width="127" height="20" uuid="8b89fec7-e874-40bf-8dbf-944b002bbd05"/>
+				<reportElement x="156" y="136" width="127" height="20" uuid="8b89fec7-e874-40bf-8dbf-944b002bbd05"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}.toString()]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement x="15" y="42" width="149" height="83" uuid="24b829b7-64c2-48cd-bb39-3e3763a6bd01"/>
+				<imageExpression><![CDATA["/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/imagenes/TodoHogar.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="164" y="60" width="195" height="20" uuid="b4d4f3e6-dd65-4b74-ae58-880647d87bbf"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Domicilio: Av. Colón 702]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="164" y="87" width="195" height="20" uuid="d4e8db8b-e00a-43f4-adc4-10afd9e264b9"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefono: 3814305868]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
@@ -161,32 +175,46 @@ WHERE venta.`idventa` = $P{id};]]>
 				<reportElement x="0" y="6" width="555" height="69" uuid="39474eeb-30c4-43f7-9c7d-e5844bc175e1"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="20" y="22" width="61" height="20" uuid="4df5e908-f5ee-4184-8872-81a37c6d353f"/>
+				<reportElement x="20" y="13" width="61" height="20" uuid="4df5e908-f5ee-4184-8872-81a37c6d353f"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cliente:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="42" width="75" height="20" uuid="50dd588b-d18b-4a75-8107-2528a1c2017b"/>
+				<reportElement x="20" y="33" width="75" height="20" uuid="50dd588b-d18b-4a75-8107-2528a1c2017b"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Telefono:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="81" y="22" width="268" height="20" uuid="45501829-97a1-4f68-9980-c84b6d9da375"/>
+				<reportElement x="81" y="13" width="268" height="20" uuid="45501829-97a1-4f68-9980-c84b6d9da375"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="95" y="42" width="132" height="20" uuid="ea3d7b45-3d37-4c4f-a970-feb86258a343"/>
+				<reportElement x="95" y="33" width="132" height="20" uuid="ea3d7b45-3d37-4c4f-a970-feb86258a343"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="19" y="53" width="76" height="20" uuid="953b8766-769e-4fe3-b6f5-b53a0046c092"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Domicilio: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="95" y="53" width="254" height="20" uuid="1036b9f1-d927-439b-b505-8ca75f751e0a"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{domicilio}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

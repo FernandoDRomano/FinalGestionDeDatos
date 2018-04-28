@@ -305,7 +305,6 @@ public class GestionEmpleado extends javax.swing.JDialog {
             try {
                 this.dispose();
                 EditarEmpleado vista = new EditarEmpleado(null, true, this);
-                vista.setVisible(true);
                 
                 } catch (SQLException ex) {
                 Logger.getLogger(GestionEmpleado.class.getName()).log(Level.SEVERE, null, ex);

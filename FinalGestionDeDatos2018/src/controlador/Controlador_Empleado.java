@@ -12,7 +12,9 @@ import modelo.Cargo;
 import modelo.Conexion;
 import modelo.Domicilio;
 import modelo.Empleado;
+import modelo.Localidad;
 import modelo.Perfil;
+import modelo.Provincia;
 import modelo.Usuario;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -37,6 +39,8 @@ public class Controlador_Empleado {
     private static Usuario usuario;
     private static Domicilio domicilio;
     private static Perfil perfil;
+    private static Provincia provincia;
+    private static Localidad localidad;
     
     public static void LogicaBotones(GestionEmpleado vista){
         vista.getBtn_Agregar().setEnabled(true);
@@ -112,6 +116,38 @@ public class Controlador_Empleado {
         vista.getCombo_Cargo().setModel(vista.getModeloComboCargo());
     }
     
+    public static void CargarProvincia(NuevoEmpleado vista) throws SQLException{
+        provincia = new Provincia();
+        ResultSet r = provincia.listar();
+        vista.getModeloProvincia().addElement("Seleccione una Opción");
+        while(r.next()){
+            provincia = new Provincia();
+            provincia.setIdprovincia(Integer.valueOf(r.getString("idprovincia")));
+            provincia.setNombre(r.getString("nombre"));
+            vista.getModeloProvincia().addElement(provincia);
+        }
+        vista.getCombo_Pronvincia().setModel(vista.getModeloProvincia());
+    }
+    
+    public static void CargarLocalidad(NuevoEmpleado vista) throws SQLException{
+        provincia = new Provincia();
+        provincia = (Provincia) vista.getCombo_Pronvincia().getModel().getSelectedItem();
+        localidad = new Localidad();
+        localidad.setProvincia(provincia);
+        //Limpiar el Combo
+        vista.getModeloLocalidad().removeAllElements();
+        ResultSet r = localidad.listar();
+        vista.getModeloLocalidad().addElement("Seleccione una Opción");
+        while(r.next()){
+            localidad = new Localidad();
+            localidad.setIdlocalidad(Integer.valueOf(r.getString("idlocalidad")));
+            localidad.setNombre(r.getString("nombre"));
+            localidad.setCodigoPostal(Integer.valueOf(r.getString("codigoPostal")));
+            vista.getModeloLocalidad().addElement(localidad);
+        }
+        vista.getCombo_Localidad().setModel(vista.getModeloLocalidad());
+    }
+    
     public static void CargarPerfil(EditarEmpleado vista) throws SQLException{
         perfil = new Perfil();
         ResultSet r = perfil.listar();
@@ -138,6 +174,38 @@ public class Controlador_Empleado {
         vista.getCombo_Cargo().setModel(vista.getModeloComboCargo());
     }
     
+     public static void CargarProvincia(EditarEmpleado vista) throws SQLException{
+        provincia = new Provincia();
+        ResultSet r = provincia.listar();
+        vista.getModeloProvincia().addElement("Seleccione una Opción");
+        while(r.next()){
+            provincia = new Provincia();
+            provincia.setIdprovincia(Integer.valueOf(r.getString("idprovincia")));
+            provincia.setNombre(r.getString("nombre"));
+            vista.getModeloProvincia().addElement(provincia);
+        }
+        vista.getCombo_Pronvincia().setModel(vista.getModeloProvincia());
+    }
+    
+    public static void CargarLocalidad(EditarEmpleado vista) throws SQLException{
+        provincia = new Provincia();
+        provincia = (Provincia) vista.getCombo_Pronvincia().getModel().getSelectedItem();
+        localidad = new Localidad();
+        localidad.setProvincia(provincia);
+        //Limpiar el Combo
+        vista.getModeloLocalidad().removeAllElements();
+        ResultSet r = localidad.listar();
+        vista.getModeloLocalidad().addElement("Seleccione una Opción");
+        while(r.next()){
+            localidad = new Localidad();
+            localidad.setIdlocalidad(Integer.valueOf(r.getString("idlocalidad")));
+            localidad.setNombre(r.getString("nombre"));
+            localidad.setCodigoPostal(Integer.valueOf(r.getString("codigoPostal")));
+            vista.getModeloLocalidad().addElement(localidad);
+        }
+        vista.getCombo_Localidad().setModel(vista.getModeloLocalidad());
+    }
+    
     public static boolean ValidarCampos(NuevoEmpleado vista){
         boolean bandera = true;
         //VALIDO QUE LOS CAMPOS NO SEAN VACIOS
@@ -161,6 +229,7 @@ public class Controlador_Empleado {
         usuario = usuario.replaceAll(" ", "");
         usuario = usuario.replaceAll(" ", "");
         String perfil = vista.getCombo_Perfil().getSelectedItem().toString();
+        String localidad = vista.getCombo_Localidad().getSelectedItem().toString();
             
         if (estado.equals("Seleccione una Opción")) {
             JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UNA OPCIÓN EN EL CAMPO ESTADO", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
@@ -219,6 +288,11 @@ public class Controlador_Empleado {
         
         if (perfil.equals("Seleccione una Opción")) {
             JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UN PERFÍL", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            bandera = false;
+        }
+        
+        if (localidad.equals("Seleccione una Opción")) {
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UNA LOCALIDAD", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
             bandera = false;
         }
         
@@ -248,6 +322,7 @@ public class Controlador_Empleado {
         usuario = usuario.replaceAll(" ", "");
         usuario = usuario.replaceAll(" ", "");
         String perfil = vista.getCombo_Perfil().getSelectedItem().toString();
+        String localidad = vista.getCombo_Localidad().getSelectedItem().toString();
             
         if (estado.equals("Seleccione una Opción")) {
             JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UNA OPCIÓN EN EL CAMPO ESTADO", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
@@ -309,6 +384,11 @@ public class Controlador_Empleado {
             bandera = false;
         }
         
+        if (localidad.equals("Seleccione una Opción")) {
+            JOptionPane.showMessageDialog(vista, "ERROR: DEBE SELECCIONAR UNA LOCALIDAD", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+            bandera = false;
+        }
+        
         return bandera;
     }
     
@@ -317,12 +397,16 @@ public class Controlador_Empleado {
             empleado = new Empleado();
             usuario = new Usuario();
             domicilio = new Domicilio();
+            localidad = new Localidad();
             perfil = new Perfil();
             //Seteo los Valores del Domicilio
             domicilio.setCalle(vista.getTxt_Calle().getText());
             domicilio.setNumero(vista.getTxt_Numero().getText());
             domicilio.setPiso(vista.getTxt_Piso().getText());
             domicilio.setDepartamento(vista.getTxt_Departamento().getText());
+            //Seteo la Localidad para asignarle al Domicilio
+            localidad = (Localidad) vista.getCombo_Localidad().getSelectedItem();
+            domicilio.setLocalidad(localidad);
             //Seteo los valores del Usuario
             usuario.setNombreUsuario(vista.getTxt_Usuario().getText());
             /*
@@ -376,6 +460,8 @@ public class Controlador_Empleado {
         usuario = new Usuario();
         perfil = new Perfil();
         domicilio = new Domicilio();
+        localidad = new Localidad();
+        provincia = new Provincia();
         
         //CAPTURO EL ID DEL EMPLEADO DE LA VISTA, QUE FUE PASADO DE LA VISTA GESTION DE EMPLEADOS
         empleado.setIdEmpleado(vista.getEmpleado().getIdEmpleado());
@@ -401,7 +487,15 @@ public class Controlador_Empleado {
             domicilio.setNumero(r.getString("numero"));
             domicilio.setPiso(r.getString("piso"));
             domicilio.setDepartamento(r.getString("departamento"));
+            localidad.setIdlocalidad(Integer.valueOf(r.getString("idlocalidad")));
+            localidad.setNombre(r.getString("localidad"));
+            localidad.setCodigoPostal(Integer.valueOf(r.getString("codigoPostal")));
+            provincia.setIdprovincia(Integer.valueOf(r.getString("idprovincia")));
+            provincia.setNombre(r.getString("provincia"));
         }
+        
+        System.out.println("Localidad Original: " + localidad);
+        
         
 
         //Cargo los campos del Formulario
@@ -427,7 +521,29 @@ public class Controlador_Empleado {
         vista.getCombo_Cargo().getModel().setSelectedItem(cargo);
         vista.getCombo_Perfil().getModel().setSelectedItem(perfil);
         vista.getTxt_Usuario().setText(usuario.getNombreUsuario());
+        vista.getCombo_Pronvincia().getModel().setSelectedItem(provincia);
         
+        
+
+        localidad.setProvincia(provincia);
+        //Limpio el Combo
+        vista.getModeloLocalidad().removeAllElements();
+        ResultSet l = localidad.listar();
+        vista.getModeloLocalidad().addElement("Seleccione una Opción");
+        while (l.next()) {  
+            Localidad loc = new Localidad();
+            loc.setIdlocalidad(Integer.valueOf(l.getString("idlocalidad")));
+            loc.setNombre(l.getString("nombre"));
+            loc.setCodigoPostal(Integer.valueOf(l.getString("codigoPostal")));
+            vista.getModeloLocalidad().addElement(loc);
+        }
+        
+        vista.getCombo_Localidad().setModel(vista.getModeloLocalidad());
+        vista.getCombo_Localidad().getModel().setSelectedItem(localidad);
+
+        
+        vista.setVisible(true);
+
     }
     
     public static void EditarEmpleado(EditarEmpleado vista) throws SQLException{
@@ -437,12 +553,16 @@ public class Controlador_Empleado {
                 empleado = new Empleado();
                 usuario = new Usuario();
                 domicilio = new Domicilio();
+                localidad = new Localidad();
                 perfil = new Perfil();
                 //Seteo los Valores del Domicilio
                 domicilio.setCalle(vista.getTxt_Calle().getText());
                 domicilio.setNumero(vista.getTxt_Numero().getText());
                 domicilio.setPiso(vista.getTxt_Piso().getText());
                 domicilio.setDepartamento(vista.getTxt_Departamento().getText());
+                //Seteo la Localidad para asignarle al Domicilio
+                localidad = (Localidad) vista.getCombo_Localidad().getSelectedItem();
+                domicilio.setLocalidad(localidad);
                 //Seteo los valores del Usuario
                 usuario.setNombreUsuario(vista.getTxt_Usuario().getText());
                 //Ya no se puede modificar la contraseña desde aqui!! 

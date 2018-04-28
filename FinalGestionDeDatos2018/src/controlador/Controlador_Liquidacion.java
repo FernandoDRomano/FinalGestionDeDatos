@@ -1258,6 +1258,8 @@ public class Controlador_Liquidacion {
             }
             
             vista.getTabla_Liquidacion().setModel(vista.getModeloLiquidacion());
+            
+            vista.getModeloDetalle().setRowCount(0);
         }
     }
     

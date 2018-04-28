@@ -15,18 +15,19 @@ public class Domicilio {
     private String numero;
     private String piso;
     private String departamento;
-
-    public Domicilio(int idDomicilio, String calle, String numero, String piso, String departamento) {
-        this.idDomicilio = idDomicilio;
-        this.calle = calle;
-        this.numero = numero;
-        this.piso = piso;
-        this.departamento = departamento;
-    }
+    private Localidad localidad;
 
     public Domicilio() {
     }
 
+    public Localidad getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(Localidad localidad) {
+        this.localidad = localidad;
+    }    
+    
     public int getIdDomicilio() {
         return idDomicilio;
     }
@@ -79,12 +80,13 @@ public class Domicilio {
     public void grabarDomicilio(){
         try {
             Conexion conexion = new Conexion();
-            String query = "insert into domicilio (calle, numero, piso, departamento) values (?,?,?,?);";
+            String query = "insert into domicilio (calle, numero, piso, departamento, localidad_idlocalidad) values (?,?,?,?,?);";
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.setString(1, this.getCalle());
             st.setString(2, this.getNumero());
             st.setString(3, this.getPiso());
             st.setString(4, this.getDepartamento());
+            st.setInt(5, this.getLocalidad().getIdlocalidad());
             st.execute();
             System.out.println("SE GRABO LA DIRECCIÓN EN LA BASE DE DATOS");
             st.close();
@@ -130,7 +132,7 @@ public class Domicilio {
     public void editarDomicilio(){
         try {
             Conexion conexion = new Conexion();
-            String query = "update domicilio set calle = '"+ this.getCalle()+ "', numero = '" + this.getNumero() + "', piso = '" + this.getPiso() + "', departamento = '" + this.getDepartamento() + "' where iddomicilio =" + this.getIdDomicilio()+ ";";
+            String query = "update domicilio set calle = '"+ this.getCalle()+ "', numero = '" + this.getNumero() + "', piso = '" + this.getPiso() + "', departamento = '" + this.getDepartamento() + "', localidad_idlocalidad = '" + this.getLocalidad().getIdlocalidad() + "' where iddomicilio =" + this.getIdDomicilio()+ ";";
             System.out.println(query);
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             st.executeUpdate();

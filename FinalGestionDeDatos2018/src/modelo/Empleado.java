@@ -269,12 +269,16 @@ public class Empleado {
                            "domicilio.iddomicilio, domicilio.calle, domicilio.numero, domicilio.piso, domicilio.departamento, \n" +
                            "usuario.idusuario, usuario.nombreUsuario,\n" +
                            "perfil.idperfil, perfil.nombre as perfil, \n" +
-                           "cargo.idcargo, cargo.cargo, cargo.basico\n" +
+                           "cargo.idcargo, cargo.cargo, cargo.basico,\n" +
+                           "localidad.idlocalidad, localidad.nombre as localidad, localidad.codigoPostal,\n" +
+                           "provincia.idprovincia, provincia.nombre as provincia\n" +
                            "from empleado\n" +
                            "inner join domicilio on domicilio.iddomicilio = empleado.domicilio_iddomicilio\n" +
                            "inner join cargo on cargo.idcargo = empleado.cargo_idcargo\n" +
                            "inner join usuario on usuario.idusuario = empleado.usuario_idusuario\n" +
                            "inner join perfil on perfil.idperfil = usuario.perfil_idperfil\n" +
+                           "inner join localidad on localidad.idlocalidad = domicilio.localidad_idlocalidad\n" +
+                           "inner join provincia on provincia.idprovincia = localidad.provincia_idprovincia\n" +
                            "where idempleado =" + this.getIdEmpleado();
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             resultado = st.executeQuery();

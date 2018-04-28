@@ -225,6 +225,7 @@ public class Controlador_Venta {
                 for(int i = 0; i < venta.getTabla_Descripcion().getColumnCount(); i++) {
                     venta.getTabla_Descripcion().getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
                 }
+                vista.setVisible(false);
             }
             
         }else{
@@ -521,6 +522,9 @@ public class Controlador_Venta {
             vista.getLabel_NumeroVenta().setVisible(true);
             vista.getLabel_TotalVenta().setVisible(true);
             vista.getLabel_Empleado().setVisible(true);
+            
+            //LIMPIO LAS VENTAS SELECCIONADAS ANTERIORMENTE
+            vista.getModeloVentas().setRowCount(0);
         }
         
     }
@@ -532,6 +536,7 @@ public class Controlador_Venta {
             //UNA VES LIMPIADOS LAS FECHAS POR LAS QUE SE FILTRABA, VUELVO A CARGAR LAS VENTAS DEL ULTIMO EMPLEADO SELECCIONADO
             //POR ESO SE INVOCA AL MEDOTO CARGAR_VENTAS_X_EMPLEADO
             cargarVentaxEmpleado(vista);
+            vista.getModeloVentas().setRowCount(0);
         } catch (SQLException ex) {
             Logger.getLogger(Controlador_Venta.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -697,6 +702,9 @@ public class Controlador_Venta {
             //LOS HAGO VISIBLE
             vista.getLabel_NumeroVenta().setVisible(true);
             vista.getLabel_TotalVenta().setVisible(true);
+            
+            //LIMPIO LOS DETALLES DE LA VENTA SELECCIONADA ANTERIORMENTE
+            vista.getModeloDetalles().setRowCount(0);
         }
         
     }
@@ -708,6 +716,7 @@ public class Controlador_Venta {
             //UNA VES LIMPIADOS LAS FECHAS POR LAS QUE SE FILTRABA, VUELVO A CARGAR LAS VENTAS DEL ULTIMO EMPLEADO SELECCIONADO
             //POR ESO SE INVOCA AL MEDOTO CARGAR_VENTAS
             cargarVentas(vista);
+            vista.getModeloDetalles().setRowCount(0);
         } catch (SQLException ex) {
             Logger.getLogger(Controlador_Venta.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -62,14 +62,18 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="48" splitType="Stretch">
+		<band height="71" splitType="Stretch">
 			<staticText>
-				<reportElement x="93" y="0" width="385" height="44" uuid="27de31c2-ddee-4ea7-88a2-b886eb3b13ae"/>
+				<reportElement x="113" y="13" width="385" height="44" uuid="27de31c2-ddee-4ea7-88a2-b886eb3b13ae"/>
 				<textElement>
 					<font size="30" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Reporte de Categorías]]></text>
 			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="145" height="69" uuid="dbc2fc49-d59a-438f-9e4d-3d24be473044"/>
+				<imageExpression><![CDATA["/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/imagenes/TodoHogar.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<detail>

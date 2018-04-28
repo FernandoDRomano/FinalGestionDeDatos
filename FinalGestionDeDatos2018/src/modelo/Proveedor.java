@@ -152,10 +152,15 @@ public class Proveedor {
         ResultSet resultado = null;
          try {
             Conexion conexion = new Conexion();
-            String query = "select proveedor.idproveedor, proveedor.nombre, proveedor.cuit, proveedor.razonSocial, proveedor.telefono, proveedor.correo, domicilio.iddomicilio, domicilio.calle, domicilio.numero, domicilio.piso, domicilio.departamento\n" +
-                           "from proveedor\n" +
-                           "inner join domicilio on domicilio.iddomicilio = proveedor.domicilio_iddomicilio\n" +
-                           "where proveedor.idproveedor = " + this.getIdProveedor() + " ;";
+            String query = "select domicilio.iddomicilio, domicilio.calle, domicilio.numero, domicilio.piso, domicilio.departamento, \n" +
+                            "provincia.idprovincia, provincia.nombre as provincia, \n" +
+                            "localidad.idlocalidad, localidad.nombre as localidad, localidad.codigoPostal,\n" +
+                            "proveedor.idproveedor, proveedor.nombre as proveedor, proveedor.correo, proveedor.cuit, proveedor.razonSocial, proveedor.telefono\n" +
+                            "from proveedor\n" +
+                            "inner join domicilio on domicilio.iddomicilio = proveedor.domicilio_iddomicilio\n" +
+                            "inner join localidad on localidad.idlocalidad = domicilio.localidad_idlocalidad\n" +
+                            "inner join provincia on provincia.idprovincia = localidad.provincia_idprovincia\n" +
+                            "where proveedor.idproveedor = " + this.getIdProveedor() + " ;";
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             resultado = st.executeQuery();
             conexion.desconectar();

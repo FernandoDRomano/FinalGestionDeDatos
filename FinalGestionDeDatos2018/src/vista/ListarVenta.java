@@ -220,7 +220,7 @@ public class ListarVenta extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(tabla_Ventas);
 
-        btn_Limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_salir.png"))); // NOI18N
+        btn_Limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btn_limpiar.png"))); // NOI18N
         btn_Limpiar.setText("Limpiar");
         btn_Limpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

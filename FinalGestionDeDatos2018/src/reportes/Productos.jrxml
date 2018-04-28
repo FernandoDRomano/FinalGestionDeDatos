@@ -50,14 +50,18 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="48" splitType="Stretch">
+		<band height="73" splitType="Stretch">
 			<staticText>
-				<reportElement x="207" y="0" width="385" height="44" uuid="b22f1f8f-c5f9-4b42-8781-7a80b28258da"/>
+				<reportElement x="207" y="16" width="385" height="44" uuid="b22f1f8f-c5f9-4b42-8781-7a80b28258da"/>
 				<textElement>
 					<font size="30" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Reporte de Productos]]></text>
 			</staticText>
+			<image>
+				<reportElement x="3" y="1" width="145" height="69" uuid="02e55664-27be-48d8-a517-f35c862f012c"/>
+				<imageExpression><![CDATA["/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/imagenes/TodoHogar.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<detail>

@@ -44,6 +44,12 @@ public class Principal extends javax.swing.JFrame {
     
     public Principal() {
         initComponents();
+        Menu_Gestion.setTitle("Gestiones");
+        Menu_Venta.setTitle("Ventas");
+        Menu_Compra.setTitle("Compras");
+        Menu_Reporte.setTitle("Reportes");
+        Menu_LiquidacionSueldo.setTitle("Liquidaciones de Sueldos");
+        Menu_Sistema.setTitle("Sistema");
         empleado = new Empleado();
         usuario = new Usuario();
         Minimizar();
@@ -226,7 +232,7 @@ public class Principal extends javax.swing.JFrame {
         Icon IconoListarVenta = new ImageIcon(ClassLoader.getSystemResource("imagenes/ListarVenta.png"));
         Icon IconoListarVentaxEmpleado = new ImageIcon(ClassLoader.getSystemResource("imagenes/ListarVentaEmpleado.png"));
         
-        final JXLabel labelNuevaVenta = new JXLabel("Nueva Venta", IconoNuevaVenta, JXLabel.LEFT);
+        final JXLabel labelNuevaVenta = new JXLabel("Punto de Venta", IconoNuevaVenta, JXLabel.LEFT);
         final JXLabel labelListarVentas = new JXLabel("Listar Ventas", IconoListarVenta, JXLabel.LEFT);
         final JXLabel labelListarVentasxEmpleado = new JXLabel("Listar Ventas por Empleado", IconoListarVentaxEmpleado, JXLabel.LEFT);
         
@@ -289,7 +295,7 @@ public class Principal extends javax.swing.JFrame {
         Icon IconoListarCompraXempleado = new ImageIcon(ClassLoader.getSystemResource("imagenes/ListarCompraEmpleado.png"));
 
         
-        final JXLabel labelNuevaCompra = new JXLabel("Nueva Compra", IconoNuevaCompra, JXLabel.LEFT);
+        final JXLabel labelNuevaCompra = new JXLabel("Punto de Compra", IconoNuevaCompra, JXLabel.LEFT);
         final JXLabel labelListarCompras = new JXLabel("Listar Compras", IconoListarCompra, JXLabel.LEFT);
         final JXLabel labelListarComprasXempleado = new JXLabel("Listar Compras por Empleado", IconoListarCompraXempleado, JXLabel.LEFT);
         
@@ -771,9 +777,10 @@ public class Principal extends javax.swing.JFrame {
         Menu_LiquidacionSueldo = new org.jdesktop.swingx.JXTaskPane();
         Menu_Sistema = new org.jdesktop.swingx.JXTaskPane();
         jcMousePanel3 = new jcMousePanel.jcMousePanel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Principal");
+        setTitle("Muebleria Todo Hogar - Principal");
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         jcMousePanel1.setLayout(new java.awt.BorderLayout());
@@ -795,34 +802,11 @@ public class Principal extends javax.swing.JFrame {
         label_Empleado.setForeground(new java.awt.Color(255, 255, 255));
         label_Empleado.setText("                 ");
         Contenedor_Menu.add(label_Empleado);
-
-        Menu_Gestion.setScrollOnExpand(true);
-        Menu_Gestion.setSpecial(true);
-        Menu_Gestion.setTitle("Gestiones");
         Contenedor_Menu.add(Menu_Gestion);
-
-        Menu_Venta.setSpecial(true);
-        Menu_Venta.setTitle("Ventas");
         Contenedor_Menu.add(Menu_Venta);
-
-        Menu_Compra.setScrollOnExpand(true);
-        Menu_Compra.setSpecial(true);
-        Menu_Compra.setTitle("Compras");
         Contenedor_Menu.add(Menu_Compra);
-
-        Menu_Reporte.setScrollOnExpand(true);
-        Menu_Reporte.setSpecial(true);
-        Menu_Reporte.setTitle("Reportes");
         Contenedor_Menu.add(Menu_Reporte);
-
-        Menu_LiquidacionSueldo.setScrollOnExpand(true);
-        Menu_LiquidacionSueldo.setSpecial(true);
-        Menu_LiquidacionSueldo.setTitle("Liquidación de Sueldo");
         Contenedor_Menu.add(Menu_LiquidacionSueldo);
-
-        Menu_Sistema.setScrollOnExpand(true);
-        Menu_Sistema.setSpecial(true);
-        Menu_Sistema.setTitle("Sistema");
         Contenedor_Menu.add(Menu_Sistema);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -846,6 +830,13 @@ public class Principal extends javax.swing.JFrame {
 
         jcMousePanel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondo.jpg"))); // NOI18N
         jcMousePanel3.setLayout(new java.awt.BorderLayout());
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 3, 90)); // NOI18N
+        jLabel2.setForeground(java.awt.Color.white);
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Muebleria Todo Hogar");
+        jcMousePanel3.add(jLabel2, java.awt.BorderLayout.CENTER);
+
         jcMousePanel1.add(jcMousePanel3, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jcMousePanel1);
@@ -898,6 +889,7 @@ public class Principal extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXTaskPane Menu_Sistema;
     private org.jdesktop.swingx.JXTaskPane Menu_Venta;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private jcMousePanel.jcMousePanel jcMousePanel1;
     private jcMousePanel.jcMousePanel jcMousePanel3;

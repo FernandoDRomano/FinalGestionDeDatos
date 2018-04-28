@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9f5d3c07-2112-4341-bbf4-813852a7ec15">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="72"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -228,25 +228,39 @@ WHERE liquidacion.idliquidacion = $P{Id};]]>
 				<reportElement x="6" y="5" width="545" height="90" uuid="c170fdb5-1212-45e2-bdf6-5c058ddf9eda"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="17" y="14" width="169" height="20" uuid="95bf847e-0d8e-4051-9fbc-4dbe344dc264"/>
+				<reportElement x="17" y="32" width="169" height="20" uuid="95bf847e-0d8e-4051-9fbc-4dbe344dc264"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Número de Liquidación:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="186" y="14" width="100" height="20" uuid="cb5df22d-4976-4bee-9c34-c87057770c68"/>
+				<reportElement x="186" y="32" width="100" height="20" uuid="cb5df22d-4976-4bee-9c34-c87057770c68"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="16" y="43" width="155" height="20" uuid="0aa77793-9a85-407b-9fee-2b2f8499052d"/>
+				<reportElement x="18" y="52" width="195" height="20" uuid="03c82d9f-944e-40af-a7b7-7910b7cb743c"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Detalles del Negocio]]></text>
+				<text><![CDATA[Domicilio: Av. Colón 702]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="72" width="195" height="20" uuid="027353ac-6c5f-4b4b-a631-7902cf58b941"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUIT: 20728391647185]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="11" width="269" height="20" uuid="cef8125c-06d0-43f2-9137-c057c5d88747"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empresa: Muebleria Todo Hogar]]></text>
 			</staticText>
 		</band>
 	</pageHeader>

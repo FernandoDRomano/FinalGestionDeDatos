@@ -44,14 +44,18 @@ FROM
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="48" splitType="Stretch">
+		<band height="69" splitType="Stretch">
 			<staticText>
-				<reportElement x="118" y="0" width="321" height="44" uuid="27de31c2-ddee-4ea7-88a2-b886eb3b13ae"/>
+				<reportElement x="145" y="14" width="321" height="44" uuid="27de31c2-ddee-4ea7-88a2-b886eb3b13ae"/>
 				<textElement>
 					<font size="30" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Reporte de Cargos]]></text>
 			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="145" height="69" uuid="6f8b1c11-b66c-4f7d-9847-795f125e633f"/>
+				<imageExpression><![CDATA["/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/imagenes/TodoHogar.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<detail>

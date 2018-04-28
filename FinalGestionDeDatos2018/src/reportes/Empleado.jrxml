@@ -103,14 +103,18 @@ where empleado.idempleado =  $P{Id};]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="50" splitType="Stretch">
+		<band height="72" splitType="Stretch">
 			<staticText>
-				<reportElement x="154" y="0" width="366" height="44" uuid="30d183d5-5f3f-4fda-976b-2a655695c9e8"/>
+				<reportElement x="157" y="13" width="366" height="44" uuid="30d183d5-5f3f-4fda-976b-2a655695c9e8"/>
 				<textElement>
 					<font size="30" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Reporte de Empleado]]></text>
 			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="145" height="69" uuid="1b9dff25-0837-4d19-99a7-6b7f599f1d6b"/>
+				<imageExpression><![CDATA["/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/imagenes/TodoHogar.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<columnHeader>
@@ -381,15 +385,15 @@ where empleado.idempleado =  $P{Id};]]>
 			</staticText>
 		</band>
 	</detail>
-	<summary>
-		<band height="32" splitType="Stretch">
+	<pageFooter>
+		<band height="50">
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="0" y="12" width="226" height="20" uuid="cfecef43-7e43-46ce-8135-252f4b179583"/>
+				<reportElement x="0" y="30" width="226" height="20" uuid="cfecef43-7e43-46ce-8135-252f4b179583"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
-	</summary>
+	</pageFooter>
 </jasperReport>

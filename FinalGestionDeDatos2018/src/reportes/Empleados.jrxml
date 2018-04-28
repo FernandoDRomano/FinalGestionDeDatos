@@ -76,14 +76,18 @@ inner join cargo on cargo.idcargo = empleado.cargo_idcargo;]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="48" splitType="Stretch">
+		<band height="77" splitType="Stretch">
 			<staticText>
-				<reportElement x="187" y="3" width="385" height="44" uuid="26e504c4-a163-4ceb-abe8-d17a0e522ec2"/>
+				<reportElement x="185" y="15" width="385" height="44" uuid="26e504c4-a163-4ceb-abe8-d17a0e522ec2"/>
 				<textElement>
 					<font size="30" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Reporte de Empleados]]></text>
 			</staticText>
+			<image>
+				<reportElement x="2" y="3" width="145" height="69" uuid="d192c490-af39-4f43-ad2c-c12fbac25bc1"/>
+				<imageExpression><![CDATA["/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/imagenes/TodoHogar.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<detail>
