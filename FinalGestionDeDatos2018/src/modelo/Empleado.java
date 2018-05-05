@@ -417,7 +417,7 @@ public class Empleado {
             conexion1.desconectar();
             
             Conexion conexion2 = new Conexion();
-            String queryPedido = "select count(*) as resultado from pedido where pedido.empleado_idempleado = " + this.getIdEmpleado()+ " ;";
+            String queryPedido = "select count(*) as resultado from compra where compra.empleado_idempleado = " + this.getIdEmpleado()+ " ;";
             PreparedStatement st1 = conexion2.getConnection().prepareStatement(queryPedido);
             System.out.println(queryPedido);
             p = st1.executeQuery();

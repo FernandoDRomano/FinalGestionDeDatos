@@ -40,6 +40,8 @@ public class Principal extends javax.swing.JFrame {
     private JXLabel labelCategoria;
     private JXLabel labelCargo;
     private JXLabel labelConceptos;
+    private JXLabel labelListarVentas;
+    private JXLabel labelListarVentasxEmpleado;
     
     
     public Principal() {
@@ -233,8 +235,8 @@ public class Principal extends javax.swing.JFrame {
         Icon IconoListarVentaxEmpleado = new ImageIcon(ClassLoader.getSystemResource("imagenes/ListarVentaEmpleado.png"));
         
         final JXLabel labelNuevaVenta = new JXLabel("Punto de Venta", IconoNuevaVenta, JXLabel.LEFT);
-        final JXLabel labelListarVentas = new JXLabel("Listar Ventas", IconoListarVenta, JXLabel.LEFT);
-        final JXLabel labelListarVentasxEmpleado = new JXLabel("Listar Ventas por Empleado", IconoListarVentaxEmpleado, JXLabel.LEFT);
+        labelListarVentas = new JXLabel("Listar Ventas", IconoListarVenta, JXLabel.LEFT);
+        labelListarVentasxEmpleado = new JXLabel("Listar Ventas por Empleado", IconoListarVentaxEmpleado, JXLabel.LEFT);
         
         labelNuevaVenta.addMouseListener(new MouseAdapter() {
             
@@ -757,6 +759,23 @@ public class Principal extends javax.swing.JFrame {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public JXLabel getLabelListarVentas() {
+        return labelListarVentas;
+    }
+
+    public void setLabelListarVentas(JXLabel labelListarVentas) {
+        this.labelListarVentas = labelListarVentas;
+    }
+
+    public JXLabel getLabelListarVentasxEmpleado() {
+        return labelListarVentasxEmpleado;
+    }
+
+    public void setLabelListarVentasxEmpleado(JXLabel labelListarVentasxEmpleado) {
+        this.labelListarVentasxEmpleado = labelListarVentasxEmpleado;
+    }
+    
     
     
     

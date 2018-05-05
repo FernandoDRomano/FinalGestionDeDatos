@@ -210,7 +210,7 @@ public class Producto {
             conexion1.desconectar();
             
             Conexion conexion2 = new Conexion();
-            String queryPedido = "select count(*) as resultado from linea_pedido where linea_pedido.producto_idproducto = " + this.getIdProducto()+ " ;";
+            String queryPedido = "select count(*) as resultado from linea_compra where linea_compra.producto_idproducto = " + this.getIdProducto()+ " ;";
             PreparedStatement st1 = conexion2.getConnection().prepareStatement(queryPedido);
             p = st1.executeQuery();
             conexion2.desconectar();

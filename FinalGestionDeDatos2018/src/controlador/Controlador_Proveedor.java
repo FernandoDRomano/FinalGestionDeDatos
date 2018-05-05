@@ -249,7 +249,7 @@ public class Controlador_Proveedor {
                //VALIDO QUE EL PROVEEDOR NO TENGA PEDIDOS ASOCIADOS
                boolean bandera = proveedor.tienePedidos();
                if (bandera == true) {
-                    JOptionPane.showMessageDialog(vista, "ERROR: NO SE PUEDE ELIMINAR ÉSTE PROVEEDOR,\n TIENE PEDIDOS ASOCIADOS", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(vista, "ERROR: NO SE PUEDE ELIMINAR ÉSTE PROVEEDOR,\n TIENE COMPRAS ASOCIADAS", "Mensaje de Error", JOptionPane.ERROR_MESSAGE);
                }else{
                     ResultSet r = proveedor.buscarProveedorId();
                     while (r.next()) {                

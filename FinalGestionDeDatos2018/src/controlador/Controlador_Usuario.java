@@ -77,8 +77,10 @@ public class Controlador_Usuario {
                 principal.getLabelFamilia().setVisible(false);
                 principal.getLabelProveedor().setVisible(false);
                 principal.getLabelProducto().setVisible(false);
+                principal.getLabelListarVentas().setVisible(false);
+                principal.getLabelListarVentasxEmpleado().setVisible(false);
                 principal.getMenu_Venta().setCollapsed(false);
-                principal.getMenu_Compra().setCollapsed(false);
+                principal.getMenu_Compra().setVisible(false);
                 principal.setVisible(true);
                 JOptionPane.showMessageDialog(null, "Bienvenido " + empleado.getApellido() + ", " + empleado.getNombre(), "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
             }

@@ -193,7 +193,7 @@ public class Proveedor {
         int resultado = 0;
         try {
             Conexion conexion = new Conexion();
-            String query = "select count(*) as resultado from pedido where pedido.proveedor_idproveedor = " + this.getIdProveedor()+ " ;";
+            String query = "select count(*) as resultado from compra where compra.proveedor_idproveedor = " + this.getIdProveedor()+ " ;";
             PreparedStatement st = conexion.getConnection().prepareStatement(query);
             r = st.executeQuery();
             conexion.desconectar();
