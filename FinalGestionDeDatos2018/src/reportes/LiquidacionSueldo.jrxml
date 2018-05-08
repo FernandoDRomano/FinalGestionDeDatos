@@ -253,7 +253,7 @@ WHERE liquidacion.idliquidacion = $P{Id};]]>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[CUIT: 20728391647185]]></text>
+				<text><![CDATA[CUIT: 20318913293]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="17" y="11" width="269" height="20" uuid="cef8125c-06d0-43f2-9137-c057c5d88747"/>

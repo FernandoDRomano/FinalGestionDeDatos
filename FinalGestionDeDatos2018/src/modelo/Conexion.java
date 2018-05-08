@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class Conexion {
     
     /**Parametros de conexion*/
-   static String bd = "sg_bar";
+   static String bd = "todoHogar";
    static String login = "root";
    static String password = "35548988";
    static String url = "jdbc:mysql://localhost/"+bd;

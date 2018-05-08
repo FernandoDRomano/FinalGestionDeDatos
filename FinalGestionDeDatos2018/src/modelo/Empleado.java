@@ -165,7 +165,7 @@ public class Empleado {
         ResultSet resultado = null;
          try {
             Conexion conexion = new Conexion();
-             String query = "select empleado.idempleado, empleado.apellido, empleado.nombre, empleado.dni, empleado.telefono, empleado.fechaIngreso, TIMESTAMPDIFF(YEAR, empleado.fechaIngreso, CURDATE()) As antiguedad, empleado.sexo, empleado.estado, \n" +
+             String query = "select empleado.idempleado, empleado.apellido, empleado.nombre, empleado.dni, empleado.telefono, date_format(empleado.fechaIngreso, '%d/%m/%Y') as fechaIngreso, TIMESTAMPDIFF(YEAR, empleado.fechaIngreso, CURDATE()) As antiguedad, empleado.sexo, empleado.estado, \n" +
                            "domicilio.iddomicilio, domicilio.calle, domicilio.numero, domicilio.piso, domicilio.departamento, concat(domicilio.calle, ' ',domicilio.numero) as domicilio, \n" +
                            "usuario.idusuario, usuario.nombreUsuario as usuario,\n" +
                            "perfil.idperfil, perfil.nombre as perfil, \n" +

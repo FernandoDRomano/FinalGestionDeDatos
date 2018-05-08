@@ -428,12 +428,11 @@
             <Component class="javax.swing.JComboBox" name="combo_Escolaridad">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="5">
+                  <StringArray count="4">
                     <StringItem index="0" value="Seleccione una Opci&#xf3;n"/>
                     <StringItem index="1" value="Primaria"/>
                     <StringItem index="2" value="Secundaria"/>
-                    <StringItem index="3" value="Universidad"/>
-                    <StringItem index="4" value="Ninguna"/>
+                    <StringItem index="3" value="Ninguna"/>
                   </StringArray>
                 </Property>
               </Properties>

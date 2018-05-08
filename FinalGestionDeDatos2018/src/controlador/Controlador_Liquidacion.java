@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import modelo.Cargo;
 import modelo.Concepto;
+import modelo.Conexion;
 import modelo.Domicilio;
 import modelo.Empleado;
 import modelo.Familia;
@@ -294,6 +296,7 @@ public class Controlador_Liquidacion {
         }
     }
     
+    /*
     public static void CargarConceptosDeLaFamiliaAutomaticamente(LiquidacionEmpleado vista, ResultSet familia) throws SQLException{
         int matrimonio = 0;
         int hijosDiscapacidad = 0;
@@ -408,6 +411,124 @@ public class Controlador_Liquidacion {
         vista.getTabla_Conceptos().setModel(vista.getModeloConcepto());
         TamañoDeLasColumnasDeLosConceptos(vista);    
     }
+    */
+    
+    public static void CargarConceptosDeLaFamiliaAutomaticamente(LiquidacionEmpleado vista, ResultSet familia) throws SQLException{
+        int matrimonio = 0;
+        int hijosDiscapacidad = 0;
+        int hijos = 0;
+        int escolaridadHijos = 0;
+        int escolaridadDiscapacitados = 0;
+        double total = 0; // SIRVE PARA CALCULAR EL TOTAL DEL CONCEPTO = MONTO * CANTIDAD
+        
+        //REINICIO EL MODELO DE LOS CONCEPTOS
+        IniciarModeloConcepto(vista);
+        
+        while (familia.next()) {     
+            String vinculo = familia.getString("vinculo");
+            String discapacidad = familia.getString("discapacidad");
+            String escolaridad = familia.getString("escolaridad");
+            
+            //PREGUNTO PRIMERO POR EL VINCULO
+            if (vinculo.equals("Esposo/a")) {
+                matrimonio ++;
+            }else{
+                if (vinculo.equals("Hijo/a")) {
+                    
+                    //SI ES UN HIJ@ PREGUNTO SI TIENE ESCOLARIDAD
+                    if (discapacidad.equals("Si")) {
+                        //SI ES DISCAPACITADO, PREGUNTO POR SU ESCOLARIDAD
+                        if (escolaridad.equals("Primaria") || escolaridad.equals("Secundaria")) {
+                            escolaridadDiscapacitados ++;
+                        }
+                        //INCREMENTO EN UNO LA CANTIDAD DE HIJOS DISCAPACITADOS
+                        hijosDiscapacidad ++;
+                    }else{
+                        //SI NO ES DISCAPACITADO PREGUNTO POR SU ESCOLARIDAD
+                        if (escolaridad.equals("Primaria") || escolaridad.equals("Secundaria")) {
+                        escolaridadHijos ++;
+                        }
+                        //INCREMENTO LA CANTIDAD DE HIJOS NO DISCAPACITADOS
+                        hijos++;
+                    }
+                }
+            }
+            
+            System.out.println("Vinculo: " + vinculo + " - Escolaridad: " + escolaridad + " - Discapacidad: " + discapacidad);
+            
+        }//FIN DEL CICLO WHILE
+        
+        System.out.println("Total de Cónyuge:" + matrimonio);
+        System.out.println("Total de Hijos:" + hijos);
+        System.out.println("Total de Escolaridad Anual :" + escolaridadHijos);
+        System.out.println("Total de Hijos con Discapacidad:" + hijosDiscapacidad);
+        System.out.println("Total de Escolaridad Anual por Hijo Discapacitado:" + escolaridadDiscapacitados);
+        
+        //ENTRO A BUSCAR LOS CONCEPTOS PARA APLICAR LOS RESULTADOS OBTENIDOS
+        concepto = new Concepto();
+        ResultSet c = concepto.listarConceptos();
+        while (c.next()) {            
+              String id = c.getString("idconcepto");
+              String descripcion = c.getString("descripcion");
+              String tipo = c.getString("tipoConcepto");
+              String fijo = c.getString("fijo");
+              String porcentaje = c.getString("porcentaje");
+              double monto = Double.valueOf(c.getString("monto"));
+              
+              if (id.equals("1")) { //EL ID 1 ES DEL SUELDO BASICO
+                      // COMO EL CONCEPTO DEL BASICO TIENE UN 100% DE PORCENTAJE DEL BASICO REALIZO EL SIGUIENTE CALCULO  
+                      total = (Double.valueOf(porcentaje) * Double.valueOf(vista.getTxt_SueldoBasico().getText()))/100;
+                      String fila[] = {id, descripcion, tipo, fijo, porcentaje , "--------------", String.valueOf("1"), String.valueOf(total)};
+                      vista.getModeloConcepto().addRow(fila);
+              }
+              
+              if (id.equals("2")){//EL ID 2 ES Asignación Familiar por Hijo
+                  if (hijos > 0) {
+                      total = monto * hijos;
+                      String fila[] = {id, descripcion, tipo, fijo, "--------------",  String.valueOf(monto), String.valueOf(hijos), String.valueOf(total)};
+                      vista.getModeloConcepto().addRow(fila);
+                  }
+              }
+              
+              if (id.equals("3")){//EL ID 3 ES Asignación Familiar por Hijo con Discapacidad
+                  if (hijosDiscapacidad > 0) {
+                      total = monto * hijosDiscapacidad;
+                      String fila[] = {id, descripcion, tipo, fijo, "--------------", String.valueOf(monto), String.valueOf(hijosDiscapacidad), String.valueOf(total)};
+                      vista.getModeloConcepto().addRow(fila);
+                  }
+              }
+              
+              if (id.equals("4")) {//EL ID 4 ES Asignación Familiar por Ayuda Escolar Anual
+                  if (escolaridadHijos > 0) {
+                      total = monto * escolaridadHijos;
+                      String fila[] = {id, descripcion, tipo, fijo, "--------------", String.valueOf(monto), String.valueOf(escolaridadHijos), String.valueOf(total)};
+                      vista.getModeloConcepto().addRow(fila);
+                  }   
+              }
+              
+              if (id.equals("5")) {//EL ID 5 ES Asignación Familiar por Ayuda Escolar Anual por Hijo Discapacitado
+                  if (escolaridadDiscapacitados > 0) {
+                     total = monto * escolaridadDiscapacitados;
+                     String fila[] = {id, descripcion, tipo, fijo, "--------------", String.valueOf(monto), String.valueOf(escolaridadDiscapacitados), String.valueOf(total)};
+                     vista.getModeloConcepto().addRow(fila); 
+                  }
+              }
+              
+              if (id.equals("6")) {////EL ID 6 por Conyugue
+                  if (matrimonio > 0) {
+                     total = monto * matrimonio;
+                     String fila[] = {id, descripcion, tipo, fijo, "--------------", String.valueOf(monto), String.valueOf(matrimonio), String.valueOf(total)};
+                     vista.getModeloConcepto().addRow(fila);   
+                  }
+              }
+                            
+              
+        }//FIN DEL CICLO WHILE DE CONCEPTOS
+        
+        vista.getTabla_Conceptos().setModel(vista.getModeloConcepto());
+        TamañoDeLasColumnasDeLosConceptos(vista);    
+    }
+    
     
     public static void CalcularTotales(LiquidacionEmpleado vista){
         double totalHaberes = 0;
@@ -425,6 +546,7 @@ public class Controlador_Liquidacion {
         }
         
         totalNeto = totalHaberes - totalDescuentos;
+        
         vista.getTxt_Haberes().setText("" + totalHaberes);
         vista.getTxt_Descuentos().setText("" + totalDescuentos);
         vista.getTxt_SueldoNeto().setText("" + totalNeto);
@@ -661,7 +783,515 @@ public class Controlador_Liquidacion {
         return bandera;
     }
     
-    public static void LiquidarTodos(LiquidacionTodos vista) throws SQLException, ClassNotFoundException, JRException, FileNotFoundException{
+//    public static void LiquidarTodos(LiquidacionTodos vista) throws SQLException, ClassNotFoundException, JRException, FileNotFoundException{
+//        if (ValidarCampos(vista)) {
+//            int opt = JOptionPane.showConfirmDialog(vista, "¿ESTÁ USTED SEGURO DE REALIZAR LA LIQUIDACIÓN A TODOS LOS EMPLEADOS?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+//            if (opt == JOptionPane.YES_OPTION) {
+//                int op = JOptionPane.showConfirmDialog(vista, "¿DESEA GENERAR LOS COMPROBANTES DE LAS LIQUIDACIONES DE SUELDO?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+//                if (op == JOptionPane.YES_OPTION) {
+//                    
+//                //ABRIR CUADRO DE DIALOGO PARA GUARDAR EL ARCHIVO 
+//                JFileChooser fileChooser = new JFileChooser();
+//                fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.PDF", "pdf", "PDF"));//filtro para ver solo archivos .pdf
+//                int seleccion = fileChooser.showSaveDialog(null);
+//                if (seleccion == JFileChooser.APPROVE_OPTION) {
+//                    
+//                    //INSTANCIO UN OBJETO EMPLEADO PARA BUSCAR TODOS LOS EMPLEADOS DE LA BD
+//                    empleado = new Empleado();
+//                    //BUSCO LOS EMPLEADOS Y RECORRO
+//                    ResultSet e = empleado.listarEmpleadoActivo();
+//                    int cantidadEmpleado = 0;
+//
+//                    JOptionPane.showMessageDialog(vista, "¡ESPERE UN MOMENTO POR FAVOR, \nÉSTE PROCESO PUEDE DEMORAR UNOS SEGUNDOS!", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
+//
+//                    while(e.next()){
+//                        //DEFINO LAS VARIABLES PARA REALIZAR LOS CALCULOS
+//                        double totalHaberes = 0;
+//                        double totalDescuentos = 0;
+//                        double sueldoNeto = 0;
+//
+//                        empleado.setIdEmpleado(Integer.valueOf(e.getString("idempleado")));
+//                        empleado.setNombre(e.getString("apellido") + ", " + e.getString("nombre"));
+//                        System.out.println("EMPLEADO ID: " + empleado.getIdEmpleado());
+//
+//                        //INSTANCIO UN OBJETO DEL TIPO FAMILIA, PARA SABER SI TIENE FAMILIARES
+//                        familia = new Familia();
+//                        familia.setEmpleado(empleado);
+//                        ResultSet r = familia.listarFamiliar();
+//
+//                        //VARIABLES A UTILIZAR PARA CALCULAR LA SITUACION DEL GRUPO FAMILIAR
+//                        int matrimonio = 0;
+//                        int hijosDiscapacidad = 0;
+//                        int primaria = 0;
+//                        int secundaria = 0;
+//                        int universidad = 0;
+//                        while (r.next()) {     
+//                            String vinculo = r.getString("vinculo");
+//                            String discapacidad = r.getString("discapacidad");
+//                            String escolaridad = r.getString("escolaridad");
+//
+//                            //PREGUNTO PRIMERO POR EL VINCULO
+//                            if (vinculo.equals("Esposo/a")) {
+//                                matrimonio ++;
+//                            }else{
+//                                if (vinculo.equals("Hijo/a")) {
+//                                    //SI ES UN HIJ@ PREGUNTO SI TIENE ESCOLARIDAD
+//                                    if (escolaridad.equals("Primaria")) {
+//                                        primaria ++;
+//                                    }
+//
+//                                    if (escolaridad.equals("Secundaria")) {
+//                                        secundaria ++;
+//                                    }
+//
+//                                    if (escolaridad.equals("Universidad")) {
+//                                        universidad ++;
+//                                    }
+//
+//                                    if (discapacidad.equals("Si")) {
+//                                        hijosDiscapacidad ++;
+//                                    }
+//                                }
+//                            }
+//
+//                            System.out.println("Vinculo: " + vinculo + " - Escolaridad: " + escolaridad + " - Discapacidad: " + discapacidad);
+//
+//                        }//FIN DEL CICLO WHILE
+//
+//
+//
+//
+//                        //POR CADA EMPLEADO BUSCO SU BASICO Y LE ASIGNO AL CARGO
+//                        cargo = new Cargo();
+//                        cargo.setBasico(Double.valueOf(e.getString("basico")));
+//
+//                        System.out.println("BASICO DEL EMPLEADO: " + cargo.getBasico());
+//
+//                        //POR CADA EMPLEADO REALIZO LA LIQUIDACION
+//                        liquidacion = new Liquidacion();
+//
+//                        //RECORRO EL MODELO DE LA TABLA CONCENTO DE LA VISTA
+//                        for (int i = 0; i < vista.getModeloConcepto().getRowCount(); i++) {
+//                            //INSTANCION UN OBJETO DE TIPO CONCEPTO Y SETEO SUS VALORES CON LA TABLA
+//                            concepto = new Concepto();
+//                            concepto.setIdConcepto(Integer.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 0).toString()));
+//                            concepto.setDescripcion(vista.getTabla_Conceptos().getModel().getValueAt(i, 1).toString());
+//                            concepto.setTipoConcepto(vista.getTabla_Conceptos().getModel().getValueAt(i, 2).toString());
+//                            concepto.setFijo(vista.getTabla_Conceptos().getModel().getValueAt(i, 3).toString());
+//                            concepto.setPorcentaje(Double.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 4).toString()));
+//                            concepto.setMonto(Double.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 5).toString()));
+//                            //INSTANCIO UNA LINEA DE LIQUIDACION
+//                            linea = new LineaLiquidacion();
+//
+//                            //EMPIEZO EL PROCESO PARA CALCULAR LOS MONTOS
+//
+//                            switch (concepto.getIdConcepto()) {
+//                            //EL CONCEPTO BASICO NO LO TOMARE AQUI SINO EN EL DEFAULT DEBIDO A QUE ES OTRO TIPO DE CALCULO SIMPLE
+//                            case 2://EL ID 2 ES LA AYUDA POR PRIMARIA
+//                                 if (primaria > 0) {
+//                                     linea.setConcepto(concepto);
+//                                     linea.setCantidad(primaria);
+//                                     linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                     totalHaberes += linea.getMonto();
+//                                     liquidacion.agregarLinea(linea);
+//                                 }
+//                                 break;
+//                            case 3://EL ID 3 ES LA AYUDA POR SECUNDARIA
+//                                 if (secundaria > 0) {
+//                                    linea.setConcepto(concepto);
+//                                    linea.setCantidad(secundaria);
+//                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                    totalHaberes += linea.getMonto();
+//                                    liquidacion.agregarLinea(linea);
+//                                 }
+//                                 break;
+//                            case 4://EL ID 4 ES LA AYUDA POR UNIVERSIDAD
+//                                 if (universidad > 0) {
+//                                    linea.setConcepto(concepto);
+//                                    linea.setCantidad(universidad);
+//                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                    totalHaberes += linea.getMonto();
+//                                    liquidacion.agregarLinea(linea);
+//                                 }
+//                                 break;
+//                            case 5://EL ID 5 ES DE MATRIMONIO
+//                                 if (matrimonio > 0) {
+//                                    linea.setConcepto(concepto);
+//                                    linea.setCantidad(matrimonio);
+//                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                    totalHaberes += linea.getMonto();
+//                                    liquidacion.agregarLinea(linea);
+//                                 }
+//                                 break;
+//                            case 6://EL ID 6 ES DE AYUDA POR HIJOS CON DISCAPACIDAD
+//                                 if (hijosDiscapacidad > 0) {
+//                                    linea.setConcepto(concepto);
+//                                    linea.setCantidad(hijosDiscapacidad);
+//                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                    totalHaberes += linea.getMonto();
+//                                    liquidacion.agregarLinea(linea);
+//                                 }
+//                                 break;
+//                            case 7:
+//                                 linea.setConcepto(concepto);
+//                                 linea.setCantidad(1);
+//                                 //CALCULO LA ANTIGUEDAD
+//                                 int mes = vista.getDate_Mes().getMonth();
+//                                 String fecha = vista.getDate_Año().getYear() + "/" + ((mes + 1)) + "/01";
+//                                 int antiguedad = calcularAntiguedad(fecha, empleado.getIdEmpleado());
+//                                 linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico() * antiguedad) / 100));
+//                                 totalHaberes += linea.getMonto();
+//                                 liquidacion.agregarLinea(linea);
+//                                 break;
+//                            default:
+//                                //PRIMERO ME FIJO SI EL CONCEPTO ES FIJO O NO
+//                                if (concepto.getFijo().equals("SI")) {
+//                                    //SI EL CONCEPTO ES FIJO ME PREGUNTO DE QUE TIPO ES: HABER - DEBE
+//                                    //SI EL CONCEPTO ES DE HABER, LE SUMO AL TOTAL DE HABERES
+//                                    if (concepto.getTipoConcepto().equals("Haber")) {
+//                                        linea.setConcepto(concepto);
+//                                        linea.setCantidad(1);
+//                                        linea.setMonto(concepto.getMonto());
+//                                        totalHaberes += linea.getMonto();
+//                                        liquidacion.agregarLinea(linea);
+//                                    }else{
+//                                    //SI NO ES DE HABER LE SUMO A LOS DESCUENTOS
+//                                        linea.setConcepto(concepto);
+//                                        linea.setCantidad(1);
+//                                        linea.setMonto(concepto.getMonto());
+//                                        totalDescuentos += linea.getMonto();
+//                                        liquidacion.agregarLinea(linea);
+//                                    }
+//
+//                                //COMO EL CONCEPTO NO ES FIJO CALCULO EL MONTO, SEGUN SU PORCENTAJE
+//                                }else{
+//                                    //PREGUNTO SI EL CONCEPTO ES DEL TIPO HABER O DESCUENTO
+//                                    if (concepto.getTipoConcepto().equals("Haber")) {
+//                                        //SI ES DEL TIPO HABER LE SUMO AL TOTAL DE HABERES CALCULANDO
+//                                        linea.setConcepto(concepto);
+//                                        linea.setCantidad(1);
+//                                        linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico()) / 100));
+//                                        totalHaberes += linea.getMonto();
+//                                        liquidacion.agregarLinea(linea);
+//                                    }else{
+//                                        linea.setConcepto(concepto);
+//                                        linea.setCantidad(1);
+//                                        linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico()) / 100));
+//                                        totalDescuentos += linea.getMonto();
+//                                        liquidacion.agregarLinea(linea);
+//                                    }
+//                                }
+//
+//                                 break; //FIN DEL SWITCH CASE
+//                            }
+//
+//
+//                        } //FIN DEL FOR DEL MODELO
+//
+//                        //UNA VES OBTENIDO LOS TOTALES CALCULO LAS DIFERENCIAS
+//                        sueldoNeto = totalHaberes - totalDescuentos;
+//
+//                        System.out.println("Total de Haberes: " + totalHaberes);
+//                        System.out.println("Total de Descuentos: " + totalDescuentos);
+//                        System.out.println("Sueldo Neto: " + sueldoNeto);
+//
+//                        System.out.println();
+//
+//                        //GRABO PRIMERO LA LIQUIDACION
+//                        liquidacion.setEmpleado(empleado);
+//                        liquidacion.setAño(vista.getDate_Año().getYear());
+//                        liquidacion.setMes((vista.getDate_Mes().getMonth() + 1));
+//                        liquidacion.setTotalHaberes(totalHaberes);
+//                        liquidacion.setTotalDescuentos(totalDescuentos);
+//                        liquidacion.setSueldoNeto(sueldoNeto);
+//                        liquidacion.grabarLiquidacion();
+//
+//                        //TRAIGO EL ID DE LA ULTIMA LIQUIDACION Y LO SETEO
+//                        liquidacion.setIdLiquidacion(liquidacion.maxId());
+//
+//                        //RECORRO LAS LINEAS DE LIQUIDACION Y LAS GRABO
+//                        for (int i = 0; i < liquidacion.getLinea().size(); i++) {
+//                            //SETEO LA LIQUIDACION PRIMERO
+//                            liquidacion.getLinea().get(i).setLiquidacion(liquidacion);
+//                            //GRABO LAS LINEAS DE LIQUIDACION
+//                            liquidacion.getLinea().get(i).grabarLineaLiquidacion();
+//                        }
+//
+//                        ResultSet l = liquidacion.filtrarLiquidacionId();
+//                        while (l.next()) {
+//                            String idEmpleado = l.getString("idempleado");
+//                            String nombre = l.getString("empleado");
+//                            String idLiquidacion = l.getString("idliquidacion");
+//                            String periodo = l.getString("periodo");
+//                            String TotalDeHaberes = l.getString("totalHaberes");
+//                            String TotalDescuento = l.getString("totalDescuentos");
+//                            String sueldoN = l.getString("sueldoNeto");
+//
+//                            String fila [] = {idEmpleado, nombre, idLiquidacion, periodo, TotalDeHaberes, TotalDescuento, sueldoN};
+//                            vista.getModeloLiquidacion().addRow(fila);
+//                            vista.getTabla_Liquidacion().setModel(vista.getModeloLiquidacion());
+//                         }
+//
+//                        guardarReporte(fileChooser);
+//
+//                        cantidadEmpleado ++;
+//                    }//FIN DEL CICLO WHILE
+//
+//                JOptionPane.showMessageDialog(vista, "SE REALIZARON CON EXITO " + cantidadEmpleado + " LIQUIDACIONES DE SUELDO", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
+//                
+//                }
+//                    
+//                }else{
+//                    //SI NO QUIERE GENERAR LOS COMPROBANTES
+//                        //INSTANCIO UN OBJETO EMPLEADO PARA BUSCAR TODOS LOS EMPLEADOS DE LA BD
+//                        empleado = new Empleado();
+//                        //BUSCO LOS EMPLEADOS Y RECORRO
+//                        ResultSet e = empleado.listarEmpleadoActivo();
+//                        int cantidadEmpleado = 0;
+//
+//                        JOptionPane.showMessageDialog(vista, "¡ESPERE UN MOMENTO POR FAVOR, \nÉSTE PROCESO PUEDE DEMORAR UNOS SEGUNDOS!", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
+//
+//                        while(e.next()){
+//                            //DEFINO LAS VARIABLES PARA REALIZAR LOS CALCULOS
+//                            double totalHaberes = 0;
+//                            double totalDescuentos = 0;
+//                            double sueldoNeto = 0;
+//
+//                            empleado.setIdEmpleado(Integer.valueOf(e.getString("idempleado")));
+//                            empleado.setNombre(e.getString("apellido") + ", " + e.getString("nombre"));
+//                            System.out.println("EMPLEADO ID: " + empleado.getIdEmpleado());
+//
+//                            //INSTANCIO UN OBJETO DEL TIPO FAMILIA, PARA SABER SI TIENE FAMILIARES
+//                            familia = new Familia();
+//                            familia.setEmpleado(empleado);
+//                            ResultSet r = familia.listarFamiliar();
+//
+//                            //VARIABLES A UTILIZAR PARA CALCULAR LA SITUACION DEL GRUPO FAMILIAR
+//                            int matrimonio = 0;
+//                            int hijosDiscapacidad = 0;
+//                            int primaria = 0;
+//                            int secundaria = 0;
+//                            int universidad = 0;
+//                            while (r.next()) {     
+//                                String vinculo = r.getString("vinculo");
+//                                String discapacidad = r.getString("discapacidad");
+//                                String escolaridad = r.getString("escolaridad");
+//
+//                                //PREGUNTO PRIMERO POR EL VINCULO
+//                                if (vinculo.equals("Esposo/a")) {
+//                                    matrimonio ++;
+//                                }else{
+//                                    if (vinculo.equals("Hijo/a")) {
+//                                        //SI ES UN HIJ@ PREGUNTO SI TIENE ESCOLARIDAD
+//                                        if (escolaridad.equals("Primaria")) {
+//                                            primaria ++;
+//                                        }
+//
+//                                        if (escolaridad.equals("Secundaria")) {
+//                                            secundaria ++;
+//                                        }
+//
+//                                        if (escolaridad.equals("Universidad")) {
+//                                            universidad ++;
+//                                        }
+//
+//                                        if (discapacidad.equals("Si")) {
+//                                            hijosDiscapacidad ++;
+//                                        }
+//                                    }
+//                                }
+//
+//                                System.out.println("Vinculo: " + vinculo + " - Escolaridad: " + escolaridad + " - Discapacidad: " + discapacidad);
+//
+//                            }//FIN DEL CICLO WHILE
+//
+//
+//
+//
+//                            //POR CADA EMPLEADO BUSCO SU BASICO Y LE ASIGNO AL CARGO
+//                            cargo = new Cargo();
+//                            cargo.setBasico(Double.valueOf(e.getString("basico")));
+//
+//                            System.out.println("BASICO DEL EMPLEADO: " + cargo.getBasico());
+//
+//                            //POR CADA EMPLEADO REALIZO LA LIQUIDACION
+//                            liquidacion = new Liquidacion();
+//
+//                            //RECORRO EL MODELO DE LA TABLA CONCENTO DE LA VISTA
+//                            for (int i = 0; i < vista.getModeloConcepto().getRowCount(); i++) {
+//                                //INSTANCION UN OBJETO DE TIPO CONCEPTO Y SETEO SUS VALORES CON LA TABLA
+//                                concepto = new Concepto();
+//                                concepto.setIdConcepto(Integer.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 0).toString()));
+//                                concepto.setDescripcion(vista.getTabla_Conceptos().getModel().getValueAt(i, 1).toString());
+//                                concepto.setTipoConcepto(vista.getTabla_Conceptos().getModel().getValueAt(i, 2).toString());
+//                                concepto.setFijo(vista.getTabla_Conceptos().getModel().getValueAt(i, 3).toString());
+//                                concepto.setPorcentaje(Double.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 4).toString()));
+//                                concepto.setMonto(Double.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 5).toString()));
+//                                //INSTANCIO UNA LINEA DE LIQUIDACION
+//                                linea = new LineaLiquidacion();
+//
+//                                //EMPIEZO EL PROCESO PARA CALCULAR LOS MONTOS
+//
+//                                switch (concepto.getIdConcepto()) {
+//                                //EL CONCEPTO BASICO NO LO TOMARE AQUI SINO EN EL DEFAULT DEBIDO A QUE ES OTRO TIPO DE CALCULO SIMPLE
+//                                case 2://EL ID 2 ES LA AYUDA POR PRIMARIA
+//                                     if (primaria > 0) {
+//                                         linea.setConcepto(concepto);
+//                                         linea.setCantidad(primaria);
+//                                         linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                         totalHaberes += linea.getMonto();
+//                                         liquidacion.agregarLinea(linea);
+//                                     }
+//                                     break;
+//                                case 3://EL ID 3 ES LA AYUDA POR SECUNDARIA
+//                                     if (secundaria > 0) {
+//                                        linea.setConcepto(concepto);
+//                                        linea.setCantidad(secundaria);
+//                                        linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                        totalHaberes += linea.getMonto();
+//                                        liquidacion.agregarLinea(linea);
+//                                     }
+//                                     break;
+//                                case 4://EL ID 4 ES LA AYUDA POR UNIVERSIDAD
+//                                     if (universidad > 0) {
+//                                        linea.setConcepto(concepto);
+//                                        linea.setCantidad(universidad);
+//                                        linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                        totalHaberes += linea.getMonto();
+//                                        liquidacion.agregarLinea(linea);
+//                                     }
+//                                     break;
+//                                case 5://EL ID 5 ES DE MATRIMONIO
+//                                     if (matrimonio > 0) {
+//                                        linea.setConcepto(concepto);
+//                                        linea.setCantidad(matrimonio);
+//                                        linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                        totalHaberes += linea.getMonto();
+//                                        liquidacion.agregarLinea(linea);
+//                                     }
+//                                     break;
+//                                case 6://EL ID 6 ES DE AYUDA POR HIJOS CON DISCAPACIDAD
+//                                     if (hijosDiscapacidad > 0) {
+//                                        linea.setConcepto(concepto);
+//                                        linea.setCantidad(hijosDiscapacidad);
+//                                        linea.setMonto(concepto.getMonto() * linea.getCantidad());
+//                                        totalHaberes += linea.getMonto();
+//                                        liquidacion.agregarLinea(linea);
+//                                     }
+//                                     break;
+//                                case 7:
+//                                     linea.setConcepto(concepto);
+//                                     linea.setCantidad(1);
+//                                     //CALCULO LA ANTIGUEDAD
+//                                     int mes = vista.getDate_Mes().getMonth();
+//                                     String fecha = vista.getDate_Año().getYear() + "/" + ((mes + 1)) + "/01";
+//                                     int antiguedad = calcularAntiguedad(fecha, empleado.getIdEmpleado());
+//                                     linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico() * antiguedad) / 100));
+//                                     totalHaberes += linea.getMonto();
+//                                     liquidacion.agregarLinea(linea);
+//                                     break;
+//                                default:
+//                                    //PRIMERO ME FIJO SI EL CONCEPTO ES FIJO O NO
+//                                    if (concepto.getFijo().equals("SI")) {
+//                                        //SI EL CONCEPTO ES FIJO ME PREGUNTO DE QUE TIPO ES: HABER - DEBE
+//                                        //SI EL CONCEPTO ES DE HABER, LE SUMO AL TOTAL DE HABERES
+//                                        if (concepto.getTipoConcepto().equals("Haber")) {
+//                                            linea.setConcepto(concepto);
+//                                            linea.setCantidad(1);
+//                                            linea.setMonto(concepto.getMonto());
+//                                            totalHaberes += linea.getMonto();
+//                                            liquidacion.agregarLinea(linea);
+//                                        }else{
+//                                        //SI NO ES DE HABER LE SUMO A LOS DESCUENTOS
+//                                            linea.setConcepto(concepto);
+//                                            linea.setCantidad(1);
+//                                            linea.setMonto(concepto.getMonto());
+//                                            totalDescuentos += linea.getMonto();
+//                                            liquidacion.agregarLinea(linea);
+//                                        }
+//
+//                                    //COMO EL CONCEPTO NO ES FIJO CALCULO EL MONTO, SEGUN SU PORCENTAJE
+//                                    }else{
+//                                        //PREGUNTO SI EL CONCEPTO ES DEL TIPO HABER O DESCUENTO
+//                                        if (concepto.getTipoConcepto().equals("Haber")) {
+//                                            //SI ES DEL TIPO HABER LE SUMO AL TOTAL DE HABERES CALCULANDO
+//                                            linea.setConcepto(concepto);
+//                                            linea.setCantidad(1);
+//                                            linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico()) / 100));
+//                                            totalHaberes += linea.getMonto();
+//                                            liquidacion.agregarLinea(linea);
+//                                        }else{
+//                                            linea.setConcepto(concepto);
+//                                            linea.setCantidad(1);
+//                                            linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico()) / 100));
+//                                            totalDescuentos += linea.getMonto();
+//                                            liquidacion.agregarLinea(linea);
+//                                        }
+//                                    }
+//
+//                                     break; //FIN DEL SWITCH CASE
+//                                }
+//
+//
+//                            } //FIN DEL FOR DEL MODELO
+//
+//                            //UNA VES OBTENIDO LOS TOTALES CALCULO LAS DIFERENCIAS
+//                            sueldoNeto = totalHaberes - totalDescuentos;
+//
+//                            System.out.println("Total de Haberes: " + totalHaberes);
+//                            System.out.println("Total de Descuentos: " + totalDescuentos);
+//                            System.out.println("Sueldo Neto: " + sueldoNeto);
+//
+//                            System.out.println();
+//
+//                            //GRABO PRIMERO LA LIQUIDACION
+//                            liquidacion.setEmpleado(empleado);
+//                            liquidacion.setAño(vista.getDate_Año().getYear());
+//                            liquidacion.setMes((vista.getDate_Mes().getMonth() + 1));
+//                            liquidacion.setTotalHaberes(totalHaberes);
+//                            liquidacion.setTotalDescuentos(totalDescuentos);
+//                            liquidacion.setSueldoNeto(sueldoNeto);
+//                            liquidacion.grabarLiquidacion();
+//
+//                            //TRAIGO EL ID DE LA ULTIMA LIQUIDACION Y LO SETEO
+//                            liquidacion.setIdLiquidacion(liquidacion.maxId());
+//
+//                            //RECORRO LAS LINEAS DE LIQUIDACION Y LAS GRABO
+//                            for (int i = 0; i < liquidacion.getLinea().size(); i++) {
+//                                //SETEO LA LIQUIDACION PRIMERO
+//                                liquidacion.getLinea().get(i).setLiquidacion(liquidacion);
+//                                //GRABO LAS LINEAS DE LIQUIDACION
+//                                liquidacion.getLinea().get(i).grabarLineaLiquidacion();
+//                            }
+//
+//                            ResultSet l = liquidacion.filtrarLiquidacionId();
+//                            while (l.next()) {
+//                                String idEmpleado = l.getString("idempleado");
+//                                String nombre = l.getString("empleado");
+//                                String idLiquidacion = l.getString("idliquidacion");
+//                                String periodo = l.getString("periodo");
+//                                String TotalDeHaberes = l.getString("totalHaberes");
+//                                String TotalDescuento = l.getString("totalDescuentos");
+//                                String sueldoN = l.getString("sueldoNeto");
+//
+//                                String fila [] = {idEmpleado, nombre, idLiquidacion, periodo, TotalDeHaberes, TotalDescuento, sueldoN};
+//                                vista.getModeloLiquidacion().addRow(fila);
+//                                vista.getTabla_Liquidacion().setModel(vista.getModeloLiquidacion());
+//                             }
+//
+//                            cantidadEmpleado ++;
+//                        }//FIN DEL CICLO WHILE
+//
+//                    JOptionPane.showMessageDialog(vista, "SE REALIZARON CON EXITO " + cantidadEmpleado + " LIQUIDACIONES DE SUELDO", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
+//                }
+//                
+//                        
+//            }
+//        }
+//        
+//    }
+    
+        public static void LiquidarTodos(LiquidacionTodos vista) throws SQLException, ClassNotFoundException, JRException, FileNotFoundException{
         if (ValidarCampos(vista)) {
             int opt = JOptionPane.showConfirmDialog(vista, "¿ESTÁ USTED SEGURO DE REALIZAR LA LIQUIDACIÓN A TODOS LOS EMPLEADOS?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if (opt == JOptionPane.YES_OPTION) {
@@ -700,9 +1330,9 @@ public class Controlador_Liquidacion {
                         //VARIABLES A UTILIZAR PARA CALCULAR LA SITUACION DEL GRUPO FAMILIAR
                         int matrimonio = 0;
                         int hijosDiscapacidad = 0;
-                        int primaria = 0;
-                        int secundaria = 0;
-                        int universidad = 0;
+                        int hijos = 0;
+                        int escolaridadHijos = 0;
+                        int escolaridadDiscapacitados = 0;
                         while (r.next()) {     
                             String vinculo = r.getString("vinculo");
                             String discapacidad = r.getString("discapacidad");
@@ -713,21 +1343,22 @@ public class Controlador_Liquidacion {
                                 matrimonio ++;
                             }else{
                                 if (vinculo.equals("Hijo/a")) {
+
                                     //SI ES UN HIJ@ PREGUNTO SI TIENE ESCOLARIDAD
-                                    if (escolaridad.equals("Primaria")) {
-                                        primaria ++;
-                                    }
-
-                                    if (escolaridad.equals("Secundaria")) {
-                                        secundaria ++;
-                                    }
-
-                                    if (escolaridad.equals("Universidad")) {
-                                        universidad ++;
-                                    }
-
                                     if (discapacidad.equals("Si")) {
+                                        //SI ES DISCAPACITADO, PREGUNTO POR SU ESCOLARIDAD
+                                        if (escolaridad.equals("Primaria") || escolaridad.equals("Secundaria")) {
+                                            escolaridadDiscapacitados ++;
+                                        }
+                                        //INCREMENTO EN UNO LA CANTIDAD DE HIJOS DISCAPACITADOS
                                         hijosDiscapacidad ++;
+                                    }else{
+                                        //SI NO ES DISCAPACITADO PREGUNTO POR SU ESCOLARIDAD
+                                        if (escolaridad.equals("Primaria") || escolaridad.equals("Secundaria")) {
+                                        escolaridadHijos ++;
+                                        }
+                                        //INCREMENTO LA CANTIDAD DE HIJOS NO DISCAPACITADOS
+                                        hijos++;
                                     }
                                 }
                             }
@@ -735,8 +1366,6 @@ public class Controlador_Liquidacion {
                             System.out.println("Vinculo: " + vinculo + " - Escolaridad: " + escolaridad + " - Discapacidad: " + discapacidad);
 
                         }//FIN DEL CICLO WHILE
-
-
 
 
                         //POR CADA EMPLEADO BUSCO SU BASICO Y LE ASIGNO AL CARGO
@@ -765,46 +1394,46 @@ public class Controlador_Liquidacion {
 
                             switch (concepto.getIdConcepto()) {
                             //EL CONCEPTO BASICO NO LO TOMARE AQUI SINO EN EL DEFAULT DEBIDO A QUE ES OTRO TIPO DE CALCULO SIMPLE
-                            case 2://EL ID 2 ES LA AYUDA POR PRIMARIA
-                                 if (primaria > 0) {
+                            case 2://EL ID 2 ASIGNACION POR HIJO
+                                 if (hijos > 0) {
                                      linea.setConcepto(concepto);
-                                     linea.setCantidad(primaria);
+                                     linea.setCantidad(hijos);
                                      linea.setMonto(concepto.getMonto() * linea.getCantidad());
                                      totalHaberes += linea.getMonto();
                                      liquidacion.agregarLinea(linea);
                                  }
                                  break;
-                            case 3://EL ID 3 ES LA AYUDA POR SECUNDARIA
-                                 if (secundaria > 0) {
-                                    linea.setConcepto(concepto);
-                                    linea.setCantidad(secundaria);
-                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
-                                    totalHaberes += linea.getMonto();
-                                    liquidacion.agregarLinea(linea);
-                                 }
-                                 break;
-                            case 4://EL ID 4 ES LA AYUDA POR UNIVERSIDAD
-                                 if (universidad > 0) {
-                                    linea.setConcepto(concepto);
-                                    linea.setCantidad(universidad);
-                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
-                                    totalHaberes += linea.getMonto();
-                                    liquidacion.agregarLinea(linea);
-                                 }
-                                 break;
-                            case 5://EL ID 5 ES DE MATRIMONIO
-                                 if (matrimonio > 0) {
-                                    linea.setConcepto(concepto);
-                                    linea.setCantidad(matrimonio);
-                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
-                                    totalHaberes += linea.getMonto();
-                                    liquidacion.agregarLinea(linea);
-                                 }
-                                 break;
-                            case 6://EL ID 6 ES DE AYUDA POR HIJOS CON DISCAPACIDAD
+                            case 3://EL ID 3 ASIGNACION POR HIJO CON DISCAPACIDAD
                                  if (hijosDiscapacidad > 0) {
                                     linea.setConcepto(concepto);
                                     linea.setCantidad(hijosDiscapacidad);
+                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+                                    totalHaberes += linea.getMonto();
+                                    liquidacion.agregarLinea(linea);
+                                 }
+                                 break;
+                            case 4://EL ID 4 AYUDA ESCOLAR ANUAL
+                                 if (escolaridadHijos > 0) {
+                                    linea.setConcepto(concepto);
+                                    linea.setCantidad(escolaridadHijos);
+                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+                                    totalHaberes += linea.getMonto();
+                                    liquidacion.agregarLinea(linea);
+                                 }
+                                 break;
+                            case 5://EL ID 5 AYUDA ESCOLAR POR DISCAPACIDAD
+                                 if (escolaridadDiscapacitados > 0) {
+                                    linea.setConcepto(concepto);
+                                    linea.setCantidad(escolaridadDiscapacitados);
+                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+                                    totalHaberes += linea.getMonto();
+                                    liquidacion.agregarLinea(linea);
+                                 }
+                                 break;
+                            case 6://EL ID 6 ES CONYUGE
+                                 if (matrimonio > 0) {
+                                    linea.setConcepto(concepto);
+                                    linea.setCantidad(matrimonio);
                                     linea.setMonto(concepto.getMonto() * linea.getCantidad());
                                     totalHaberes += linea.getMonto();
                                     liquidacion.agregarLinea(linea);
@@ -931,234 +1560,233 @@ public class Controlador_Liquidacion {
 
                         while(e.next()){
                             //DEFINO LAS VARIABLES PARA REALIZAR LOS CALCULOS
-                            double totalHaberes = 0;
-                            double totalDescuentos = 0;
-                            double sueldoNeto = 0;
+                        double totalHaberes = 0;
+                        double totalDescuentos = 0;
+                        double sueldoNeto = 0;
 
-                            empleado.setIdEmpleado(Integer.valueOf(e.getString("idempleado")));
-                            empleado.setNombre(e.getString("apellido") + ", " + e.getString("nombre"));
-                            System.out.println("EMPLEADO ID: " + empleado.getIdEmpleado());
+                        empleado.setIdEmpleado(Integer.valueOf(e.getString("idempleado")));
+                        empleado.setNombre(e.getString("apellido") + ", " + e.getString("nombre"));
+                        System.out.println("EMPLEADO ID: " + empleado.getIdEmpleado());
 
-                            //INSTANCIO UN OBJETO DEL TIPO FAMILIA, PARA SABER SI TIENE FAMILIARES
-                            familia = new Familia();
-                            familia.setEmpleado(empleado);
-                            ResultSet r = familia.listarFamiliar();
+                        //INSTANCIO UN OBJETO DEL TIPO FAMILIA, PARA SABER SI TIENE FAMILIARES
+                        familia = new Familia();
+                        familia.setEmpleado(empleado);
+                        ResultSet r = familia.listarFamiliar();
 
-                            //VARIABLES A UTILIZAR PARA CALCULAR LA SITUACION DEL GRUPO FAMILIAR
-                            int matrimonio = 0;
-                            int hijosDiscapacidad = 0;
-                            int primaria = 0;
-                            int secundaria = 0;
-                            int universidad = 0;
-                            while (r.next()) {     
-                                String vinculo = r.getString("vinculo");
-                                String discapacidad = r.getString("discapacidad");
-                                String escolaridad = r.getString("escolaridad");
+                        //VARIABLES A UTILIZAR PARA CALCULAR LA SITUACION DEL GRUPO FAMILIAR
+                        int matrimonio = 0;
+                        int hijosDiscapacidad = 0;
+                        int hijos = 0;
+                        int escolaridadHijos = 0;
+                        int escolaridadDiscapacitados = 0;
+                        while (r.next()) {     
+                            String vinculo = r.getString("vinculo");
+                            String discapacidad = r.getString("discapacidad");
+                            String escolaridad = r.getString("escolaridad");
 
-                                //PREGUNTO PRIMERO POR EL VINCULO
-                                if (vinculo.equals("Esposo/a")) {
-                                    matrimonio ++;
-                                }else{
-                                    if (vinculo.equals("Hijo/a")) {
-                                        //SI ES UN HIJ@ PREGUNTO SI TIENE ESCOLARIDAD
-                                        if (escolaridad.equals("Primaria")) {
-                                            primaria ++;
+                            //PREGUNTO PRIMERO POR EL VINCULO
+                            if (vinculo.equals("Esposo/a")) {
+                                matrimonio ++;
+                            }else{
+                                if (vinculo.equals("Hijo/a")) {
+
+                                    //SI ES UN HIJ@ PREGUNTO SI TIENE ESCOLARIDAD
+                                    if (discapacidad.equals("Si")) {
+                                        //SI ES DISCAPACITADO, PREGUNTO POR SU ESCOLARIDAD
+                                        if (escolaridad.equals("Primaria") || escolaridad.equals("Secundaria")) {
+                                            escolaridadDiscapacitados ++;
                                         }
-
-                                        if (escolaridad.equals("Secundaria")) {
-                                            secundaria ++;
-                                        }
-
-                                        if (escolaridad.equals("Universidad")) {
-                                            universidad ++;
-                                        }
-
-                                        if (discapacidad.equals("Si")) {
-                                            hijosDiscapacidad ++;
-                                        }
-                                    }
-                                }
-
-                                System.out.println("Vinculo: " + vinculo + " - Escolaridad: " + escolaridad + " - Discapacidad: " + discapacidad);
-
-                            }//FIN DEL CICLO WHILE
-
-
-
-
-                            //POR CADA EMPLEADO BUSCO SU BASICO Y LE ASIGNO AL CARGO
-                            cargo = new Cargo();
-                            cargo.setBasico(Double.valueOf(e.getString("basico")));
-
-                            System.out.println("BASICO DEL EMPLEADO: " + cargo.getBasico());
-
-                            //POR CADA EMPLEADO REALIZO LA LIQUIDACION
-                            liquidacion = new Liquidacion();
-
-                            //RECORRO EL MODELO DE LA TABLA CONCENTO DE LA VISTA
-                            for (int i = 0; i < vista.getModeloConcepto().getRowCount(); i++) {
-                                //INSTANCION UN OBJETO DE TIPO CONCEPTO Y SETEO SUS VALORES CON LA TABLA
-                                concepto = new Concepto();
-                                concepto.setIdConcepto(Integer.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 0).toString()));
-                                concepto.setDescripcion(vista.getTabla_Conceptos().getModel().getValueAt(i, 1).toString());
-                                concepto.setTipoConcepto(vista.getTabla_Conceptos().getModel().getValueAt(i, 2).toString());
-                                concepto.setFijo(vista.getTabla_Conceptos().getModel().getValueAt(i, 3).toString());
-                                concepto.setPorcentaje(Double.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 4).toString()));
-                                concepto.setMonto(Double.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 5).toString()));
-                                //INSTANCIO UNA LINEA DE LIQUIDACION
-                                linea = new LineaLiquidacion();
-
-                                //EMPIEZO EL PROCESO PARA CALCULAR LOS MONTOS
-
-                                switch (concepto.getIdConcepto()) {
-                                //EL CONCEPTO BASICO NO LO TOMARE AQUI SINO EN EL DEFAULT DEBIDO A QUE ES OTRO TIPO DE CALCULO SIMPLE
-                                case 2://EL ID 2 ES LA AYUDA POR PRIMARIA
-                                     if (primaria > 0) {
-                                         linea.setConcepto(concepto);
-                                         linea.setCantidad(primaria);
-                                         linea.setMonto(concepto.getMonto() * linea.getCantidad());
-                                         totalHaberes += linea.getMonto();
-                                         liquidacion.agregarLinea(linea);
-                                     }
-                                     break;
-                                case 3://EL ID 3 ES LA AYUDA POR SECUNDARIA
-                                     if (secundaria > 0) {
-                                        linea.setConcepto(concepto);
-                                        linea.setCantidad(secundaria);
-                                        linea.setMonto(concepto.getMonto() * linea.getCantidad());
-                                        totalHaberes += linea.getMonto();
-                                        liquidacion.agregarLinea(linea);
-                                     }
-                                     break;
-                                case 4://EL ID 4 ES LA AYUDA POR UNIVERSIDAD
-                                     if (universidad > 0) {
-                                        linea.setConcepto(concepto);
-                                        linea.setCantidad(universidad);
-                                        linea.setMonto(concepto.getMonto() * linea.getCantidad());
-                                        totalHaberes += linea.getMonto();
-                                        liquidacion.agregarLinea(linea);
-                                     }
-                                     break;
-                                case 5://EL ID 5 ES DE MATRIMONIO
-                                     if (matrimonio > 0) {
-                                        linea.setConcepto(concepto);
-                                        linea.setCantidad(matrimonio);
-                                        linea.setMonto(concepto.getMonto() * linea.getCantidad());
-                                        totalHaberes += linea.getMonto();
-                                        liquidacion.agregarLinea(linea);
-                                     }
-                                     break;
-                                case 6://EL ID 6 ES DE AYUDA POR HIJOS CON DISCAPACIDAD
-                                     if (hijosDiscapacidad > 0) {
-                                        linea.setConcepto(concepto);
-                                        linea.setCantidad(hijosDiscapacidad);
-                                        linea.setMonto(concepto.getMonto() * linea.getCantidad());
-                                        totalHaberes += linea.getMonto();
-                                        liquidacion.agregarLinea(linea);
-                                     }
-                                     break;
-                                case 7:
-                                     linea.setConcepto(concepto);
-                                     linea.setCantidad(1);
-                                     //CALCULO LA ANTIGUEDAD
-                                     int mes = vista.getDate_Mes().getMonth();
-                                     String fecha = vista.getDate_Año().getYear() + "/" + ((mes + 1)) + "/01";
-                                     int antiguedad = calcularAntiguedad(fecha, empleado.getIdEmpleado());
-                                     linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico() * antiguedad) / 100));
-                                     totalHaberes += linea.getMonto();
-                                     liquidacion.agregarLinea(linea);
-                                     break;
-                                default:
-                                    //PRIMERO ME FIJO SI EL CONCEPTO ES FIJO O NO
-                                    if (concepto.getFijo().equals("SI")) {
-                                        //SI EL CONCEPTO ES FIJO ME PREGUNTO DE QUE TIPO ES: HABER - DEBE
-                                        //SI EL CONCEPTO ES DE HABER, LE SUMO AL TOTAL DE HABERES
-                                        if (concepto.getTipoConcepto().equals("Haber")) {
-                                            linea.setConcepto(concepto);
-                                            linea.setCantidad(1);
-                                            linea.setMonto(concepto.getMonto());
-                                            totalHaberes += linea.getMonto();
-                                            liquidacion.agregarLinea(linea);
-                                        }else{
-                                        //SI NO ES DE HABER LE SUMO A LOS DESCUENTOS
-                                            linea.setConcepto(concepto);
-                                            linea.setCantidad(1);
-                                            linea.setMonto(concepto.getMonto());
-                                            totalDescuentos += linea.getMonto();
-                                            liquidacion.agregarLinea(linea);
-                                        }
-
-                                    //COMO EL CONCEPTO NO ES FIJO CALCULO EL MONTO, SEGUN SU PORCENTAJE
+                                        //INCREMENTO EN UNO LA CANTIDAD DE HIJOS DISCAPACITADOS
+                                        hijosDiscapacidad ++;
                                     }else{
-                                        //PREGUNTO SI EL CONCEPTO ES DEL TIPO HABER O DESCUENTO
-                                        if (concepto.getTipoConcepto().equals("Haber")) {
-                                            //SI ES DEL TIPO HABER LE SUMO AL TOTAL DE HABERES CALCULANDO
-                                            linea.setConcepto(concepto);
-                                            linea.setCantidad(1);
-                                            linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico()) / 100));
-                                            totalHaberes += linea.getMonto();
-                                            liquidacion.agregarLinea(linea);
-                                        }else{
-                                            linea.setConcepto(concepto);
-                                            linea.setCantidad(1);
-                                            linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico()) / 100));
-                                            totalDescuentos += linea.getMonto();
-                                            liquidacion.agregarLinea(linea);
+                                        //SI NO ES DISCAPACITADO PREGUNTO POR SU ESCOLARIDAD
+                                        if (escolaridad.equals("Primaria") || escolaridad.equals("Secundaria")) {
+                                        escolaridadHijos ++;
                                         }
+                                        //INCREMENTO LA CANTIDAD DE HIJOS NO DISCAPACITADOS
+                                        hijos++;
                                     }
-
-                                     break; //FIN DEL SWITCH CASE
                                 }
-
-
-                            } //FIN DEL FOR DEL MODELO
-
-                            //UNA VES OBTENIDO LOS TOTALES CALCULO LAS DIFERENCIAS
-                            sueldoNeto = totalHaberes - totalDescuentos;
-
-                            System.out.println("Total de Haberes: " + totalHaberes);
-                            System.out.println("Total de Descuentos: " + totalDescuentos);
-                            System.out.println("Sueldo Neto: " + sueldoNeto);
-
-                            System.out.println();
-
-                            //GRABO PRIMERO LA LIQUIDACION
-                            liquidacion.setEmpleado(empleado);
-                            liquidacion.setAño(vista.getDate_Año().getYear());
-                            liquidacion.setMes((vista.getDate_Mes().getMonth() + 1));
-                            liquidacion.setTotalHaberes(totalHaberes);
-                            liquidacion.setTotalDescuentos(totalDescuentos);
-                            liquidacion.setSueldoNeto(sueldoNeto);
-                            liquidacion.grabarLiquidacion();
-
-                            //TRAIGO EL ID DE LA ULTIMA LIQUIDACION Y LO SETEO
-                            liquidacion.setIdLiquidacion(liquidacion.maxId());
-
-                            //RECORRO LAS LINEAS DE LIQUIDACION Y LAS GRABO
-                            for (int i = 0; i < liquidacion.getLinea().size(); i++) {
-                                //SETEO LA LIQUIDACION PRIMERO
-                                liquidacion.getLinea().get(i).setLiquidacion(liquidacion);
-                                //GRABO LAS LINEAS DE LIQUIDACION
-                                liquidacion.getLinea().get(i).grabarLineaLiquidacion();
                             }
 
-                            ResultSet l = liquidacion.filtrarLiquidacionId();
-                            while (l.next()) {
-                                String idEmpleado = l.getString("idempleado");
-                                String nombre = l.getString("empleado");
-                                String idLiquidacion = l.getString("idliquidacion");
-                                String periodo = l.getString("periodo");
-                                String TotalDeHaberes = l.getString("totalHaberes");
-                                String TotalDescuento = l.getString("totalDescuentos");
-                                String sueldoN = l.getString("sueldoNeto");
+                            System.out.println("Vinculo: " + vinculo + " - Escolaridad: " + escolaridad + " - Discapacidad: " + discapacidad);
 
-                                String fila [] = {idEmpleado, nombre, idLiquidacion, periodo, TotalDeHaberes, TotalDescuento, sueldoN};
-                                vista.getModeloLiquidacion().addRow(fila);
-                                vista.getTabla_Liquidacion().setModel(vista.getModeloLiquidacion());
-                             }
-
-                            cantidadEmpleado ++;
                         }//FIN DEL CICLO WHILE
+
+
+                        //POR CADA EMPLEADO BUSCO SU BASICO Y LE ASIGNO AL CARGO
+                        cargo = new Cargo();
+                        cargo.setBasico(Double.valueOf(e.getString("basico")));
+
+                        System.out.println("BASICO DEL EMPLEADO: " + cargo.getBasico());
+
+                        //POR CADA EMPLEADO REALIZO LA LIQUIDACION
+                        liquidacion = new Liquidacion();
+
+                        //RECORRO EL MODELO DE LA TABLA CONCENTO DE LA VISTA
+                        for (int i = 0; i < vista.getModeloConcepto().getRowCount(); i++) {
+                            //INSTANCION UN OBJETO DE TIPO CONCEPTO Y SETEO SUS VALORES CON LA TABLA
+                            concepto = new Concepto();
+                            concepto.setIdConcepto(Integer.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 0).toString()));
+                            concepto.setDescripcion(vista.getTabla_Conceptos().getModel().getValueAt(i, 1).toString());
+                            concepto.setTipoConcepto(vista.getTabla_Conceptos().getModel().getValueAt(i, 2).toString());
+                            concepto.setFijo(vista.getTabla_Conceptos().getModel().getValueAt(i, 3).toString());
+                            concepto.setPorcentaje(Double.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 4).toString()));
+                            concepto.setMonto(Double.valueOf(vista.getTabla_Conceptos().getModel().getValueAt(i, 5).toString()));
+                            //INSTANCIO UNA LINEA DE LIQUIDACION
+                            linea = new LineaLiquidacion();
+
+                            //EMPIEZO EL PROCESO PARA CALCULAR LOS MONTOS
+
+                            switch (concepto.getIdConcepto()) {
+                            //EL CONCEPTO BASICO NO LO TOMARE AQUI SINO EN EL DEFAULT DEBIDO A QUE ES OTRO TIPO DE CALCULO SIMPLE
+                            case 2://EL ID 2 ASIGNACION POR HIJO
+                                 if (hijos > 0) {
+                                     linea.setConcepto(concepto);
+                                     linea.setCantidad(hijos);
+                                     linea.setMonto(concepto.getMonto() * linea.getCantidad());
+                                     totalHaberes += linea.getMonto();
+                                     liquidacion.agregarLinea(linea);
+                                 }
+                                 break;
+                            case 3://EL ID 3 ASIGNACION POR HIJO CON DISCAPACIDAD
+                                 if (hijosDiscapacidad > 0) {
+                                    linea.setConcepto(concepto);
+                                    linea.setCantidad(hijosDiscapacidad);
+                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+                                    totalHaberes += linea.getMonto();
+                                    liquidacion.agregarLinea(linea);
+                                 }
+                                 break;
+                            case 4://EL ID 4 AYUDA ESCOLAR ANUAL
+                                 if (escolaridadHijos > 0) {
+                                    linea.setConcepto(concepto);
+                                    linea.setCantidad(escolaridadHijos);
+                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+                                    totalHaberes += linea.getMonto();
+                                    liquidacion.agregarLinea(linea);
+                                 }
+                                 break;
+                            case 5://EL ID 5 AYUDA ESCOLAR POR DISCAPACIDAD
+                                 if (escolaridadDiscapacitados > 0) {
+                                    linea.setConcepto(concepto);
+                                    linea.setCantidad(escolaridadDiscapacitados);
+                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+                                    totalHaberes += linea.getMonto();
+                                    liquidacion.agregarLinea(linea);
+                                 }
+                                 break;
+                            case 6://EL ID 6 ES CONYUGE
+                                 if (matrimonio > 0) {
+                                    linea.setConcepto(concepto);
+                                    linea.setCantidad(matrimonio);
+                                    linea.setMonto(concepto.getMonto() * linea.getCantidad());
+                                    totalHaberes += linea.getMonto();
+                                    liquidacion.agregarLinea(linea);
+                                 }
+                                 break;
+                            case 7:
+                                 linea.setConcepto(concepto);
+                                 linea.setCantidad(1);
+                                 //CALCULO LA ANTIGUEDAD
+                                 int mes = vista.getDate_Mes().getMonth();
+                                 String fecha = vista.getDate_Año().getYear() + "/" + ((mes + 1)) + "/01";
+                                 int antiguedad = calcularAntiguedad(fecha, empleado.getIdEmpleado());
+                                 linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico() * antiguedad) / 100));
+                                 totalHaberes += linea.getMonto();
+                                 liquidacion.agregarLinea(linea);
+                                 break;
+                            default:
+                                //PRIMERO ME FIJO SI EL CONCEPTO ES FIJO O NO
+                                if (concepto.getFijo().equals("SI")) {
+                                    //SI EL CONCEPTO ES FIJO ME PREGUNTO DE QUE TIPO ES: HABER - DEBE
+                                    //SI EL CONCEPTO ES DE HABER, LE SUMO AL TOTAL DE HABERES
+                                    if (concepto.getTipoConcepto().equals("Haber")) {
+                                        linea.setConcepto(concepto);
+                                        linea.setCantidad(1);
+                                        linea.setMonto(concepto.getMonto());
+                                        totalHaberes += linea.getMonto();
+                                        liquidacion.agregarLinea(linea);
+                                    }else{
+                                    //SI NO ES DE HABER LE SUMO A LOS DESCUENTOS
+                                        linea.setConcepto(concepto);
+                                        linea.setCantidad(1);
+                                        linea.setMonto(concepto.getMonto());
+                                        totalDescuentos += linea.getMonto();
+                                        liquidacion.agregarLinea(linea);
+                                    }
+
+                                //COMO EL CONCEPTO NO ES FIJO CALCULO EL MONTO, SEGUN SU PORCENTAJE
+                                }else{
+                                    //PREGUNTO SI EL CONCEPTO ES DEL TIPO HABER O DESCUENTO
+                                    if (concepto.getTipoConcepto().equals("Haber")) {
+                                        //SI ES DEL TIPO HABER LE SUMO AL TOTAL DE HABERES CALCULANDO
+                                        linea.setConcepto(concepto);
+                                        linea.setCantidad(1);
+                                        linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico()) / 100));
+                                        totalHaberes += linea.getMonto();
+                                        liquidacion.agregarLinea(linea);
+                                    }else{
+                                        linea.setConcepto(concepto);
+                                        linea.setCantidad(1);
+                                        linea.setMonto(((concepto.getPorcentaje() * cargo.getBasico()) / 100));
+                                        totalDescuentos += linea.getMonto();
+                                        liquidacion.agregarLinea(linea);
+                                    }
+                                }
+
+                                 break; //FIN DEL SWITCH CASE
+                            }
+
+
+                        } //FIN DEL FOR DEL MODELO
+
+                        //UNA VES OBTENIDO LOS TOTALES CALCULO LAS DIFERENCIAS
+                        sueldoNeto = totalHaberes - totalDescuentos;
+
+                        System.out.println("Total de Haberes: " + totalHaberes);
+                        System.out.println("Total de Descuentos: " + totalDescuentos);
+                        System.out.println("Sueldo Neto: " + sueldoNeto);
+
+                        System.out.println();
+
+                        //GRABO PRIMERO LA LIQUIDACION
+                        liquidacion.setEmpleado(empleado);
+                        liquidacion.setAño(vista.getDate_Año().getYear());
+                        liquidacion.setMes((vista.getDate_Mes().getMonth() + 1));
+                        liquidacion.setTotalHaberes(totalHaberes);
+                        liquidacion.setTotalDescuentos(totalDescuentos);
+                        liquidacion.setSueldoNeto(sueldoNeto);
+                        liquidacion.grabarLiquidacion();
+
+                        //TRAIGO EL ID DE LA ULTIMA LIQUIDACION Y LO SETEO
+                        liquidacion.setIdLiquidacion(liquidacion.maxId());
+
+                        //RECORRO LAS LINEAS DE LIQUIDACION Y LAS GRABO
+                        for (int i = 0; i < liquidacion.getLinea().size(); i++) {
+                            //SETEO LA LIQUIDACION PRIMERO
+                            liquidacion.getLinea().get(i).setLiquidacion(liquidacion);
+                            //GRABO LAS LINEAS DE LIQUIDACION
+                            liquidacion.getLinea().get(i).grabarLineaLiquidacion();
+                        }
+
+                        ResultSet l = liquidacion.filtrarLiquidacionId();
+                        while (l.next()) {
+                            String idEmpleado = l.getString("idempleado");
+                            String nombre = l.getString("empleado");
+                            String idLiquidacion = l.getString("idliquidacion");
+                            String periodo = l.getString("periodo");
+                            String TotalDeHaberes = l.getString("totalHaberes");
+                            String TotalDescuento = l.getString("totalDescuentos");
+                            String sueldoN = l.getString("sueldoNeto");
+
+                            String fila [] = {idEmpleado, nombre, idLiquidacion, periodo, TotalDeHaberes, TotalDescuento, sueldoN};
+                            vista.getModeloLiquidacion().addRow(fila);
+                            vista.getTabla_Liquidacion().setModel(vista.getModeloLiquidacion());
+                         }
+
+                        cantidadEmpleado ++;
+                    }//FIN DEL CICLO WHILE
 
                     JOptionPane.showMessageDialog(vista, "SE REALIZARON CON EXITO " + cantidadEmpleado + " LIQUIDACIONES DE SUELDO", "Mensaje de Información", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -1168,6 +1796,7 @@ public class Controlador_Liquidacion {
         }
         
     }
+
     
     public static void CargarDetalleLiquidacion(LiquidacionTodos vista) throws SQLException{
         int fila = vista.getTabla_Liquidacion().getSelectedRow();
@@ -1340,16 +1969,14 @@ public class Controlador_Liquidacion {
             liquidacion.setIdLiquidacion(id);
             imprimirLiquidacion(liquidacion);
         }else{
-            JOptionPane.showMessageDialog(null, "ERROR: DEBE SELECCIONAR UNA COMPRA!", "MENSAJE DE ERROR!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "ERROR: DEBE SELECCIONAR UNA LIQUIDACIÓN!", "MENSAJE DE ERROR!", JOptionPane.ERROR_MESSAGE);
         }
     }
     
     public static void imprimirLiquidacion(Liquidacion liquidacion) throws SQLException, ClassNotFoundException{
         int opt = JOptionPane.showConfirmDialog(null, "¿DESEA IMPRIMIR EL COMPROBANTE DE LIQUIDACIÓN?", "Mensaje de Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (opt == JOptionPane.YES_OPTION) {
-        Class.forName("com.mysql.jdbc.Driver");
-        //Creamos un enlace hacia la base de datos
-        Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/sg_bar", "root", "35548988");
+        Conexion conexion = new Conexion();
         //Metodo para Exportar
             try {
                 String rutaInforme = "/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/reportes/LiquidacionSueldo.jasper";
@@ -1357,7 +1984,7 @@ public class Controlador_Liquidacion {
                 //SETEO LOS PARAMETROS
                 parametros.put("Id", liquidacion.getIdLiquidacion());
                 //parametros.put("fecha", fecha);
-                JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros, conexion);
+                JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros, conexion.getConnection());
                 JasperViewer ventanavisor = new JasperViewer(informe, false);
                 JOptionPane.showMessageDialog(null, "ESTO PUEDE TARDAR UNOS SEGUNDOS,\nESPERE POR FAVOR", "ESTAMOS GENERANDO EL REPORTE", JOptionPane.WARNING_MESSAGE);
                 JOptionPane.showMessageDialog(null, "DOCUMENTO EXPORTADO EXITOSAMENTE!", "GUARDADO EXITOSO!", JOptionPane.INFORMATION_MESSAGE);
@@ -1379,9 +2006,7 @@ public class Controlador_Liquidacion {
 //        int seleccion = fileChooser.showSaveDialog(null);
 //        try {
 //            if (seleccion == JFileChooser.APPROVE_OPTION) {//comprueba si ha presionado el boton de aceptar
-                Class.forName("com.mysql.jdbc.Driver");
-                //Creamos un enlace hacia la base de datos
-                Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/sg_bar", "root", "35548988");
+                Conexion conexion = new Conexion();
                 String rutaInforme = "/home/fernando/NetBeansProjects/FinalGestionDeDatos/FinalGestionDeDatos2018/src/reportes/LiquidacionSueldo.jasper";
                 File JFC = fileChooser.getSelectedFile();
                 String PATH = JFC.getAbsolutePath() +" - " + liquidacion.getIdLiquidacion();//obtenemos la direccion del archivo + el nombre a guardar
@@ -1393,7 +2018,7 @@ public class Controlador_Liquidacion {
                 //SETEO LOS PARAMETROS
                 parametros.put("Id", liquidacion.getIdLiquidacion());
                 //parametros.put("fecha", fecha);
-                JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros, conexion);
+                JasperPrint informe = JasperFillManager.fillReport(rutaInforme, parametros, conexion.getConnection());
                 JasperExportManager.exportReportToPdfFile(informe, PATH);
                 JasperViewer ventanavisor = new JasperViewer(informe, false);
                 //JOptionPane.showMessageDialog(null, "ESTO PUEDE TARDAR UNOS SEGUNDOS,\nESPERE POR FAVOR", "ESTAMOS GENERANDO EL REPORTE", JOptionPane.WARNING_MESSAGE);

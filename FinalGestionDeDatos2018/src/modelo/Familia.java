@@ -153,7 +153,7 @@ public class Familia {
         ResultSet resultado = null;
          try {
             Conexion conexion = new Conexion();
-            String query = "SELECT familia.idfamilia, familia.dni, familia.nombre, familia.apellido, familia.vinculo, familia.fechaNacimiento, familia.discapacidad, familia.escolaridad \n" +
+            String query = "SELECT familia.idfamilia, familia.dni, familia.nombre, familia.apellido, familia.vinculo, date_format(familia.fechaNacimiento, '%d/%m/%Y') as fechaNacimiento, familia.discapacidad, familia.escolaridad \n" +
                            "FROM familia\n" +
                            "INNER JOIN empleado ON empleado.idempleado = familia.empleado_idempleado\n" +
                            "WHERE empleado.idempleado = " + this.getEmpleado().getIdEmpleado() + ";";

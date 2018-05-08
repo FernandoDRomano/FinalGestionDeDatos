@@ -406,7 +406,7 @@ public class GestionFamilia extends javax.swing.JDialog {
 
         jLabel9.setText("Dni");
 
-        combo_Escolaridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione una Opción", "Primaria", "Secundaria", "Universidad", "Ninguna" }));
+        combo_Escolaridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione una Opción", "Primaria", "Secundaria", "Ninguna" }));
 
         jLabel11.setText("Escolaridad");
 
